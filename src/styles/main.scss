@@ -33,7 +33,7 @@ body {
   height: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  @include font(var(--font-family--genos), 400);
+  @include font(400, var(--font-family--genos));
 }
 
 #root {
