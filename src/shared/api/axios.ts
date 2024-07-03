@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = import.meta.env.VITE_CTP_BASE_URL;
+const baseURL = 'https://stapi.co/api/v2/rest/';
 
 const axiosInstance = axios.create({
   baseURL,
