@@ -1,1 +1,1 @@
-npx validate-branch-name
+npm run format:fix && npm run lint && npx validate-branch-name
