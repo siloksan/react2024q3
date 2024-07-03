@@ -4,6 +4,7 @@ import { SpacecraftsResponse } from 'entities/spacecraft/models';
 import getData from 'shared/api/axiosMethods';
 import { AxiosRequestConfig } from 'axios';
 import Payload from 'shared/api/types/apiTypes';
+import Loader from 'shared/ui/Loader';
 import SpaceCraftDetails from '../components/SpaceCraftDetails/SpaceCraftDetails';
 
 import styles from './Main.module.scss';
@@ -29,6 +30,7 @@ export default class Main extends React.Component<Props, State> {
   }
 
   public updateData = async (payload: Payload) => {
+    this.setState({ data: null });
     const options: AxiosRequestConfig = {
       params: {
         pageSize: this.pageSize,
@@ -46,13 +48,20 @@ export default class Main extends React.Component<Props, State> {
 
   render() {
     const { data, error } = this.state;
-    const spacecraftsList = data ? (
+    let spacecraftsList = data ? (
       data.spacecrafts.map((spacecraft) => {
         return <SpaceCraftDetails spacecraft={spacecraft} key={spacecraft.uid} />;
       })
     ) : (
-      <div>Loading...</div>
+      <Loader />
     );
+
+    spacecraftsList =
+      data && data.spacecrafts.length === 0 ? (
+        <h3 className={styles.not_found}>No spacecrafts found</h3>
+      ) : (
+        spacecraftsList
+      );
 
     if (error) {
       return <div>Error: {error}</div>;
