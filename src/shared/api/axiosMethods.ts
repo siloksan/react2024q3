@@ -1,17 +1,15 @@
 import { AxiosRequestConfig } from 'axios';
 import { SpacecraftsResponse } from 'entities/spacecraft/models';
 import axiosInstance from './axios';
+import Payload from './types/apiTypes';
 
-async function getData(endpoint: string, options: AxiosRequestConfig = {}): Promise<SpacecraftsResponse | null> {
-  try {
-    const response = await axiosInstance.get(endpoint, options);
-    return response.data;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
-  }
-  return null;
+async function getData(
+  endpoint: string,
+  payload: Payload,
+  options: AxiosRequestConfig = {}
+): Promise<SpacecraftsResponse> {
+  const response = await axiosInstance.post(endpoint, payload, options);
+  return response.data;
 }
 
 export default getData;

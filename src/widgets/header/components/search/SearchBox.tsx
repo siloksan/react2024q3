@@ -1,17 +1,62 @@
 import React from 'react';
+import StorageService from 'shared/api/utils/StorageService';
+import Payload from 'shared/api/types/apiTypes';
 import styles from './SearchBox.module.scss';
 import loupe from './assets/search-icon.svg';
 
-export default class SearchBox extends React.PureComponent {
+interface State {
+  searchTerm: string;
+}
+
+interface Props {
+  updateData: (payload: Payload) => void;
+}
+
+export default class SearchBox extends React.Component<Props, State> {
+  private storageService = new StorageService('searchTerm');
+
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      searchTerm: this.storageService.getData() || '',
+    };
+  }
+
+  componentDidMount(): void {
+    const { searchTerm } = this.state;
+    const { updateData } = this.props;
+    updateData({ name: searchTerm });
+  }
+
+  handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const { value } = event.target;
+    this.storageService.setData(value);
+    this.setState({ searchTerm: value });
+  };
+
+  handleSubmit = () => {
+    const { searchTerm } = this.state;
+    const { updateData } = this.props;
+    updateData({ name: searchTerm });
+  };
+
   render() {
+    const { searchTerm } = this.state;
     return (
       <div className={styles.container}>
-        <form className={styles.form}>
-          <input type="text" className={styles.input} placeholder="Search" />
-          <button className={styles.button} aria-label="Search" type="submit">
+        <div className={styles.form}>
+          <input
+            value={searchTerm || ''}
+            onChange={this.handleInput}
+            type="text"
+            className={styles.input}
+            placeholder="Search"
+          />
+          <button className={styles.button} aria-label="Search" type="submit" onClick={this.handleSubmit}>
             <img src={loupe} alt="loupe icon" />
           </button>
-        </form>
+        </div>
       </div>
     );
   }

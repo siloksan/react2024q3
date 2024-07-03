@@ -10,9 +10,9 @@ export default class SpaceCraftDetails extends React.PureComponent<{ spacecraft:
 
     const owner = spacecraft.owner ? spacecraft.owner.name : 'unknown';
     const operator = spacecraft.operator ? spacecraft.operator.name : 'unknown';
-    const dateStatus = spacecraft.dateStatus && 'unknown';
+    const dateStatus = spacecraft.dateStatus || 'unknown';
     const spacecraftClass = spacecraft.spacecraftClass ? spacecraft.spacecraftClass.name : 'unknown';
-    const status = spacecraft.status && 'unknown';
+    const status = spacecraft.status || 'unknown';
 
     return (
       <li className={styles.container}>
