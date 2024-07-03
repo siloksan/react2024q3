@@ -4,7 +4,7 @@ import { SpacecraftsResponse } from 'entities/spacecraft/models';
 import getData from 'shared/api/axiosMethods';
 import { AxiosRequestConfig } from 'axios';
 import Payload from 'shared/api/types/apiTypes';
-import Loader from 'shared/ui/Loader';
+import Loader from 'shared/ui/loader/Loader';
 import SpaceCraftDetails from '../components/SpaceCraftDetails/SpaceCraftDetails';
 
 import styles from './Main.module.scss';
@@ -64,7 +64,7 @@ export default class Main extends React.Component<Props, State> {
       );
 
     if (error) {
-      return <div>Error: {error}</div>;
+      throw new Error(error);
     }
     return (
       <div>

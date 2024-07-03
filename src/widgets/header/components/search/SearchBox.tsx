@@ -29,7 +29,6 @@ export default class SearchBox extends React.Component<Props, State> {
   }
 
   handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
     const { value } = event.target;
     const trimString = value.trim();
     this.storageService.setData(trimString);
@@ -42,6 +41,12 @@ export default class SearchBox extends React.Component<Props, State> {
     updateData({ name: searchTerm });
   };
 
+  handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      this.handleSubmit();
+    }
+  };
+
   render() {
     const { searchTerm } = this.state;
     return (
@@ -50,6 +55,7 @@ export default class SearchBox extends React.Component<Props, State> {
           <input
             value={searchTerm || ''}
             onChange={this.handleInput}
+            onKeyDown={this.handleKeyDown}
             type="text"
             className={styles.input}
             placeholder="Search"
