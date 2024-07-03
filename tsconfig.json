@@ -53,6 +53,9 @@
       "tests/*": [
         "tests/*"
       ],
+      "widgets/*": [
+        "widgets/*"
+      ],
     }
   },
   "include": [

@@ -18,6 +18,7 @@ module.exports = {
   },
   plugins: ['react-refresh', 'prettier'],
   rules: {
+    // 'react/prefer-stateless-function': ['error', { ignorePureComponents: true }],
     'react/react-in-jsx-scope': 0,
     'prettier/prettier': [
       'error',
