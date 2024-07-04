@@ -1,69 +1,54 @@
-import React from 'react';
-import StorageService from 'shared/api/utils/StorageService';
+import React, { useCallback, useEffect, useRef } from 'react';
 import Payload from 'shared/api/types/apiTypes';
-import styles from './SearchBox.module.scss';
+import useSearch from 'shared/lib/useSearch';
 import loupe from './assets/search-icon.svg';
 
-interface State {
-  searchTerm: string;
-}
+import styles from './SearchBox.module.scss';
 
 interface Props {
   updateData: (payload: Payload) => void;
 }
 
-export default class SearchBox extends React.Component<Props, State> {
-  private storageService = new StorageService('searchTerm');
+export default function SearchBox({ updateData }: Props) {
+  const { searchTerm, setSearchTerm } = useSearch();
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      searchTerm: this.storageService.getData() || '',
-    };
-  }
-
-  componentDidMount(): void {
-    const { searchTerm } = this.state;
-    const { updateData } = this.props;
-    updateData({ name: searchTerm });
-  }
-
-  handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    this.storageService.setData(value);
-    this.setState({ searchTerm: value });
+    setSearchTerm(value);
   };
 
-  handleSubmit = () => {
-    const { searchTerm } = this.state;
-    const { updateData } = this.props;
-    updateData({ name: searchTerm.trim() });
-  };
+  const handleSubmit = useCallback(() => {
+    updateData({ name: searchTerm });
+  }, [searchTerm, updateData]);
 
-  handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const savedCallback = useRef(handleSubmit);
+
+  // This trick is necessary to avoid re-render every time when search input is changed
+  useEffect(() => {
+    savedCallback.current();
+  }, []);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      this.handleSubmit();
+      handleSubmit();
     }
   };
 
-  render() {
-    const { searchTerm } = this.state;
-    return (
-      <div className={styles.container}>
-        <div className={styles.form}>
-          <input
-            value={searchTerm || ''}
-            onChange={this.handleInput}
-            onKeyDown={this.handleKeyDown}
-            type="text"
-            className={styles.input}
-            placeholder="Search"
-          />
-          <button className={styles.button} aria-label="Search" type="submit" onClick={this.handleSubmit}>
-            <img src={loupe} alt="loupe icon" />
-          </button>
-        </div>
+  return (
+    <div className={styles.container}>
+      <div className={styles.form}>
+        <input
+          value={searchTerm}
+          onChange={handleInput}
+          onKeyDown={handleKeyDown}
+          type="text"
+          className={styles.input}
+          placeholder="Search"
+        />
+        <button className={styles.button} aria-label="Search" type="submit" onClick={handleSubmit}>
+          <img src={loupe} alt="loupe icon" />
+        </button>
       </div>
-    );
-  }
+    </div>
+  );
 }

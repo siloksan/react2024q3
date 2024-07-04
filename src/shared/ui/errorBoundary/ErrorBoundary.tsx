@@ -1,5 +1,5 @@
 import React from 'react';
-import logger from 'shared/utils/logger';
+import logger from 'shared/lib/logger/logger';
 
 import styles from './ErrorBoundary.module.scss';
 
