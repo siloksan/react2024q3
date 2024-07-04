@@ -30,15 +30,14 @@ export default class SearchBox extends React.Component<Props, State> {
 
   handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    const trimString = value.trim();
-    this.storageService.setData(trimString);
-    this.setState({ searchTerm: trimString });
+    this.storageService.setData(value);
+    this.setState({ searchTerm: value });
   };
 
   handleSubmit = () => {
     const { searchTerm } = this.state;
     const { updateData } = this.props;
-    updateData({ name: searchTerm });
+    updateData({ name: searchTerm.trim() });
   };
 
   handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
