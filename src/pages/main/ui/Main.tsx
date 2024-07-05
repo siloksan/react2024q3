@@ -1,10 +1,10 @@
 import React from 'react';
-import Header from 'widgets/header';
 import { SpacecraftsResponse } from 'entities/spacecraft/models';
 import getData from 'shared/api/axiosMethods';
 import { AxiosRequestConfig } from 'axios';
 import Payload from 'shared/api/types/apiTypes';
 import Loader from 'shared/ui/loader/Loader';
+import SearchBox from 'shared/ui/search/SearchBox';
 import SpaceCraftDetails from '../components/SpaceCraftDetails/SpaceCraftDetails';
 
 import styles from './Main.module.scss';
@@ -50,12 +50,10 @@ export default function Main() {
     throw new Error(error);
   }
   return (
-    <div>
-      <Header updateData={updateData} />
-      <main className={styles.main}>
-        <h1>Spacecrafts</h1>
-        <ul className={styles.list}>{spacecraftsList}</ul>
-      </main>
-    </div>
+    <>
+      <h1>Spacecrafts</h1>
+      <SearchBox updateData={updateData} />
+      <ul className={styles.list}>{spacecraftsList}</ul>
+    </>
   );
 }

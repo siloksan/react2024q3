@@ -48,6 +48,7 @@
     "eslint-plugin-react-refresh": "^0.4.6",
     "husky": "^9.0.11",
     "jsdom": "^24.1.0",
+    "lint-staged": "^15.2.7",
     "prettier": "^3.2.5",
     "sass": "^1.76.0",
     "typescript": "^5.5.2",
@@ -57,5 +58,14 @@
   "validate-branch-name": {
     "pattern": "(config|feat|fix|refactor|docs|chore)/RSS-\\d+-\\d+_\\w+",
     "errorMsg": "Branch name is invalid"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "**/*.{css,scss,md}": [
+      "prettier --write"
+    ]
   }
 }
