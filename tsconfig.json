@@ -29,26 +29,14 @@
     /* Paths */
     "baseUrl": "src",
     "paths": {
-      "components/*": [
-        "components/*"
-      ],
       "app/*": [
         "app/*"
       ],
       "pages/*": [
         "pages/*"
       ],
-      "layout/*": [
-        "layout/*"
-      ],
       "utils/*": [
         "utils/*"
-      ],
-      "assets/*": [
-        "assets/*"
-      ],
-      "styles/*": [
-        "styles/*"
       ],
       "tests/*": [
         "tests/*"
@@ -56,6 +44,9 @@
       "widgets/*": [
         "widgets/*"
       ],
+      "shared/*": [
+        "shared/*"
+      ]
     }
   },
   "include": [
