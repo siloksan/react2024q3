@@ -1,19 +1,22 @@
-import React from 'react';
-import { SpacecraftsResponse } from 'entities/spacecraft/models';
-import getData from 'shared/api/axiosMethods';
+import { useState } from 'react';
 import { AxiosRequestConfig } from 'axios';
-import Payload from 'shared/api/types/apiTypes';
-import Loader from 'shared/ui/loader/Loader';
-import SearchBox from 'shared/ui/search/SearchBox';
-import SpaceCraftDetails from '../components/SpaceCraftDetails/SpaceCraftDetails';
 
+import getData from 'shared/api/axiosMethods';
+import Loader from 'shared/ui/loader/Loader';
+
+import SearchBox from 'shared/ui/search/SearchBox';
+
+import Payload from 'shared/api/types/apiTypes';
+
+import { SpacecraftsResponse } from 'entities/spacecraft/models';
+import SpaceCraftDetails from '../components/SpaceCraftDetails/SpaceCraftDetails';
 import styles from './Main.module.scss';
 
 export default function Main() {
   const pageSize = 10;
 
-  const [data, setData] = React.useState<SpacecraftsResponse | null>(null);
-  const [error, setError] = React.useState<string | null>(null);
+  const [data, setData] = useState<SpacecraftsResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const updateData = async (payload: Payload) => {
     setData(null);
     const options: AxiosRequestConfig = {
@@ -51,7 +54,7 @@ export default function Main() {
   }
   return (
     <>
-      <h1>Spacecrafts</h1>
+      <h1 className={styles.title}>Spacecrafts</h1>
       <SearchBox updateData={updateData} />
       <ul className={styles.list}>{spacecraftsList}</ul>
     </>

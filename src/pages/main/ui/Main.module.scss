@@ -1,16 +1,9 @@
 @use 'src/app/styles/mixins.scss' as *;
 
-.main {
-  width: 95%;
-  max-width: 1200px;
-  margin: 0 auto;
-  flex: 1 0 auto;
-
-  h1 {
-    text-align: center;
-    @include font(700, var(--font-family--genos));
-    font-size: 3.6rem;
-  }
+.title {
+  text-align: center;
+  @include font(700, var(--font-family--genos));
+  font-size: 3.6rem;
 }
 
 .list {
