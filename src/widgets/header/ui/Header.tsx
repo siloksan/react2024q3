@@ -1,20 +1,18 @@
-import Payload from 'shared/api/types/apiTypes';
-import styles from './Header.module.scss';
+import { Link } from 'react-router-dom';
+
 import logo from '../assets/startrek-logo.png';
-import SearchBox from '../components/search/SearchBox';
 import ErrorButton from '../components/errorButton/ErrorButton';
 
-interface Props {
-  updateData: (payload: Payload) => void;
-}
+import styles from './Header.module.scss';
 
-export default function Header({ updateData }: Props) {
+export default function Header() {
   return (
     <header className={styles.container}>
-      <div className={styles.logo}>
-        <img src={logo} alt="Star trek logo" />
-      </div>
-      <SearchBox updateData={updateData} />
+      <Link to="/main">
+        <div className={styles.logo}>
+          <img src={logo} alt="Star trek logo" />
+        </div>
+      </Link>
       <ErrorButton />
     </header>
   );
