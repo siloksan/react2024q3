@@ -1,24 +1,28 @@
 import { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { AxiosRequestConfig } from 'axios';
 
-import getData from 'shared/api/axiosMethods';
-import Loader from 'shared/ui/loader/Loader';
-import StorageKeys from 'shared/lib/useSearch/types/storageKeys';
-
-import SearchBox from 'shared/ui/search/SearchBox';
-
-import Payload from 'shared/api/types/apiTypes';
-
 import { SpacecraftsResponse } from 'entities/spacecraft/models';
-import Pagination from 'widgets/pagination';
+import Payload from 'shared/api/types/apiTypes';
+import getData from 'shared/api/axiosMethods';
+
+import StorageKeys from 'shared/lib/useSearch/types/storageKeys';
 import useSearch from 'shared/lib/useSearch';
+
+import Loader from 'shared/ui/loader/Loader';
+import SearchBox from 'shared/ui/search/SearchBox';
+import Pagination from 'widgets/pagination';
+
 import SpaceCraftDetails from '../components/SpaceCraftDetails/SpaceCraftDetails';
+
 import styles from './Main.module.scss';
 
 export default function Main() {
   const pageSize = 10;
   const { dataStorage: searchTerm, setDataStorage: setSearchTerm } = useSearch(StorageKeys.searchTerm);
   const { dataStorage: currentPage, setDataStorage: setCurrentPage } = useSearch(StorageKeys.currentPage);
+
+  const [, setSearchParams] = useSearchParams();
 
   const [data, setData] = useState<SpacecraftsResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -41,6 +45,7 @@ export default function Main() {
       const response = await getData('spacecraft/search', payload, options);
       setData(response);
       setCurrentPage(response.page.pageNumber.toString());
+      setSearchParams({ page: (response.page.pageNumber + 1).toString(), search: searchQuery });
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
