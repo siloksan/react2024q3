@@ -7,7 +7,7 @@ import styles from './Header.module.scss';
 
 export default function Header() {
   return (
-    <header className={styles.container}>
+    <header className={styles.container} data-testid="header">
       <Link to="/main">
         <div className={styles.logo}>
           <img src={logo} alt="Star trek logo" />
