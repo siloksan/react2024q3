@@ -1,32 +1,32 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import Payload from 'shared/api/types/apiTypes';
-import useSearch from 'shared/lib/useSearch';
+import React from 'react';
 import loupe from './assets/search-icon.svg';
 
 import styles from './SearchBox.module.scss';
 
 interface Props {
-  updateData: (payload: Payload) => void;
+  updateData: (searchTerm: string, pageNumber?: number) => void;
+  searchTerm: string;
+  setSearchTerm: (searchTerm: string) => void;
+  setCurrentPage: (page: string) => void;
 }
 
-export default function SearchBox({ updateData }: Props) {
-  const { searchTerm, setSearchTerm } = useSearch();
-
+export default function SearchBox({ updateData, searchTerm, setSearchTerm, setCurrentPage }: Props) {
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setSearchTerm(value);
   };
 
-  const handleSubmit = useCallback(() => {
-    updateData({ name: searchTerm });
-  }, [searchTerm, updateData]);
+  const handleSubmit = () => {
+    setCurrentPage('');
+    updateData(searchTerm);
+  };
 
-  const savedCallback = useRef(handleSubmit);
+  // const savedCallback = useRef(handleSubmit);
 
   // This trick is necessary to avoid re-render every time when search input is changed
-  useEffect(() => {
-    savedCallback.current();
-  }, []);
+  // useEffect(() => {
+  //   savedCallback.current();
+  // }, []);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -45,7 +45,7 @@ export default function SearchBox({ updateData }: Props) {
           className={styles.input}
           placeholder="Search"
         />
-        <button className={styles.button} aria-label="Search" type="submit" onClick={handleSubmit}>
+        <button className={styles.button} aria-label="Search" type="submit" onClick={() => handleSubmit()}>
           <img src={loupe} alt="loupe icon" />
         </button>
       </div>
