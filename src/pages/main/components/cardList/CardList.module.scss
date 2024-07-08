@@ -1,0 +1,12 @@
+@use 'src/app/styles/mixins.scss' as *;
+
+.container {
+  list-style: none;
+  position: relative;
+}
+
+.not_found {
+  text-align: center;
+  @include font(700, var(--font-family--genos));
+  font-size: 2rem;
+}

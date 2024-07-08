@@ -1,6 +1,6 @@
 import { Spacecraft } from 'entities/spacecraft/models';
 
-import styles from './SpaceCraftDetails.module.scss';
+import styles from './Card.module.scss';
 
 interface Props {
   spacecraft: Spacecraft;

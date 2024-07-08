@@ -12,8 +12,7 @@ import useSearch from 'shared/lib/useSearch';
 import Loader from 'shared/ui/loader/Loader';
 import SearchBox from 'shared/ui/search/SearchBox';
 import Pagination from 'widgets/pagination';
-
-import SpaceCraftDetails from '../components/SpaceCraftDetails/SpaceCraftDetails';
+import CardList from '../components/cardList/CardList';
 
 import styles from './Main.module.scss';
 
@@ -65,21 +64,6 @@ export default function Main() {
     savedCallback.current();
   }, []);
 
-  let spacecraftsList = data ? (
-    data.spacecrafts.map((spacecraft) => {
-      return <SpaceCraftDetails spacecraft={spacecraft} key={spacecraft.uid} />;
-    })
-  ) : (
-    <Loader />
-  );
-
-  spacecraftsList =
-    data && data.spacecrafts.length === 0 ? (
-      <h3 className={styles.not_found}>No spacecrafts found</h3>
-    ) : (
-      spacecraftsList
-    );
-
   const pagination = data ? (
     <Pagination
       currentPage={Number(currentPage) + 1}
@@ -103,7 +87,7 @@ export default function Main() {
         setSearchTerm={setSearchTerm}
         setCurrentPage={(p) => setCurrentPage(p.toString())}
       />
-      <ul className={styles.list}>{spacecraftsList}</ul>
+      {data ? <CardList spacecrafts={data.spacecrafts} /> : <Loader />}
     </>
   );
 }
