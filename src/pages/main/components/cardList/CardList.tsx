@@ -7,15 +7,18 @@ interface Props {
   spacecrafts: Spacecraft[];
 }
 export default function CardList({ spacecrafts }: Props) {
-  if (spacecrafts.length === 0) {
-    return <p className={styles.not_found}>No spacecrafts found</p>;
-  }
+  const spacecraftsView =
+    spacecrafts.length === 0 ? (
+      <p className={styles.not_found}>No spacecrafts found</p>
+    ) : (
+      spacecrafts.map((spacecraft) => {
+        return <Card spacecraft={spacecraft} key={spacecraft.uid} />;
+      })
+    );
 
   return (
-    <ul className={styles.container}>
-      {spacecrafts.map((spacecraft) => {
-        return <Card spacecraft={spacecraft} key={spacecraft.uid} />;
-      })}
+    <ul className={styles.container} data-testid="card-list">
+      {spacecraftsView}
     </ul>
   );
 }

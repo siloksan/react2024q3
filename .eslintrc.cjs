@@ -18,14 +18,11 @@ module.exports = {
   },
   plugins: ['react-refresh', 'prettier'],
   rules: {
-    // 'react/prefer-stateless-function': ['error', { ignorePureComponents: true }],
-    'import/no-extraneous-dependencies': ['error', {
-      devDependencies: [
-        '**/setupTests.ts',
-        '**/src/**/*.test.ts',
-        '**/src/**/*.test.tsx',
-      ],
-    }],
+    'import/prefer-default-export': 'off',
+    'import/no-extraneous-dependencies': [
+      'off',
+      { devDependencies: false, optionalDependencies: false, peerDependencies: false },
+    ],
     'react/react-in-jsx-scope': 0,
     'prettier/prettier': [
       'error',

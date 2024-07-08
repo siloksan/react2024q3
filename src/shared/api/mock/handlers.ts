@@ -1,17 +1,13 @@
-// import { http } from 'msw';
-// import SPACE_CRAFTS_RESPONSE from './mocks/spaceCraftsResponseMock';
+import { http, HttpResponse } from 'msw';
+import { DUMMY_SPACE_CRAFTS_RESPONSE } from './mocks/dummyData/dummySpaceCraftsResponse';
 
-// export const handlers = [
-//   http.get('/spacecraft/search', (req, res, ctx) => {
-//     return res(
-//       ctx.status(200),
-//       ctx.json({
-//         spacecrafts,
-//         page: {
-//           pageNumber: 0,
-//           totalElements: SPACE_CRAFTS_RESPONSE,
-//         },
-//       })
-//     );
-//   }),
-// ];
+export const handlers = [
+  http.post('https://stapi.co/api/v2/rest/spacecraft/search', ({ request }) => {
+    const url = new URL(request.url);
+
+    url.searchParams.set('pageNumber', '');
+    url.searchParams.set('pageSize', '10');
+
+    return HttpResponse.json(DUMMY_SPACE_CRAFTS_RESPONSE);
+  }),
+];
