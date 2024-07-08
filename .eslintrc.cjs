@@ -16,9 +16,9 @@ module.exports = {
     sourceType: 'module',
     project: './tsconfig.json',
   },
-  plugins: ['react-refresh', 'prettier'],
+  plugins: ['react-refresh', 'prettier', "react-compiler"],
   rules: {
-    // 'react/prefer-stateless-function': ['error', { ignorePureComponents: true }],
+    "react-compiler/react-compiler": "error",
     'react/react-in-jsx-scope': 0,
     'prettier/prettier': [
       'error',
