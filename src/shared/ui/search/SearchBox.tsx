@@ -18,15 +18,8 @@ export default function SearchBox({ updateData, searchTerm, setSearchTerm, setCu
 
   const handleSubmit = () => {
     setCurrentPage('');
-    updateData(searchTerm);
+    updateData(searchTerm.trim());
   };
-
-  // const savedCallback = useRef(handleSubmit);
-
-  // This trick is necessary to avoid re-render every time when search input is changed
-  // useEffect(() => {
-  //   savedCallback.current();
-  // }, []);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {

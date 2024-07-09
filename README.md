@@ -1,4 +1,4 @@
-# react-app application 🛍️🌐
+# react-app application
 
 This is a project for the [Rolling Scopes School React Course](#).
 
@@ -29,7 +29,7 @@ git clone link
 2. Go to the project folder:
 
 ```bash
-cd eCommerce-app
+cd react2024q3
 ```
 
 3. Install dependencies

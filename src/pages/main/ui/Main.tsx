@@ -44,7 +44,7 @@ export default function Main() {
       const response = await getData('spacecraft/search', payload, options);
       setData(response);
       setCurrentPage(response.page.pageNumber.toString());
-      setSearchParams({ page: (response.page.pageNumber + 1).toString(), search: searchQuery });
+      setSearchParams({ page: (response.page.pageNumber + 1).toString(), name: searchQuery });
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);

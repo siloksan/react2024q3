@@ -16,8 +16,9 @@ module.exports = {
     sourceType: 'module',
     project: './tsconfig.json',
   },
-  plugins: ['react-refresh', 'prettier'],
+  plugins: ['@typescript-eslint', 'react-refresh', 'prettier'],
   rules: {
+    '@typescript-eslint/no-explicit-any': 'error',
     'import/prefer-default-export': 'off',
     'import/no-extraneous-dependencies': [
       'off',
@@ -28,22 +29,6 @@ module.exports = {
       'error',
       {
         endOfLine: 'auto',
-      },
-    ],
-    'jsx-a11y/label-has-associated-control': [
-      'error',
-      {
-        required: {
-          some: ['nesting', 'id'],
-        },
-      },
-    ],
-    'jsx-a11y/label-has-for': [
-      'error',
-      {
-        required: {
-          some: ['nesting', 'id'],
-        },
       },
     ],
   },
