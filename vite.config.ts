@@ -22,6 +22,7 @@ export default defineConfig({
     setupFiles: ['./setupTests.ts'],
     coverage: {
       reporter: ['text', 'json', 'html'],
+      exclude: ['.eslintrc.cjs'],
     },
   },
 });
