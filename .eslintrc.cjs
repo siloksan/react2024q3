@@ -16,8 +16,9 @@ module.exports = {
     sourceType: 'module',
     project: './tsconfig.json',
   },
-  plugins: ['@typescript-eslint', 'react-refresh', 'prettier'],
+  plugins: ['@typescript-eslint', 'react-refresh', 'prettier', "react-compiler"],
   rules: {
+    "react-compiler/react-compiler": "error",
     '@typescript-eslint/no-explicit-any': 'error',
     'import/prefer-default-export': 'off',
     'import/no-extraneous-dependencies': [
