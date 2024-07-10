@@ -4,34 +4,28 @@ import styles from './Card.module.scss';
 
 interface Props {
   spacecraft: Spacecraft;
+  openDetails: (id: string) => void;
 }
 
-export default function SpaceCraftDetails({ spacecraft }: Props) {
+export default function SpaceCraftDetails({ spacecraft, openDetails }: Props) {
   const { name } = spacecraft;
 
-  const owner = spacecraft.owner ? spacecraft.owner.name : 'unknown';
-  const operator = spacecraft.operator ? spacecraft.operator.name : 'unknown';
   const dateStatus = spacecraft.dateStatus || 'unknown';
-  const spacecraftClass = spacecraft.spacecraftClass ? spacecraft.spacecraftClass.name : 'unknown';
   const status = spacecraft.status || 'unknown';
 
   return (
-    <li className={styles.container}>
+    <li
+      className={styles.container}
+      onClick={() => openDetails(spacecraft.uid)}
+      onKeyDown={() => openDetails(spacecraft.uid)}
+      aria-hidden="true"
+    >
       <div className="ship-details">
         <h2>
           <strong>Name:</strong> {name}
         </h2>
         <p>
-          <strong>Owner:</strong> {owner}
-        </p>
-        <p>
           <strong>Date of creation:</strong> {dateStatus}
-        </p>
-        <p>
-          <strong>Class:</strong> {spacecraftClass}
-        </p>
-        <p>
-          <strong>Managed By:</strong> {operator}
         </p>
         <p>
           <strong>Status:</strong> {status}

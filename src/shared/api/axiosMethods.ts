@@ -1,9 +1,9 @@
 import { AxiosRequestConfig } from 'axios';
-import { SpacecraftsResponse } from 'entities/spacecraft/models';
+import { Spacecraft, SpacecraftsResponse } from 'entities/spacecraft/models';
 import axiosInstance from './axios';
 import Payload from './types/apiTypes';
 
-async function getData(
+async function getSpaceCrafts(
   endpoint: string,
   payload: Payload,
   options: AxiosRequestConfig = {}
@@ -12,4 +12,9 @@ async function getData(
   return response.data;
 }
 
-export default getData;
+async function getSpaceCraftDetails(endpoint: string, options: AxiosRequestConfig = {}): Promise<Spacecraft> {
+  const response = await axiosInstance.get(endpoint, options);
+  return response.data.spacecraft;
+}
+
+export { getSpaceCrafts, getSpaceCraftDetails };

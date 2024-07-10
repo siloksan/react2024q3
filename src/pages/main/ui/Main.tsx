@@ -4,7 +4,7 @@ import { AxiosRequestConfig } from 'axios';
 
 import { SpacecraftsResponse } from 'entities/spacecraft/models';
 import Payload from 'shared/api/types/apiTypes';
-import getData from 'shared/api/axiosMethods';
+import { getSpaceCrafts } from 'shared/api/axiosMethods';
 
 import StorageKeys from 'shared/lib/useSearch/types/storageKeys';
 import useSearch from 'shared/lib/useSearch';
@@ -15,9 +15,10 @@ import Pagination from 'widgets/pagination';
 import CardList from '../components/cardList/CardList';
 
 import styles from './Main.module.scss';
+import CardDetails from '../components/cardDetails/cardDetails';
 
 export default function Main() {
-  const pageSize = 10;
+  const pageSize = 5;
   const { dataStorage: searchTerm, setDataStorage: setSearchTerm } = useSearch(StorageKeys.searchTerm);
   const { dataStorage: currentPage, setDataStorage: setCurrentPage } = useSearch(StorageKeys.currentPage);
 
@@ -25,6 +26,7 @@ export default function Main() {
 
   const [data, setData] = useState<SpacecraftsResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [cardId, setCardId] = useState<string | null>(null);
 
   const updateData = async (searchQuery: string, pageNumber: number | string = '') => {
     setSearchTerm(searchQuery);
@@ -41,7 +43,7 @@ export default function Main() {
       status: '',
     };
     try {
-      const response = await getData('spacecraft/search', payload, options);
+      const response = await getSpaceCrafts('spacecraft/search', payload, options);
       setData(response);
       setCurrentPage(response.page.pageNumber.toString());
       setSearchParams({ page: (response.page.pageNumber + 1).toString(), name: searchQuery });
@@ -50,6 +52,14 @@ export default function Main() {
         setError(err.message);
       }
     }
+  };
+
+  const closeDetails = () => {
+    setCardId(null);
+  };
+
+  const openDetails = (id: string) => {
+    setCardId(id);
   };
 
   const firstLoad = () => {
@@ -87,7 +97,10 @@ export default function Main() {
         setSearchTerm={setSearchTerm}
         setCurrentPage={(p) => setCurrentPage(p.toString())}
       />
-      {data ? <CardList spacecrafts={data.spacecrafts} /> : <Loader />}
+      <div className={styles.content}>
+        {data ? <CardList spacecrafts={data.spacecrafts} openDetails={openDetails} /> : <Loader />}
+        {cardId && <CardDetails id={cardId} closeDetails={closeDetails} />}
+      </div>
     </>
   );
 }
