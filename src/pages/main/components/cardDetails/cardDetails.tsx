@@ -40,10 +40,6 @@ export default function CardDetails({ id, closeDetails }: Props) {
     );
   }
 
-  // const closeDetails = () => {
-  //   setData(null);
-  // }
-
   const { name, spacecraftClass } = data;
 
   const owner = data.owner ? data.owner.name : 'unknown';
