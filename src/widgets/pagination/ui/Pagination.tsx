@@ -17,6 +17,7 @@ function Pagination({ itemPerPage, totalItems, currentPage, updateData, searchTe
   }
 
   const handler = (pageNumber: number) => {
+    console.log('pageNumber: ', pageNumber);
     updateData(searchTerm, pageNumber);
   };
 
@@ -47,7 +48,7 @@ function Pagination({ itemPerPage, totalItems, currentPage, updateData, searchTe
     if (isDisabled) {
       className += ` ${styles.pagination__button_disabled}`;
     }
-    const clickHandler = !isDisabled ? () => handler(pageNumber - 1) : () => {};
+    const clickHandler = !isDisabled ? () => handler(pageNumber) : () => {};
     return (
       <button
         className={className}
@@ -67,7 +68,7 @@ function Pagination({ itemPerPage, totalItems, currentPage, updateData, searchTe
       <button
         className={prevBtnClassName}
         type="button"
-        onClick={() => handler(currentPage - 2)}
+        onClick={() => handler(currentPage - 1)}
         disabled={prevBtnDisabled}
       >
         prev
@@ -76,7 +77,7 @@ function Pagination({ itemPerPage, totalItems, currentPage, updateData, searchTe
       <button
         className={nextBtnClassName}
         type="button"
-        onClick={() => handler(currentPage)}
+        onClick={() => handler(currentPage + 1)}
         disabled={nextBtnDisabled}
       >
         next

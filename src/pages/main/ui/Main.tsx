@@ -1,13 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { AxiosRequestConfig } from 'axios';
 
+import useStorageSearchParams from 'shared/lib/useCustomSearchParams/useCustomSearchParams';
 import { SpacecraftsResponse } from 'entities/spacecraft/models';
 import Payload from 'shared/api/types/apiTypes';
 import { getSpaceCrafts } from 'shared/api/axiosMethods';
-
-import StorageKeys from 'shared/lib/useSearch/types/storageKeys';
-import useSearch from 'shared/lib/useSearch';
 
 import Loader from 'shared/ui/loader/Loader';
 import SearchBox from 'shared/ui/search/SearchBox';
@@ -19,22 +16,18 @@ import CardDetails from '../components/cardDetails/cardDetails';
 
 export default function Main() {
   const pageSize = 5;
-  const { dataStorage: searchTerm, setDataStorage: setSearchTerm } = useSearch(StorageKeys.searchTerm);
-  const { dataStorage: currentPage, setDataStorage: setCurrentPage } = useSearch(StorageKeys.currentPage);
-
-  const [, setSearchParams] = useSearchParams();
+  const { dataStorage, setStorageSearchParams } = useStorageSearchParams();
 
   const [data, setData] = useState<SpacecraftsResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [cardId, setCardId] = useState<string | null>(null);
 
-  const updateData = async (searchQuery: string, pageNumber: number | string = '') => {
-    setSearchTerm(searchQuery);
+  const updateData = async (searchQuery: string = '', pageNumber?: number) => {
     setData(null);
     const options: AxiosRequestConfig = {
       params: {
         pageSize,
-        pageNumber,
+        ...(pageNumber ? { pageNumber: pageNumber - 1 } : {}),
       },
     };
     const payload: Payload = {
@@ -45,8 +38,7 @@ export default function Main() {
     try {
       const response = await getSpaceCrafts('spacecraft/search', payload, options);
       setData(response);
-      setCurrentPage(response.page.pageNumber.toString());
-      setSearchParams({ page: (response.page.pageNumber + 1).toString(), name: searchQuery });
+      setStorageSearchParams('page', (response.page.pageNumber + 1).toString());
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -63,7 +55,8 @@ export default function Main() {
   };
 
   const firstLoad = () => {
-    const page = currentPage !== '' ? Number(currentPage) : '';
+    const page = dataStorage.page ? Number(dataStorage.page) : undefined;
+    const searchTerm = dataStorage.name ? dataStorage.name : undefined;
     updateData(searchTerm, page);
   };
 
@@ -76,10 +69,10 @@ export default function Main() {
 
   const pagination = data ? (
     <Pagination
-      currentPage={Number(currentPage) + 1}
+      currentPage={dataStorage.page ? Number(dataStorage.page) : 1}
       itemPerPage={pageSize}
       totalItems={data.page.totalElements}
-      searchTerm={searchTerm}
+      searchTerm={dataStorage.name ? dataStorage.name : ''}
       updateData={updateData}
     />
   ) : null;
@@ -93,9 +86,8 @@ export default function Main() {
       <div className={styles.pagination}>{pagination}</div>
       <SearchBox
         updateData={updateData}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        setCurrentPage={(p) => setCurrentPage(p.toString())}
+        searchTerm={dataStorage.name ? dataStorage.name : ''}
+        setStorageSearchParams={setStorageSearchParams}
       />
       <div className={styles.content}>
         {data ? <CardList spacecrafts={data.spacecrafts} openDetails={openDetails} /> : <Loader />}

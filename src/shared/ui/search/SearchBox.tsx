@@ -1,4 +1,5 @@
-import React from 'react';
+import { SetStorageSearchParams } from 'shared/lib/types/setStorageSearchParams';
+import { useState } from 'react';
 import loupe from './assets/search-icon.svg';
 
 import styles from './SearchBox.module.scss';
@@ -6,19 +7,18 @@ import styles from './SearchBox.module.scss';
 interface Props {
   updateData: (searchTerm: string, pageNumber?: number) => void;
   searchTerm: string;
-  setSearchTerm: (searchTerm: string) => void;
-  setCurrentPage: (page: string) => void;
+  setStorageSearchParams: SetStorageSearchParams;
 }
 
-export default function SearchBox({ updateData, searchTerm, setSearchTerm, setCurrentPage }: Props) {
+export default function SearchBox({ updateData, searchTerm, setStorageSearchParams }: Props) {
+  const [value, setValue] = useState(searchTerm);
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setSearchTerm(value);
+    setValue(event.target.value);
   };
 
   const handleSubmit = () => {
-    setCurrentPage('');
-    updateData(searchTerm.trim());
+    setStorageSearchParams('name', value.trim());
+    updateData(value.trim());
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -31,7 +31,7 @@ export default function SearchBox({ updateData, searchTerm, setSearchTerm, setCu
     <div className={styles.container}>
       <div className={styles.form}>
         <input
-          value={searchTerm}
+          value={value}
           onChange={handleInput}
           onKeyDown={handleKeyDown}
           type="text"

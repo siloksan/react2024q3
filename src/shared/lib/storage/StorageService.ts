@@ -1,18 +1,12 @@
 class StorageService {
-  private key: string;
-
   private service: Storage = localStorage;
 
-  constructor(key: string) {
-    this.key = key;
+  public setData(key: string, value: string): void {
+    this.service.setItem(key, value);
   }
 
-  public setData(value: string): void {
-    this.service.setItem(this.key, value);
-  }
-
-  public getData(): string | null {
-    return this.service.getItem(this.key);
+  public getData(key: string): string | null {
+    return this.service.getItem(key);
   }
 
   static remove(key: string): void {
