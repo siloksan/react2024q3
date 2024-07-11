@@ -25,9 +25,9 @@ jobs:
         run: npm install
       - name: clean build directory
         run: rm -rf dist
-      # - name: build project
-      #   run: npm run build
-      # - name: format code
-      #   run: npm run format
-      # - name: lint code
-      #   run: npm run lint
+      - name: build project
+        run: npm run build
+      - name: format code
+        run: npm run format
+      - name: lint code
+        run: npm run lint
