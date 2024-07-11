@@ -47,6 +47,7 @@ export default function Main() {
   };
 
   const closeDetails = () => {
+    setStorageSearchParams('uid', '');
     setCardId(null);
   };
 
@@ -58,6 +59,7 @@ export default function Main() {
     const page = dataStorage.page ? Number(dataStorage.page) : undefined;
     const searchTerm = dataStorage.name ? dataStorage.name : undefined;
     updateData(searchTerm, page);
+    if (dataStorage.uid) openDetails(dataStorage.uid);
   };
 
   const savedCallback = useRef(firstLoad);
@@ -74,6 +76,7 @@ export default function Main() {
       totalItems={data.page.totalElements}
       searchTerm={dataStorage.name ? dataStorage.name : ''}
       updateData={updateData}
+      closeDetails={closeDetails}
     />
   ) : null;
 
@@ -88,10 +91,19 @@ export default function Main() {
         updateData={updateData}
         searchTerm={dataStorage.name ? dataStorage.name : ''}
         setStorageSearchParams={setStorageSearchParams}
+        closeDetails={closeDetails}
       />
       <div className={styles.content}>
-        {data ? <CardList spacecrafts={data.spacecrafts} openDetails={openDetails} /> : <Loader />}
-        {cardId && <CardDetails id={cardId} closeDetails={closeDetails} />}
+        <div className={styles.list}>
+          {data ? (
+            <CardList spacecrafts={data.spacecrafts} openDetails={openDetails} dataStorage={dataStorage} />
+          ) : (
+            <Loader />
+          )}
+        </div>
+        {cardId && (
+          <CardDetails id={cardId} closeDetails={closeDetails} setStorageSearchParams={setStorageSearchParams} />
+        )}
       </div>
     </>
   );

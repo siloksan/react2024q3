@@ -1,31 +1,37 @@
 import { Spacecraft } from 'entities/spacecraft/models';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getSpaceCraftDetails } from 'shared/api/axiosMethods';
 import Loader from 'shared/ui/loader/Loader';
 
+import { SetStorageSearchParams } from 'shared/lib/types/setStorageSearchParams';
 import styles from './cardDetails.module.scss';
 
 interface Props {
   id: string;
   closeDetails: () => void;
+  setStorageSearchParams: SetStorageSearchParams;
 }
 
-export default function CardDetails({ id, closeDetails }: Props) {
+export default function CardDetails({ id, closeDetails, setStorageSearchParams }: Props) {
   const [data, setData] = useState<Spacecraft | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const getDetails = async () => {
-      try {
-        const response = await getSpaceCraftDetails('spacecraft', { params: { uid: id } });
-        setData(response);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        }
+  const getDetails = async (uid: string) => {
+    setStorageSearchParams('uid', uid);
+    try {
+      const response = await getSpaceCraftDetails('spacecraft', { params: { uid } });
+      setData(response);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
       }
-    };
-    getDetails();
+    }
+  };
+
+  const savedCallback = useRef(getDetails);
+
+  useEffect(() => {
+    savedCallback.current(id);
   }, [id]);
 
   if (error) {
@@ -74,7 +80,7 @@ export default function CardDetails({ id, closeDetails }: Props) {
         <strong>Class:</strong> {spacecraftClass.name}
       </p>
       <p>
-        <strong>Crew:</strong> {spacecraftClass.crew}
+        <strong>Crew:</strong> {spacecraftClass.crew || 'unknown'}
       </p>
       <p>
         <strong>activeFrom:</strong> {spacecraftClass.activeFrom}

@@ -8,9 +8,10 @@ interface Props {
   updateData: (searchTerm: string, pageNumber?: number) => void;
   searchTerm: string;
   setStorageSearchParams: SetStorageSearchParams;
+  closeDetails: () => void;
 }
 
-export default function SearchBox({ updateData, searchTerm, setStorageSearchParams }: Props) {
+export default function SearchBox({ updateData, searchTerm, setStorageSearchParams, closeDetails }: Props) {
   const [value, setValue] = useState(searchTerm);
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
@@ -18,6 +19,7 @@ export default function SearchBox({ updateData, searchTerm, setStorageSearchPara
 
   const handleSubmit = () => {
     setStorageSearchParams('name', value.trim());
+    closeDetails();
     updateData(value.trim());
   };
 

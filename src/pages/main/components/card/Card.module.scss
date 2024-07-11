@@ -12,9 +12,6 @@
   &:hover {
     background-color: var(--color--card--hover);
   }
-  &:active {
-    background-color: var(--color--card--active);
-  }
   h2 {
     @include font(700, var(--font-family--genos));
     font-size: 2rem;
@@ -23,4 +20,8 @@
     @include font(400, var(--font-family--genos));
     font-size: 1.4rem;
   }
+}
+
+.active {
+  background-color: var(--color--card--active);
 }
