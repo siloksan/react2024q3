@@ -14,32 +14,24 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
+    extraFileExtensions: [".json"],
     project: './tsconfig.json',
   },
-  plugins: ['react-refresh', 'prettier'],
+  plugins: ['@typescript-eslint', 'react-refresh', 'prettier', 'react-compiler'],
   rules: {
-    // 'react/prefer-stateless-function': ['error', { ignorePureComponents: true }],
+    'react/jsx-props-no-spreading': 'off',
+    'react-compiler/react-compiler': 'error',
+    '@typescript-eslint/no-explicit-any': 'error',
+    'import/prefer-default-export': 'off',
+    'import/no-extraneous-dependencies': [
+      'off',
+      { devDependencies: false, optionalDependencies: false, peerDependencies: false },
+    ],
     'react/react-in-jsx-scope': 0,
     'prettier/prettier': [
       'error',
       {
         endOfLine: 'auto',
-      },
-    ],
-    'jsx-a11y/label-has-associated-control': [
-      'error',
-      {
-        required: {
-          some: ['nesting', 'id'],
-        },
-      },
-    ],
-    'jsx-a11y/label-has-for': [
-      'error',
-      {
-        required: {
-          some: ['nesting', 'id'],
-        },
       },
     ],
   },

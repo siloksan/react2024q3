@@ -5,13 +5,26 @@ interface Options {
   name: string;
 }
 
+export interface SpacecraftClass {
+  uid: string;
+  name: string;
+  numberOfDecks: string | null;
+  crew: string;
+  warpCapable: boolean;
+  mirror: boolean;
+  alternateReality: boolean;
+  activeFrom: string;
+  activeTo: string;
+  species: string | null;
+}
+
 export interface Spacecraft {
   uid: string;
   name: string;
   registry: string | null;
   status: string;
   dateStatus: string;
-  spacecraftClass: Options | null;
+  spacecraftClass: SpacecraftClass | null;
   owner: Options | null;
   operator: Options | null;
   affiliation: null;

@@ -1,32 +1,45 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AxiosRequestConfig } from 'axios';
 
-import getData from 'shared/api/axiosMethods';
-import Loader from 'shared/ui/loader/Loader';
-
-import SearchBox from 'shared/ui/search/SearchBox';
-
 import Payload from 'shared/api/types/apiTypes';
-
+import useStorageSearchParams from 'shared/lib/useCustomSearchParams/useCustomSearchParams';
 import { SpacecraftsResponse } from 'entities/spacecraft/models';
-import SpaceCraftDetails from '../components/SpaceCraftDetails/SpaceCraftDetails';
+import { getSpaceCrafts } from 'shared/api/axiosMethods';
+
+import ErrorBoundary from 'shared/ui/errorBoundary/ErrorBoundary';
+import Loader from 'shared/ui/loader/Loader';
+import SearchBox from 'shared/ui/search/SearchBox';
+import Pagination from 'widgets/pagination';
+import CardList from '../components/cardList/CardList';
+import CardDetails from '../components/cardDetails/CardDetails';
+
 import styles from './Main.module.scss';
 
 export default function Main() {
-  const pageSize = 10;
+  const pageSize = 5;
+  const { dataStorage, setStorageSearchParams } = useStorageSearchParams();
 
   const [data, setData] = useState<SpacecraftsResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const updateData = async (payload: Payload) => {
+  const [cardId, setCardId] = useState<string | null>(null);
+
+  const updateData = async (searchQuery: string = '', pageNumber?: number) => {
     setData(null);
     const options: AxiosRequestConfig = {
       params: {
         pageSize,
+        ...(pageNumber ? { pageNumber: pageNumber - 1 } : {}),
       },
     };
+    const payload: Payload = {
+      name: searchQuery,
+      registry: '',
+      status: '',
+    };
     try {
-      const response = await getData('spacecraft/search', payload, options);
+      const response = await getSpaceCrafts('spacecraft/search', payload, options);
       setData(response);
+      setStorageSearchParams('page', (response.page.pageNumber + 1).toString());
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -34,20 +47,39 @@ export default function Main() {
     }
   };
 
-  let spacecraftsList = data ? (
-    data.spacecrafts.map((spacecraft) => {
-      return <SpaceCraftDetails spacecraft={spacecraft} key={spacecraft.uid} />;
-    })
-  ) : (
-    <Loader />
-  );
+  const closeDetails = () => {
+    setStorageSearchParams('uid', '');
+    setCardId(null);
+  };
 
-  spacecraftsList =
-    data && data.spacecrafts.length === 0 ? (
-      <h3 className={styles.not_found}>No spacecrafts found</h3>
-    ) : (
-      spacecraftsList
-    );
+  const openDetails = (id: string) => {
+    setCardId(id);
+  };
+
+  const firstLoad = () => {
+    const page = dataStorage.page ? Number(dataStorage.page) : undefined;
+    const searchTerm = dataStorage.name ? dataStorage.name : undefined;
+    updateData(searchTerm, page);
+    if (dataStorage.uid) openDetails(dataStorage.uid);
+  };
+
+  const savedCallback = useRef(firstLoad);
+
+  // This trick is necessary to avoid re-render every time when search input is changed
+  useEffect(() => {
+    savedCallback.current();
+  }, []);
+
+  const pagination = data ? (
+    <Pagination
+      currentPage={dataStorage.page ? Number(dataStorage.page) : 1}
+      itemPerPage={pageSize}
+      totalItems={data.page.totalElements}
+      searchTerm={dataStorage.name ? dataStorage.name : ''}
+      updateData={updateData}
+      closeDetails={closeDetails}
+    />
+  ) : null;
 
   if (error) {
     throw new Error(error);
@@ -55,8 +87,27 @@ export default function Main() {
   return (
     <>
       <h1 className={styles.title}>Spacecrafts</h1>
-      <SearchBox updateData={updateData} />
-      <ul className={styles.list}>{spacecraftsList}</ul>
+      <div className={styles.pagination}>{pagination}</div>
+      <SearchBox
+        updateData={updateData}
+        searchTerm={dataStorage.name ? dataStorage.name : ''}
+        setStorageSearchParams={setStorageSearchParams}
+        closeDetails={closeDetails}
+      />
+      <div className={styles.content}>
+        <div className={styles.list}>
+          {data ? (
+            <CardList spacecrafts={data.spacecrafts} openDetails={openDetails} dataStorage={dataStorage} />
+          ) : (
+            <Loader />
+          )}
+        </div>
+        {cardId && (
+          <ErrorBoundary>
+            <CardDetails id={cardId} closeDetails={closeDetails} setStorageSearchParams={setStorageSearchParams} />
+          </ErrorBoundary>
+        )}
+      </div>
     </>
   );
 }

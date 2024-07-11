@@ -1,3 +1,3 @@
-webpack.config.js
 tsconfig.json
-customTemplate.js
+public/mockServiceWorker.js
+coverage/
