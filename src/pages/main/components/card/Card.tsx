@@ -11,7 +11,6 @@ interface Props {
 }
 
 export default function Card({ spacecraft, openDetails, dataStorage }: Props) {
-  const [active, setActive] = useState(false);
   const { name } = spacecraft;
 
   const [className, setClassName] = useState(`${styles.container}`);
@@ -26,15 +25,14 @@ export default function Card({ spacecraft, openDetails, dataStorage }: Props) {
 
   const openDetailsHandler = () => {
     openDetails(spacecraft.uid);
-    setActive(!active);
   };
 
   const dateStatus = spacecraft.dateStatus || 'unknown';
   const status = spacecraft.status || 'unknown';
 
   return (
-    <li className={className} onClick={openDetailsHandler} onKeyDown={openDetailsHandler} aria-hidden="true">
-      <div className="ship-details">
+    <li className={className}>
+      <div onClick={openDetailsHandler} onKeyDown={openDetailsHandler} role="button" tabIndex={0}>
         <h2>
           <strong>Name:</strong> {name}
         </h2>

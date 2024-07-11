@@ -1,26 +1,34 @@
 import { render, screen } from '@testing-library/react';
 
+import userEvent from '@testing-library/user-event';
 import Pagination from './Pagination';
 
 describe('Pagination', () => {
+  const props = {
+    currentPage: 1,
+    itemPerPage: 10,
+    updateData: vi.fn(),
+    totalItems: 100,
+    searchTerm: '',
+    closeDetails: vi.fn(),
+  };
+
   it('renders Pagination', () => {
-    render(<Pagination currentPage={1} itemPerPage={10} updateData={() => {}} totalItems={100} searchTerm="" />);
+    render(<Pagination {...props} />);
 
-    const header = screen.getByTestId('pagination');
+    const container = screen.getByTestId('pagination');
 
-    expect(header).toBeInTheDocument();
+    expect(container).toBeInTheDocument();
   });
 
   it('button for current page should be disabled', () => {
-    const currentPage = 3;
-    render(
-      <Pagination currentPage={currentPage} itemPerPage={10} updateData={() => {}} totalItems={100} searchTerm="" />
-    );
+    render(<Pagination {...props} />);
 
-    const currentBtn = screen.getByRole('button', { name: currentPage.toString() });
+    const currentBtn = screen.getByRole('button', { name: props.currentPage.toString() });
 
     expect(currentBtn).toHaveProperty('disabled', true);
   });
+
   it('should correctly renders last page', () => {
     const currentPage = 3;
     const itemPerPage = 5;
@@ -30,9 +38,10 @@ describe('Pagination', () => {
       <Pagination
         currentPage={currentPage}
         itemPerPage={itemPerPage}
-        updateData={() => {}}
+        updateData={props.updateData}
         totalItems={totalItems}
         searchTerm=""
+        closeDetails={props.closeDetails}
       />
     );
 
@@ -48,9 +57,10 @@ describe('Pagination', () => {
       <Pagination
         currentPage={currentPage}
         itemPerPage={itemPerPage}
-        updateData={() => {}}
+        updateData={props.updateData}
         totalItems={totalItems}
         searchTerm=""
+        closeDetails={props.closeDetails}
       />
     );
 
@@ -59,5 +69,49 @@ describe('Pagination', () => {
     middleButtons.forEach((btn, idx) => {
       expect(btn).toHaveTextContent((currentPage - 1 + idx).toString());
     });
+  });
+
+  it('should return null if totalPages < 2', () => {
+    const { container } = render(
+      <Pagination
+        currentPage={props.currentPage}
+        itemPerPage={props.itemPerPage}
+        updateData={props.updateData}
+        totalItems={1}
+        searchTerm={props.searchTerm}
+        closeDetails={props.closeDetails}
+      />
+    );
+
+    expect(container.firstChild).toBeNull();
+  });
+
+  it('should call updateData when button is clicked', async () => {
+    render(<Pagination {...props} />);
+
+    const paginationButtons = screen.getAllByTestId('pagination-button');
+    const user = userEvent.setup();
+    await user.click(paginationButtons[2]);
+
+    expect(props.updateData).toHaveBeenCalled();
+  });
+
+  it('should disable next button if current page is equal to total pages', () => {
+    const currentPage = 10;
+    const itemPerPage = 5;
+    const totalItems = 50;
+    render(
+      <Pagination
+        currentPage={currentPage}
+        itemPerPage={itemPerPage}
+        updateData={props.updateData}
+        totalItems={totalItems}
+        searchTerm=""
+        closeDetails={props.closeDetails}
+      />
+    );
+
+    const nextBtn = screen.getByRole('button', { name: /next/i });
+    expect(nextBtn).toHaveProperty('disabled', true);
   });
 });

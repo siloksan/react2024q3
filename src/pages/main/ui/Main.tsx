@@ -1,18 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 import { AxiosRequestConfig } from 'axios';
 
+import Payload from 'shared/api/types/apiTypes';
 import useStorageSearchParams from 'shared/lib/useCustomSearchParams/useCustomSearchParams';
 import { SpacecraftsResponse } from 'entities/spacecraft/models';
-import Payload from 'shared/api/types/apiTypes';
 import { getSpaceCrafts } from 'shared/api/axiosMethods';
 
+import ErrorBoundary from 'shared/ui/errorBoundary/ErrorBoundary';
 import Loader from 'shared/ui/loader/Loader';
 import SearchBox from 'shared/ui/search/SearchBox';
 import Pagination from 'widgets/pagination';
 import CardList from '../components/cardList/CardList';
+import CardDetails from '../components/cardDetails/CardDetails';
 
 import styles from './Main.module.scss';
-import CardDetails from '../components/cardDetails/cardDetails';
 
 export default function Main() {
   const pageSize = 5;
@@ -102,7 +103,9 @@ export default function Main() {
           )}
         </div>
         {cardId && (
-          <CardDetails id={cardId} closeDetails={closeDetails} setStorageSearchParams={setStorageSearchParams} />
+          <ErrorBoundary>
+            <CardDetails id={cardId} closeDetails={closeDetails} setStorageSearchParams={setStorageSearchParams} />
+          </ErrorBoundary>
         )}
       </div>
     </>

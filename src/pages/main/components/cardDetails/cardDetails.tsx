@@ -23,7 +23,7 @@ export default function CardDetails({ id, closeDetails, setStorageSearchParams }
       setData(response);
     } catch (err) {
       if (err instanceof Error) {
-        setError(err.message);
+        setError('err.message');
       }
     }
   };
@@ -40,7 +40,7 @@ export default function CardDetails({ id, closeDetails, setStorageSearchParams }
 
   if (!data) {
     return (
-      <aside>
+      <aside data-testid="card-details">
         <Loader />
       </aside>
     );
@@ -92,7 +92,7 @@ export default function CardDetails({ id, closeDetails, setStorageSearchParams }
   ) : null;
 
   return (
-    <aside className={styles.container}>
+    <aside className={styles.container} data-testid="card-details">
       <h3>
         <strong>Name:</strong> {name}
       </h3>

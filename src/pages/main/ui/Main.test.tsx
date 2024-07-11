@@ -2,8 +2,8 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
 import { server } from 'shared/api/mock/mocks/node';
-import { http, HttpResponse } from 'msw';
 import ErrorBoundary from 'shared/ui/errorBoundary/ErrorBoundary';
+import { handlersError } from 'shared/api/mock/handlersError';
 import Main from './Main';
 
 const customRender = () =>
@@ -25,15 +25,8 @@ describe('Main', () => {
   });
 
   it('throws an error when the request fails', async () => {
-    server.use(
-      http.post('https://stapi.co/api/v2/rest/spacecraft/search', ({ request }) => {
-        const url = new URL(request.url);
+    server.use(handlersError.spacecraftsPost);
 
-        url.searchParams.set('pageNumber', '');
-        url.searchParams.set('pageSize', '10');
-        return HttpResponse.json({ message: 'Internal Server Error' }, { status: 500 });
-      })
-    );
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     customRender();
