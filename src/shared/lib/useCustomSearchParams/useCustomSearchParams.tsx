@@ -7,12 +7,6 @@ export default function useStorageSearchParams() {
   const { dataStorage, setItem } = useStorage();
 
   const initialSearchParams = useMemo(() => new URLSearchParams(), []);
-  Object.entries(dataStorage).forEach(([key, value]) => {
-    if (value) {
-      initialSearchParams.set(key, value);
-    }
-  });
-
   useEffect(() => {
     Object.entries(dataStorage).forEach(([key, value]) => {
       if (value) {

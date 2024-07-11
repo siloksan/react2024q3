@@ -4,7 +4,7 @@ import { getSpaceCraftDetails } from 'shared/api/axiosMethods';
 import Loader from 'shared/ui/loader/Loader';
 
 import { SetStorageSearchParams } from 'shared/lib/types/setStorageSearchParams';
-import styles from './cardDetails.module.scss';
+import styles from './CardDetails.module.scss';
 
 interface Props {
   id: string;

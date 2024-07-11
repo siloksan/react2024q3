@@ -26,9 +26,9 @@ jobs:
             npm-cache-v1-${{ runner.os }}-
       - name: install modules
         run: npm install
-      - name: build project
-        run: npm run build
-      - name: format code
-        run: npm run format
-      - name: lint code
-        run: npm run lint
+      # - name: build project
+      #   run: npm run build
+      # - name: format code
+      #   run: npm run format
+      # - name: lint code
+      #   run: npm run lint

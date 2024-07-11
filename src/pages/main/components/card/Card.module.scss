@@ -8,6 +8,9 @@
   border: 1px solid #ccc;
   background-color: var(--color--card);
   color: var(--color--white);
+  div {
+    width: 100%;
+  }
 
   &:hover {
     background-color: var(--color--card--hover);

@@ -18,8 +18,9 @@ export default function useStorage() {
   useEffect(() => {
     Object.keys(dataStorage).forEach((key) => {
       const storageKey = key as keyof StorageData;
-      if (dataStorage[storageKey] === null) return;
-      storageService.setData(storageKeys[storageKey], dataStorage[storageKey]);
+      if (dataStorage[storageKey] !== null) {
+        storageService.setData(storageKeys[storageKey], dataStorage[storageKey]);
+      }
     });
   }, [dataStorage, storageService]);
 
