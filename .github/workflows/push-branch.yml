@@ -27,6 +27,8 @@ jobs:
         run: rm -rf dist
       - name: build project
         run: npm run build
+      - name: run test
+        run: npm run test
       - name: format code
         run: npm run format
       - name: lint code
