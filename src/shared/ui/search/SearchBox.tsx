@@ -1,4 +1,3 @@
-import { SetStorageSearchParams } from 'shared/lib/types/setStorageSearchParams';
 import { useState } from 'react';
 import loupe from './assets/search-icon.svg';
 
@@ -7,7 +6,7 @@ import styles from './SearchBox.module.scss';
 interface Props {
   updateData: (searchTerm: string, pageNumber?: number) => void;
   searchTerm: string;
-  setStorageSearchParams: SetStorageSearchParams;
+  setStorageSearchParams: (key: string, value: string) => void;
 }
 
 export default function SearchBox({ updateData, searchTerm, setStorageSearchParams }: Props) {
