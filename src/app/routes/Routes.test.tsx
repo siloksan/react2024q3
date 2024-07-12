@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { describe, it, expect } from 'vitest';
-import { routesConfig } from './routes';
+import { routesConfig } from './Routes';
 
 describe('Routes component', () => {
   it('should render Layout and Main component on root path', () => {
