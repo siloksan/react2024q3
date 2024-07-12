@@ -41,7 +41,6 @@ describe('Pagination', () => {
         updateData={props.updateData}
         totalItems={totalItems}
         searchTerm=""
-        closeDetails={props.closeDetails}
       />
     );
 
@@ -60,7 +59,6 @@ describe('Pagination', () => {
         updateData={props.updateData}
         totalItems={totalItems}
         searchTerm=""
-        closeDetails={props.closeDetails}
       />
     );
 
@@ -79,7 +77,6 @@ describe('Pagination', () => {
         updateData={props.updateData}
         totalItems={1}
         searchTerm={props.searchTerm}
-        closeDetails={props.closeDetails}
       />
     );
 
@@ -107,7 +104,6 @@ describe('Pagination', () => {
         updateData={props.updateData}
         totalItems={totalItems}
         searchTerm=""
-        closeDetails={props.closeDetails}
       />
     );
 

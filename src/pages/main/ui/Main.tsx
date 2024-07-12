@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { AxiosRequestConfig } from 'axios';
+import { Outlet } from 'react-router-dom';
 
 import Payload from 'shared/api/types/apiTypes';
-import useStorageSearchParams from 'shared/lib/useCustomSearchParams/useCustomSearchParams';
 import { SpacecraftsResponse } from 'entities/spacecraft/models';
 import { getSpaceCrafts } from 'shared/api/axiosMethods';
 
@@ -10,19 +10,20 @@ import ErrorBoundary from 'shared/ui/errorBoundary/ErrorBoundary';
 import Loader from 'shared/ui/loader/Loader';
 import SearchBox from 'shared/ui/search/SearchBox';
 import Pagination from 'widgets/pagination';
+import useStorage from 'shared/lib/useStorage/useStorage';
 import CardList from '../components/cardList/CardList';
-import CardDetails from '../components/cardDetails/CardDetails';
 
 import styles from './Main.module.scss';
 
 export default function Main() {
   const pageSize = 5;
-  const { dataStorage, setStorageSearchParams } = useStorageSearchParams();
+  const { searchParams, setKeyAndValue } = useStorage();
 
   const [data, setData] = useState<SpacecraftsResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [cardId, setCardId] = useState<string | null>(null);
 
+  const pageDataString = searchParams.get('page');
+  const nameDataString = searchParams.get('name');
   const updateData = async (searchQuery: string = '', pageNumber?: number) => {
     setData(null);
     const options: AxiosRequestConfig = {
@@ -39,7 +40,7 @@ export default function Main() {
     try {
       const response = await getSpaceCrafts('spacecraft/search', payload, options);
       setData(response);
-      setStorageSearchParams('page', (response.page.pageNumber + 1).toString());
+      setKeyAndValue('page', (response.page.pageNumber + 1).toString());
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -47,20 +48,10 @@ export default function Main() {
     }
   };
 
-  const closeDetails = () => {
-    setStorageSearchParams('uid', '');
-    setCardId(null);
-  };
-
-  const openDetails = (id: string) => {
-    setCardId(id);
-  };
-
   const firstLoad = () => {
-    const page = dataStorage.page ? Number(dataStorage.page) : undefined;
-    const searchTerm = dataStorage.name ? dataStorage.name : undefined;
+    const page = pageDataString ? Number(pageDataString) : undefined;
+    const searchTerm = nameDataString || undefined;
     updateData(searchTerm, page);
-    if (dataStorage.uid) openDetails(dataStorage.uid);
   };
 
   const savedCallback = useRef(firstLoad);
@@ -72,12 +63,11 @@ export default function Main() {
 
   const pagination = data ? (
     <Pagination
-      currentPage={dataStorage.page ? Number(dataStorage.page) : 1}
+      currentPage={pageDataString ? Number(pageDataString) : 1}
       itemPerPage={pageSize}
       totalItems={data.page.totalElements}
-      searchTerm={dataStorage.name ? dataStorage.name : ''}
+      searchTerm={nameDataString || ''}
       updateData={updateData}
-      closeDetails={closeDetails}
     />
   ) : null;
 
@@ -88,25 +78,12 @@ export default function Main() {
     <>
       <h1 className={styles.title}>Spacecrafts</h1>
       <div className={styles.pagination}>{pagination}</div>
-      <SearchBox
-        updateData={updateData}
-        searchTerm={dataStorage.name ? dataStorage.name : ''}
-        setStorageSearchParams={setStorageSearchParams}
-        closeDetails={closeDetails}
-      />
+      <SearchBox updateData={updateData} searchTerm={nameDataString || ''} setStorageSearchParams={setKeyAndValue} />
       <div className={styles.content}>
-        <div className={styles.list}>
-          {data ? (
-            <CardList spacecrafts={data.spacecrafts} openDetails={openDetails} dataStorage={dataStorage} />
-          ) : (
-            <Loader />
-          )}
-        </div>
-        {cardId && (
-          <ErrorBoundary>
-            <CardDetails id={cardId} closeDetails={closeDetails} setStorageSearchParams={setStorageSearchParams} />
-          </ErrorBoundary>
-        )}
+        <div className={styles.list}>{data ? <CardList spacecrafts={data.spacecrafts} /> : <Loader />}</div>
+        <ErrorBoundary>
+          <Outlet />
+        </ErrorBoundary>
       </div>
     </>
   );

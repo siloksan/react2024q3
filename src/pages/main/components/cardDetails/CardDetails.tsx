@@ -1,23 +1,19 @@
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Spacecraft } from 'entities/spacecraft/models';
 import { useEffect, useRef, useState } from 'react';
 import { getSpaceCraftDetails } from 'shared/api/axiosMethods';
 import Loader from 'shared/ui/loader/Loader';
 
-import { SetStorageSearchParams } from 'shared/lib/types/setStorageSearchParams';
 import styles from './CardDetails.module.scss';
 
-interface Props {
-  id: string;
-  closeDetails: () => void;
-  setStorageSearchParams: SetStorageSearchParams;
-}
-
-export default function CardDetails({ id, closeDetails, setStorageSearchParams }: Props) {
+export default function CardDetails() {
+  const { spacecraftId } = useParams();
   const [data, setData] = useState<Spacecraft | null>(null);
   const [error, setError] = useState<string | null>(null);
-
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const getDetails = async (uid: string) => {
-    setStorageSearchParams('uid', uid);
+    setData(null);
     try {
       const response = await getSpaceCraftDetails('spacecraft', { params: { uid } });
       setData(response);
@@ -28,11 +24,17 @@ export default function CardDetails({ id, closeDetails, setStorageSearchParams }
     }
   };
 
+  const closeDetails = () => {
+    navigate(`/?${searchParams.toString()}`);
+  };
+
   const savedCallback = useRef(getDetails);
 
   useEffect(() => {
-    savedCallback.current(id);
-  }, [id]);
+    if (spacecraftId) {
+      savedCallback.current(spacecraftId);
+    }
+  }, [spacecraftId]);
 
   if (error) {
     throw new Error(error);
@@ -40,7 +42,7 @@ export default function CardDetails({ id, closeDetails, setStorageSearchParams }
 
   if (!data) {
     return (
-      <aside data-testid="card-details">
+      <aside className={styles.container} data-testid="card-details">
         <Loader />
       </aside>
     );

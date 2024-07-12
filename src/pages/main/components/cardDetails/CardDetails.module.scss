@@ -1,12 +1,16 @@
 @use 'src/app/styles/mixins.scss' as *;
 
 .container {
+  position: relative;
   padding: 0 20px;
   background-color: var(--color--card-details);
   color: var(--color--white);
-  width: 100%;
   display: flex;
+  flex-grow: 2;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
   h3 {
     margin-top: 30px;
     text-align: center;
@@ -23,8 +27,9 @@
     background-color: var(--color--light-blue);
     border-radius: 3px;
     @include font(500, var(--font-family--genos));
-    &:hover {
+    a:hover {
       background-color: var(--color--light-blue--hover);
+      text-decoration: none;
     }
     &:active {
       background-color: var(--color--light-blue--active);
@@ -37,6 +42,7 @@
   width: 100%;
   justify-content: space-around;
   margin: 30px 0 0 0;
+  gap: 20px;
   p {
     @include font(400, var(--font-family--genos));
     font-size: 1.6rem;

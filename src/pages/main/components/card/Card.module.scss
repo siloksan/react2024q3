@@ -8,8 +8,11 @@
   border: 1px solid #ccc;
   background-color: var(--color--card);
   color: var(--color--white);
-  div {
+  a {
     width: 100%;
+    &:hover {
+      text-decoration: none;
+    }
   }
 
   &:hover {

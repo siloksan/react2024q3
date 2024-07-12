@@ -1,35 +1,40 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import StorageService from '../storage/StorageService';
-import { StorageData, storageKeys } from '../types/storage';
-import { SetStorageSearchParams } from '../types/setStorageSearchParams';
 
 export default function useStorage() {
   const storageService = useMemo(() => new StorageService(), []);
 
-  const [dataStorage, setDataStorage] = useState<StorageData>(() => {
-    const initialData: StorageData = {
-      page: storageService.getData(storageKeys.page),
-      name: storageService.getData(storageKeys.name),
-      uid: storageService.getData(storageKeys.uid),
-    };
-    return initialData;
-  });
+  const [storageData, setStorageData] = useState<string>(storageService.getData('searchParams') || '');
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  useEffect(() => {
-    Object.keys(dataStorage).forEach((key) => {
-      const storageKey = key as keyof StorageData;
-      if (dataStorage[storageKey] !== null) {
-        storageService.setData(storageKeys[storageKey], dataStorage[storageKey]);
-      }
-    });
-  }, [dataStorage, storageService]);
-
-  const setItem: SetStorageSearchParams = (key, value) => {
-    setDataStorage((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }));
+  const firstLoad = () => {
+    if (searchParams.size > 0) {
+      const paramsString = searchParams.toString();
+      setStorageData(paramsString);
+      storageService.setData('searchParams', paramsString);
+    } else if (storageData) {
+      const params = new URLSearchParams(storageData);
+      setSearchParams(params);
+    }
   };
 
-  return { dataStorage, setItem };
+  const savedCallback = useRef(firstLoad);
+
+  useEffect(() => {
+    savedCallback.current();
+  }, []);
+
+  const setKeyAndValue = (key: string, value: string) => {
+    if (value) {
+      searchParams.set(key, value);
+    } else {
+      searchParams.delete(key);
+    }
+    setSearchParams(searchParams);
+    setStorageData(searchParams.toString());
+    storageService.setData('searchParams', searchParams.toString());
+  };
+
+  return { searchParams, setKeyAndValue };
 }
