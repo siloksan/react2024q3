@@ -10,7 +10,7 @@
     "format": "prettier --check ./src",
     "test": "vitest --run",
     "test:watch": "vitest --coverage",
-    "test:ui": "vitest --ui --coverage.enabled=true",
+    "test:ui": "vitest --ui --coverage",
     "lint": "npm run lint:code && npm run lint:types",
     "lint:code": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:types": "tsc --noEmit",

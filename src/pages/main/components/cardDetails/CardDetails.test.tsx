@@ -1,27 +1,36 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { server } from 'shared/api/mock/mocks/node';
-import userEvent from '@testing-library/user-event';
+import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 
 import { handlersError } from 'shared/api/mock/handlersError';
-import ErrorBoundary from 'shared/ui/errorBoundary/ErrorBoundary';
 import CardDetails from './CardDetails';
 
 describe('CardDetails', () => {
-  const props = {
-    id: 'test',
-    closeDetails: () => {},
-    setStorageSearchParams: () => {},
-  };
+  function customRender(id: string) {
+    const routes = [
+      {
+        path: '/details/:spacecraftId',
+        element: <CardDetails />,
+      },
+    ];
+
+    const router = createMemoryRouter(routes, {
+      initialEntries: ['/', `/details/${id}`],
+      initialIndex: 1,
+    });
+
+    render(<RouterProvider router={router} />);
+  }
 
   it('should renders CardDetails', async () => {
-    render(<CardDetails {...props} />);
+    customRender('test');
 
     const container = screen.getByTestId('card-details');
 
     expect(container).toBeInTheDocument();
   });
   it('should renders loader', async () => {
-    render(<CardDetails {...props} />);
+    customRender('test');
 
     const loader = screen.getByTestId('loader');
 
@@ -29,7 +38,7 @@ describe('CardDetails', () => {
   });
 
   it('should fetch data successfully', async () => {
-    render(<CardDetails {...props} />);
+    customRender('test');
 
     await waitFor(() => {
       const h3 = screen.getByRole('heading', { level: 3 });
@@ -41,33 +50,15 @@ describe('CardDetails', () => {
   it('should throws an error when the request fails', async () => {
     server.use(handlersError.spaceCraftGetDetails);
 
-    render(
-      <ErrorBoundary>
-        <CardDetails {...props} />
-      </ErrorBoundary>
-    );
+    customRender('test');
 
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     await waitFor(() => {
-      const errorMessage = screen.getByRole('heading', { level: 2 });
-      expect(errorMessage).toHaveTextContent(/Something went wrong!/i);
+      const errorMessage = screen.getByText(/Hey developer/i);
+      expect(errorMessage).toBeInTheDocument();
     });
 
     consoleErrorSpy.mockRestore();
-  });
-
-  it('should call closeDetails when the button is clicked', async () => {
-    const closeDetails = vi.fn();
-
-    render(<CardDetails {...props} closeDetails={closeDetails} />);
-
-    await waitFor(async () => {
-      const button = screen.getByRole('button', { name: /close details/i });
-      const user = userEvent.setup();
-      await user.click(button);
-
-      expect(closeDetails).toHaveBeenCalledOnce();
-    });
   });
 });

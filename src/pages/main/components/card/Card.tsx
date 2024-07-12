@@ -1,38 +1,38 @@
 import { Spacecraft } from 'entities/spacecraft/models';
 
 import { useEffect, useState } from 'react';
-import { StorageData } from 'shared/lib/types/storage';
+import { NavLink, useParams, useSearchParams } from 'react-router-dom';
 import styles from './Card.module.scss';
 
 interface Props {
   spacecraft: Spacecraft;
-  openDetails: (id: string) => void;
-  dataStorage: StorageData;
 }
 
-export default function Card({ spacecraft, openDetails, dataStorage }: Props) {
+export default function Card({ spacecraft }: Props) {
   const { name } = spacecraft;
+  const { spacecraftId } = useParams();
 
   const [className, setClassName] = useState(`${styles.container}`);
 
   useEffect(() => {
-    if (dataStorage.uid === spacecraft.uid) {
+    if (spacecraftId === spacecraft.uid) {
       setClassName(`${styles.container} ${styles.active}`);
     } else {
       setClassName(`${styles.container}`);
     }
-  }, [dataStorage.uid, spacecraft.uid]);
-
-  const openDetailsHandler = () => {
-    openDetails(spacecraft.uid);
-  };
+  }, [spacecraftId, spacecraft.uid]);
 
   const dateStatus = spacecraft.dateStatus || 'unknown';
   const status = spacecraft.status || 'unknown';
 
+  const [searchParams] = useSearchParams();
+
   return (
     <li className={className}>
-      <div onClick={openDetailsHandler} onKeyDown={openDetailsHandler} role="button" tabIndex={0}>
+      <NavLink
+        to={`spacecrafts/${spacecraft.uid}?${searchParams.toString()}`}
+        className={({ isActive }) => (isActive ? 'active' : '')}
+      >
         <h2>
           <strong>Name:</strong> {name}
         </h2>
@@ -42,7 +42,7 @@ export default function Card({ spacecraft, openDetails, dataStorage }: Props) {
         <p>
           <strong>Status:</strong> {status}
         </p>
-      </div>
+      </NavLink>
     </li>
   );
 }

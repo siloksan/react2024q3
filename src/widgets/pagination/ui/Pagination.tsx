@@ -7,10 +7,9 @@ interface Props {
   updateData: (searchQuery: string, pageNumber: number) => void;
   currentPage: number;
   searchTerm: string;
-  closeDetails: () => void;
 }
 
-function Pagination({ itemPerPage, totalItems, currentPage, updateData, searchTerm, closeDetails }: Props) {
+function Pagination({ itemPerPage, totalItems, currentPage, updateData, searchTerm }: Props) {
   const totalPages = Math.ceil(totalItems / itemPerPage);
 
   if (totalPages < 2) {
@@ -18,7 +17,6 @@ function Pagination({ itemPerPage, totalItems, currentPage, updateData, searchTe
   }
 
   const handler = (pageNumber: number) => {
-    closeDetails();
     updateData(searchTerm, pageNumber);
   };
 

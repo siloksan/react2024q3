@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { AxiosRequestConfig } from 'axios';
+import { Outlet } from 'react-router-dom';
 
 import Payload from 'shared/api/types/apiTypes';
 import useStorageSearchParams from 'shared/lib/useCustomSearchParams/useCustomSearchParams';
@@ -11,7 +12,6 @@ import Loader from 'shared/ui/loader/Loader';
 import SearchBox from 'shared/ui/search/SearchBox';
 import Pagination from 'widgets/pagination';
 import CardList from '../components/cardList/CardList';
-import CardDetails from '../components/cardDetails/CardDetails';
 
 import styles from './Main.module.scss';
 
@@ -21,7 +21,6 @@ export default function Main() {
 
   const [data, setData] = useState<SpacecraftsResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [cardId, setCardId] = useState<string | null>(null);
 
   const updateData = async (searchQuery: string = '', pageNumber?: number) => {
     setData(null);
@@ -47,20 +46,10 @@ export default function Main() {
     }
   };
 
-  const closeDetails = () => {
-    setStorageSearchParams('uid', '');
-    setCardId(null);
-  };
-
-  const openDetails = (id: string) => {
-    setCardId(id);
-  };
-
   const firstLoad = () => {
     const page = dataStorage.page ? Number(dataStorage.page) : undefined;
     const searchTerm = dataStorage.name ? dataStorage.name : undefined;
     updateData(searchTerm, page);
-    if (dataStorage.uid) openDetails(dataStorage.uid);
   };
 
   const savedCallback = useRef(firstLoad);
@@ -77,7 +66,6 @@ export default function Main() {
       totalItems={data.page.totalElements}
       searchTerm={dataStorage.name ? dataStorage.name : ''}
       updateData={updateData}
-      closeDetails={closeDetails}
     />
   ) : null;
 
@@ -92,21 +80,12 @@ export default function Main() {
         updateData={updateData}
         searchTerm={dataStorage.name ? dataStorage.name : ''}
         setStorageSearchParams={setStorageSearchParams}
-        closeDetails={closeDetails}
       />
       <div className={styles.content}>
-        <div className={styles.list}>
-          {data ? (
-            <CardList spacecrafts={data.spacecrafts} openDetails={openDetails} dataStorage={dataStorage} />
-          ) : (
-            <Loader />
-          )}
-        </div>
-        {cardId && (
-          <ErrorBoundary>
-            <CardDetails id={cardId} closeDetails={closeDetails} setStorageSearchParams={setStorageSearchParams} />
-          </ErrorBoundary>
-        )}
+        <div className={styles.list}>{data ? <CardList spacecrafts={data.spacecrafts} /> : <Loader />}</div>
+        <ErrorBoundary>
+          <Outlet />
+        </ErrorBoundary>
       </div>
     </>
   );
