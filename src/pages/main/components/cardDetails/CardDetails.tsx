@@ -1,15 +1,17 @@
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Spacecraft } from 'entities/spacecraft/models';
 import { useEffect, useRef, useState } from 'react';
 import { getSpaceCraftDetails } from 'shared/api/axiosMethods';
 import Loader from 'shared/ui/loader/Loader';
 
-import { NavLink, useParams } from 'react-router-dom';
 import styles from './CardDetails.module.scss';
 
 export default function CardDetails() {
   const { spacecraftId } = useParams();
   const [data, setData] = useState<Spacecraft | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const getDetails = async (uid: string) => {
     setData(null);
     try {
@@ -20,6 +22,10 @@ export default function CardDetails() {
         setError('err.message');
       }
     }
+  };
+
+  const closeDetails = () => {
+    navigate(`/?${searchParams.toString()}`);
   };
 
   const savedCallback = useRef(getDetails);
@@ -96,9 +102,9 @@ export default function CardDetails() {
         {leftSide}
         {rightSide}
       </div>
-      <NavLink to="/" className={styles.btn}>
+      <button className={styles.btn} onClick={closeDetails} type="button">
         Close details
-      </NavLink>
+      </button>
     </aside>
   );
 }
