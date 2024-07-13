@@ -25,6 +25,10 @@ export default function useStorage() {
     savedCallback.current();
   }, []);
 
+  useEffect(() => {
+    storageService.setData('searchParams', storageData);
+  }, [storageData, storageService]);
+
   const setKeyAndValue = (key: string, value: string) => {
     if (value) {
       searchParams.set(key, value);
@@ -33,7 +37,6 @@ export default function useStorage() {
     }
     setSearchParams(searchParams);
     setStorageData(searchParams.toString());
-    storageService.setData('searchParams', searchParams.toString());
   };
 
   return { searchParams, setKeyAndValue };
