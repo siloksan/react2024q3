@@ -1,0 +1,23 @@
+@use 'src/app/styles/mixins.scss' as *;
+
+.container {
+  width: 95%;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6rem;
+  background-color: var(--color--error);
+  padding: 10px;
+  h2 {
+    text-align: center;
+    @include font(700, var(--font-family--genos));
+    font-size: 3rem;
+  }
+  details {
+    margin-top: 50px;
+  }
+}

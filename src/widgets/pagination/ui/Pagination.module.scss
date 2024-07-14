@@ -1,0 +1,29 @@
+@use 'src/app/styles/mixins.scss' as *;
+
+.container {
+  display: flex;
+  gap: 10px;
+  width: 80%;
+  margin: 0 auto;
+  justify-content: center;
+}
+
+.pagination__button {
+  background-color: var(--color--dark-blue);
+  min-width: 50px;
+  padding: 6px;
+  font-size: 1.3rem;
+  @include font(500, var(--font-family--genos));
+}
+
+.pagination__button_disabled {
+  background-color: var(--color--light-blue--disabled);
+  &:hover,
+  &:active {
+    cursor: default;
+  }
+}
+
+.pagination__button_current {
+  background-color: var(--color--light-blue);
+}

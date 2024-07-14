@@ -1,0 +1,33 @@
+@use 'src/app/styles/mixins.scss' as *;
+
+.container {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: var(--color--card);
+  color: var(--color--white);
+  a {
+    width: 100%;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  &:hover {
+    background-color: var(--color--card--hover);
+  }
+  h2 {
+    @include font(700, var(--font-family--genos));
+    font-size: 2rem;
+  }
+  p {
+    @include font(400, var(--font-family--genos));
+    font-size: 1.4rem;
+  }
+}
+
+.active {
+  background-color: var(--color--card--active);
+}
