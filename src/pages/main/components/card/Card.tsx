@@ -1,7 +1,7 @@
 import { Spacecraft } from 'entities/spacecraft/models';
 
 import { useEffect, useState } from 'react';
-import { NavLink, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import styles from './Card.module.scss';
 
 interface Props {
@@ -29,10 +29,7 @@ export default function Card({ spacecraft }: Props) {
 
   return (
     <li className={className}>
-      <NavLink
-        to={`spacecrafts/${spacecraft.uid}?${searchParams.toString()}`}
-        className={({ isActive }) => (isActive ? 'active' : '')}
-      >
+      <Link to={`spacecrafts/${spacecraft.uid}?${searchParams.toString()}`}>
         <h2>
           <strong>Name:</strong> {name}
         </h2>
@@ -42,7 +39,7 @@ export default function Card({ spacecraft }: Props) {
         <p>
           <strong>Status:</strong> {status}
         </p>
-      </NavLink>
+      </Link>
     </li>
   );
 }
