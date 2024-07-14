@@ -1,46 +1,30 @@
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { Spacecraft } from 'entities/spacecraft/models';
-import { useEffect, useRef, useState } from 'react';
-import { getSpaceCraftDetails } from 'shared/api/axiosMethods';
 import Loader from 'shared/ui/loader/Loader';
 
+import { useGetItemQuery } from 'shared/api/services';
 import styles from './CardDetails.module.scss';
 
 export default function CardDetails() {
   const { spacecraftId } = useParams();
-  const [data, setData] = useState<Spacecraft | null>(null);
-  const [error, setError] = useState<string | null>(null);
+
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const getDetails = async (uid: string) => {
-    setData(null);
-    try {
-      const response = await getSpaceCraftDetails('spacecraft', { params: { uid } });
-      setData(response);
-    } catch (err) {
-      if (err instanceof Error) {
-        setError('err.message');
-      }
-    }
-  };
+
+  const requestParams = { endpoint: 'spacecraft', params: { uid: spacecraftId } };
 
   const closeDetails = () => {
     navigate(`/?${searchParams.toString()}`);
   };
 
-  const savedCallback = useRef(getDetails);
-
-  useEffect(() => {
-    if (spacecraftId) {
-      savedCallback.current(spacecraftId);
-    }
-  }, [spacecraftId]);
+  const { data, error, isLoading } = useGetItemQuery(requestParams);
 
   if (error) {
-    throw new Error(error);
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
   }
 
-  if (!data) {
+  if (isLoading && !data) {
     return (
       <aside className={styles.container} data-testid="card-details">
         <Loader />
@@ -48,13 +32,15 @@ export default function CardDetails() {
     );
   }
 
-  const { name, spacecraftClass } = data;
+  const { spacecraft } = data;
 
-  const owner = data.owner ? data.owner.name : 'unknown';
-  const registry = data.registry ? data.registry : 'unknown';
-  const operator = data.operator ? data.operator.name : 'unknown';
-  const dateStatus = data.dateStatus || 'unknown';
-  const status = data.status || 'unknown';
+  const { name, spacecraftClass } = spacecraft;
+
+  const owner = spacecraft.owner ? spacecraft.owner.name : 'unknown';
+  const registry = spacecraft.registry ? spacecraft.registry : 'unknown';
+  const operator = spacecraft.operator ? spacecraft.operator.name : 'unknown';
+  const dateStatus = spacecraft.dateStatus || 'unknown';
+  const status = spacecraft.status || 'unknown';
 
   const leftSide = (
     <div>

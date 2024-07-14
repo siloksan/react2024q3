@@ -4,12 +4,6 @@ import { SpacecraftsResponse } from 'entities/spacecraft/models';
 import { baseUrl } from '../const';
 import { SpaceCraftsRequestParams } from '../types';
 
-// interface SpaceCraftsRequestParams {
-//   endpoint: string;
-//   payload: Record<string, string>;
-//   params: Record<string, string | number>;
-// }
-
 const baseQuery = fetchBaseQuery({
   baseUrl,
   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -24,12 +18,18 @@ export const starTrekApi = createApi({
     getItems: builder.query<SpacecraftsResponse, SpaceCraftsRequestParams>({
       query: ({ endpoint, payload, params }) => ({
         url: endpoint,
-        method: 'POST',
         body: new URLSearchParams(payload).toString(),
         params,
+      }),
+    }),
+    getItem: builder.query({
+      query: ({ endpoint, params }) => ({
+        url: endpoint,
+        params,
+        method: 'GET',
       }),
     }),
   }),
 });
 
-export const { useGetItemsQuery } = starTrekApi;
+export const { useGetItemsQuery, useGetItemQuery } = starTrekApi;
