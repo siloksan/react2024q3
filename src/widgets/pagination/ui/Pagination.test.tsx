@@ -7,10 +7,8 @@ describe('Pagination', () => {
   const props = {
     currentPage: 1,
     itemPerPage: 10,
-    updateData: vi.fn(),
+    setPageNumber: vi.fn(),
     totalItems: 100,
-    searchTerm: '',
-    closeDetails: vi.fn(),
   };
 
   it('renders Pagination', () => {
@@ -38,9 +36,8 @@ describe('Pagination', () => {
       <Pagination
         currentPage={currentPage}
         itemPerPage={itemPerPage}
-        updateData={props.updateData}
+        setPageNumber={props.setPageNumber}
         totalItems={totalItems}
-        searchTerm=""
       />
     );
 
@@ -56,9 +53,8 @@ describe('Pagination', () => {
       <Pagination
         currentPage={currentPage}
         itemPerPage={itemPerPage}
-        updateData={props.updateData}
+        setPageNumber={props.setPageNumber}
         totalItems={totalItems}
-        searchTerm=""
       />
     );
 
@@ -74,9 +70,8 @@ describe('Pagination', () => {
       <Pagination
         currentPage={props.currentPage}
         itemPerPage={props.itemPerPage}
-        updateData={props.updateData}
+        setPageNumber={props.setPageNumber}
         totalItems={1}
-        searchTerm={props.searchTerm}
       />
     );
 
@@ -90,7 +85,7 @@ describe('Pagination', () => {
     const user = userEvent.setup();
     await user.click(paginationButtons[2]);
 
-    expect(props.updateData).toHaveBeenCalled();
+    expect(props.setPageNumber).toHaveBeenCalled();
   });
 
   it('should disable next button if current page is equal to total pages', () => {
@@ -101,9 +96,8 @@ describe('Pagination', () => {
       <Pagination
         currentPage={currentPage}
         itemPerPage={itemPerPage}
-        updateData={props.updateData}
+        setPageNumber={props.setPageNumber}
         totalItems={totalItems}
-        searchTerm=""
       />
     );
 

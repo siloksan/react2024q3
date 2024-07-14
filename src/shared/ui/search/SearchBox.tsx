@@ -1,23 +1,28 @@
 import { useState } from 'react';
+import useStorage from 'shared/lib/useStorage/useStorage';
 import loupe from './assets/search-icon.svg';
 
 import styles from './SearchBox.module.scss';
 
 interface Props {
-  updateData: (searchTerm: string, pageNumber?: number) => void;
+  setSearchTerm: (searchTerm: string) => void;
   searchTerm: string;
-  setStorageSearchParams: (key: string, value: string) => void;
+  setPageNumber: (page: number) => void;
 }
 
-export default function SearchBox({ updateData, searchTerm, setStorageSearchParams }: Props) {
+export default function SearchBox({ setSearchTerm, searchTerm, setPageNumber }: Props) {
   const [value, setValue] = useState(searchTerm);
+  const { setData } = useStorage();
+
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
 
   const handleSubmit = () => {
-    setStorageSearchParams('name', value.trim());
-    updateData(value.trim());
+    setData('name', value.trim());
+    setData('page', '1');
+    setPageNumber(1);
+    setSearchTerm(value.trim());
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {

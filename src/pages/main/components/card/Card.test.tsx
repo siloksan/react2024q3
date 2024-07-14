@@ -1,6 +1,8 @@
 import { DUMMY_SPACECRAFTS_RESPONSE } from 'shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
 import { render, screen } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from 'app/strore';
 import Card from './Card';
 
 describe('Card', () => {
@@ -22,7 +24,11 @@ describe('Card', () => {
       initialIndex: 1,
     });
 
-    render(<RouterProvider router={router} />);
+    render(
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
+    );
   }
 
   it('should renders Card', () => {

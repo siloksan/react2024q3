@@ -29,7 +29,7 @@ export default function useStorage() {
     storageService.setData('searchParams', storageData);
   }, [storageData, storageService]);
 
-  const setKeyAndValue = (key: string, value: string) => {
+  const setData = (key: string, value: string) => {
     if (value) {
       searchParams.set(key, value);
     } else {
@@ -39,5 +39,5 @@ export default function useStorage() {
     setStorageData(searchParams.toString());
   };
 
-  return { searchParams, setKeyAndValue };
+  return { searchParams, setData };
 }

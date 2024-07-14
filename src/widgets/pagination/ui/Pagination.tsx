@@ -1,23 +1,25 @@
+import useStorage from 'shared/lib/useStorage/useStorage';
 import getButtonsNameArray from '../lib/getButtonsNameArray';
 import styles from './Pagination.module.scss';
 
 interface Props {
   itemPerPage: number;
   totalItems: number;
-  updateData: (searchQuery: string, pageNumber: number) => void;
+  setPageNumber: (pageNumber: number) => void;
   currentPage: number;
-  searchTerm: string;
 }
 
-function Pagination({ itemPerPage, totalItems, currentPage, updateData, searchTerm }: Props) {
+function Pagination({ itemPerPage, totalItems, currentPage, setPageNumber }: Props) {
   const totalPages = Math.ceil(totalItems / itemPerPage);
+  const { setData } = useStorage();
 
   if (totalPages < 2) {
     return null;
   }
 
   const handler = (pageNumber: number) => {
-    updateData(searchTerm, pageNumber);
+    setPageNumber(pageNumber);
+    setData('page', String(pageNumber));
   };
 
   const prevBtnDisabled = currentPage === 1;

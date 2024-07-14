@@ -4,10 +4,9 @@ import SearchBox from './SearchBox';
 
 describe('SearchBox', () => {
   const props = {
-    updateData: vi.fn(),
+    setSearchTerm: vi.fn(),
     searchTerm: '',
-    setStorageSearchParams: vi.fn(),
-    closeDetails: vi.fn(),
+    setPageNumber: vi.fn(),
   };
 
   it('should renders SearchBox', () => {
@@ -26,7 +25,7 @@ describe('SearchBox', () => {
     const user = userEvent.setup();
     await user.click(button);
 
-    expect(props.updateData).toHaveBeenCalledOnce();
+    expect(props.setSearchTerm).toHaveBeenCalledOnce();
   });
 
   it('should change value in input', async () => {

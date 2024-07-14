@@ -4,13 +4,17 @@ import { BrowserRouter } from 'react-router-dom';
 import { server } from 'shared/api/mock/mocks/node';
 import ErrorBoundary from 'shared/ui/errorBoundary/ErrorBoundary';
 import { handlersError } from 'shared/api/mock/handlersError';
+import { Provider } from 'react-redux';
+import { store } from 'app/strore';
 import Main from './Main';
 
 const customRender = () =>
   render(
     <ErrorBoundary>
       <BrowserRouter>
-        <Main />
+        <Provider store={store}>
+          <Main />
+        </Provider>
       </BrowserRouter>
     </ErrorBoundary>
   );

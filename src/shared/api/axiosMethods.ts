@@ -1,7 +1,12 @@
 import { AxiosRequestConfig } from 'axios';
 import { Spacecraft, SpacecraftsResponse } from 'entities/spacecraft/models';
 import axiosInstance from './axios';
-import Payload from './types/apiTypes';
+
+interface Payload {
+  name: string;
+  registry: string;
+  status: string;
+}
 
 async function getSpaceCrafts(
   endpoint: string,

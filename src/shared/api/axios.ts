@@ -1,9 +1,8 @@
 import axios from 'axios';
-
-const baseURL = 'https://stapi.co/api/v2/rest/';
+import { baseUrl } from './const';
 
 const axiosInstance = axios.create({
-  baseURL,
+  baseURL: baseUrl,
   timeout: 7777,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded',
