@@ -1,11 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-
-// import { server } from 'shared/api/mock/mocks/node';
-import ErrorBoundary from 'shared/ui/errorBoundary/ErrorBoundary';
-// import { handlersError } from 'shared/api/mock/handlersError';
 import { Provider } from 'react-redux';
 import { store } from 'app/store';
+
+import ErrorBoundary from 'shared/ui/errorBoundary/ErrorBoundary';
 import Main from './Main';
 
 const customRender = () =>
@@ -28,31 +26,18 @@ describe('Main', () => {
     expect(h1).toBeInTheDocument();
   });
 
-  // it('throws an error when the request fails', async () => {
-  //   server.use(handlersError.spacecraftsPost);
+  it.todo('throws an error when the request fails');
 
-  //   const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  it('renders loader and fetches data successfully', async () => {
+    customRender();
 
-  //   customRender();
+    const loader = screen.getAllByTestId('loader');
+    expect(loader[0]).toBeInTheDocument();
 
-  //   await waitFor(() => {
-  //     const errorMessage = screen.getByRole('heading', { level: 2 });
-  //     expect(errorMessage).toHaveTextContent(/Something went wrong!/i);
-  //   });
+    await waitFor(() => {
+      const cardList = screen.getByTestId('card-list');
 
-  //   consoleErrorSpy.mockRestore();
-  // });
-
-  // it('renders loader and fetches data successfully', async () => {
-  //   customRender();
-
-  //   const loader = screen.getByTestId('loader');
-  //   expect(loader).toBeInTheDocument();
-
-  //   await waitFor(() => {
-  //     const cardList = screen.getByTestId('card-list');
-
-  //     expect(cardList).toBeInTheDocument();
-  //   });
-  // });
+      expect(cardList).toBeInTheDocument();
+    });
+  });
 });

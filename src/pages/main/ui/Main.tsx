@@ -54,9 +54,7 @@ export default function Main() {
   ) : null;
 
   if (error) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
+    throw new Error('Failed to fetch data in Main');
   }
 
   return (

@@ -9,7 +9,7 @@ export default function CardList() {
 
   const spacecraftsView =
     spacecrafts.length === 0 ? (
-      <p className={styles.not_found}>No spacecrafts found</p>
+      <li className={styles.not_found}>No spacecrafts found</li>
     ) : (
       spacecrafts.map((spacecraft) => {
         return <Card spacecraft={spacecraft} key={spacecraft.uid} />;

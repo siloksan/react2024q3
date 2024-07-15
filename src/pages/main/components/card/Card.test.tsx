@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'app/store';
+import userEvent from '@testing-library/user-event';
 import Card from './Card';
 
 describe('Card', () => {
@@ -52,5 +53,16 @@ describe('Card', () => {
     const item = screen.getByRole('listitem');
 
     expect(item).not.toHaveClass(/active/i);
+  });
+
+  it('should be checked when checkbox is clicked', async () => {
+    customRender('test1');
+
+    const checkbox = screen.getByRole('checkbox');
+
+    const user = userEvent.setup();
+    await user.click(checkbox);
+
+    expect(checkbox).toBeChecked();
   });
 });

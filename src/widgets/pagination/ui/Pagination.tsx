@@ -2,14 +2,14 @@ import useStorage from 'shared/lib/useStorage/useStorage';
 import getButtonsNameArray from '../lib/getButtonsNameArray';
 import styles from './Pagination.module.scss';
 
-interface Props {
+export interface PropsPagination {
   itemPerPage: number;
   totalItems: number;
   setPageNumber: (pageNumber: number) => void;
   currentPage: number;
 }
 
-function Pagination({ itemPerPage, totalItems, currentPage, setPageNumber }: Props) {
+function Pagination({ itemPerPage, totalItems, currentPage, setPageNumber }: PropsPagination) {
   const totalPages = Math.ceil(totalItems / itemPerPage);
   const { setData } = useStorage();
 
