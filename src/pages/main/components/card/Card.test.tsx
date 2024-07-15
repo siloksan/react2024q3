@@ -1,37 +1,32 @@
 import { DUMMY_SPACECRAFTS_RESPONSE } from 'shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from 'app/store';
 import userEvent from '@testing-library/user-event';
+import { renderWithProviders } from 'app/store/lib/renderWithProviders';
 import Card from './Card';
 
+const props = {
+  spacecraft: DUMMY_SPACECRAFTS_RESPONSE.spacecrafts[0],
+};
+
+function customRender(id: string) {
+  const routes = [
+    {
+      path: '/',
+      element: <Card {...props} />,
+      children: [{ path: 'spacecrafts/:spacecraftId', element: <div>Test</div> }],
+    },
+  ];
+
+  const router = createMemoryRouter(routes, {
+    initialEntries: ['/', `/spacecrafts/${id}`],
+    initialIndex: 1,
+  });
+
+  renderWithProviders(<RouterProvider router={router} />);
+}
+
 describe('Card', () => {
-  const props = {
-    spacecraft: DUMMY_SPACECRAFTS_RESPONSE.spacecrafts[0],
-  };
-
-  function customRender(id: string) {
-    const routes = [
-      {
-        path: '/',
-        element: <Card {...props} />,
-        children: [{ path: 'spacecrafts/:spacecraftId', element: <div>Test</div> }],
-      },
-    ];
-
-    const router = createMemoryRouter(routes, {
-      initialEntries: ['/', `/spacecrafts/${id}`],
-      initialIndex: 1,
-    });
-
-    render(
-      <Provider store={store}>
-        <RouterProvider router={router} />
-      </Provider>
-    );
-  }
-
   it('should renders Card', () => {
     customRender('test1');
 
@@ -64,5 +59,17 @@ describe('Card', () => {
     await user.click(checkbox);
 
     expect(checkbox).toBeChecked();
+  });
+
+  it("shouldn't be checked when checkbox is clicked twice", async () => {
+    customRender('test1');
+
+    const checkbox = screen.getByRole('checkbox');
+
+    const user = userEvent.setup();
+    await user.click(checkbox);
+    await user.click(checkbox);
+
+    expect(checkbox).not.toBeChecked();
   });
 });
