@@ -1,3 +1,12 @@
+interface SpaceCraftsParams {
+  pageNumber: number;
+  pageSize: number;
+}
+
+interface SpaceCraftParams {
+  uid: string;
+}
+
 export interface SpaceCraftsRequestParams {
   endpoint: string;
   payload: {
@@ -5,8 +14,10 @@ export interface SpaceCraftsRequestParams {
     registry: string;
     status: string;
   };
-  params: {
-    pageNumber: number;
-    pageSize: number;
-  };
+  params: SpaceCraftsParams;
+}
+
+export interface SpaceCraftRequestParams {
+  endpoint: string;
+  params: SpaceCraftParams;
 }

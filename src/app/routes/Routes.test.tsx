@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { describe, it, expect } from 'vitest';
+import { Provider } from 'react-redux';
+import { store } from 'app/store';
 import { routesConfig } from './Routes';
 
 describe('Routes component', () => {
@@ -9,7 +11,11 @@ describe('Routes component', () => {
       initialEntries: ['/'],
     });
 
-    render(<RouterProvider router={memoryRouter} />);
+    render(
+      <Provider store={store}>
+        <RouterProvider router={memoryRouter} />
+      </Provider>
+    );
 
     const header = screen.getByTestId('header');
     const mainTitle = screen.getByRole('heading', { level: 1 });

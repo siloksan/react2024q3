@@ -11,8 +11,8 @@ export const handlersError = {
   spaceCraftGetDetails: http.get('https://stapi.co/api/v2/rest/spacecraft', ({ request }) => {
     const url = new URL(request.url);
 
-    url.searchParams.set('uid', 'test');
+    url.searchParams.set('uid', 'error');
 
-    return HttpResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    return HttpResponse.json({ message: 'Internal Server Error' }, { status: 404 });
   }),
 };

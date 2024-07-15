@@ -2,29 +2,29 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import Loader from 'shared/ui/loader/Loader';
 
 import { useGetItemQuery } from 'shared/api/services';
+import { SpaceCraftRequestParams } from 'shared/api/types';
 import styles from './CardDetails.module.scss';
 
 export default function CardDetails() {
   const { spacecraftId } = useParams();
-
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const requestParams = { endpoint: 'spacecraft', params: { uid: spacecraftId } };
+  const requestParams: SpaceCraftRequestParams = { endpoint: 'spacecraft', params: { uid: spacecraftId || '' } };
 
   const closeDetails = () => {
     navigate(`/?${searchParams.toString()}`);
   };
 
-  const { data, error, isLoading } = useGetItemQuery(requestParams);
+  const { data, error, isFetching } = useGetItemQuery(requestParams);
 
   if (error) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
+    if (error) {
+      throw new Error('Failed to fetch data details in CardDetails');
     }
   }
 
-  if (isLoading && !data) {
+  if (isFetching || !data) {
     return (
       <aside className={styles.container} data-testid="card-details">
         <Loader />

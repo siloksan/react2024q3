@@ -2,7 +2,7 @@ import { DUMMY_SPACECRAFTS_RESPONSE } from 'shared/api/mock/mocks/dummyData/dumm
 import { render, screen } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { store } from 'app/strore';
+import { store } from 'app/store';
 import Card from './Card';
 
 describe('Card', () => {

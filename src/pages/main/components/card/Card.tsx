@@ -3,7 +3,7 @@ import { Spacecraft } from 'entities/spacecraft/models';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'app/strore';
+import { RootState } from 'app/store';
 import styles from './Card.module.scss';
 
 interface Props {
