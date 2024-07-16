@@ -28,6 +28,7 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'react-refresh', 'prettier', 'react-compiler'],
   rules: {
+    'consistent-return': 'off',
     'no-param-reassign': ['error', { props: false }],
     'react/jsx-props-no-spreading': 'off',
     'react-compiler/react-compiler': 'error',
