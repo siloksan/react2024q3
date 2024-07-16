@@ -33,6 +33,8 @@ body {
   height: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: url('../../shared/assets/images/star-trek-background.jpg') no-repeat center center fixed;
+  background-size: cover;
   @include font(400, var(--font-family--genos));
 }
 
