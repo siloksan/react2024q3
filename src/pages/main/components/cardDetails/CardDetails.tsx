@@ -3,6 +3,7 @@ import Loader from 'shared/ui/loader/Loader';
 
 import { useGetItemQuery } from 'shared/api/services';
 import { SpaceCraftRequestParams } from 'shared/api/types';
+import Button from 'shared/ui/button/Button';
 import styles from './CardDetails.module.scss';
 
 export default function CardDetails() {
@@ -88,9 +89,7 @@ export default function CardDetails() {
         {leftSide}
         {rightSide}
       </div>
-      <button className={styles.btn} onClick={closeDetails} type="button">
-        Close details
-      </button>
+      <Button onClick={closeDetails}>Close details</Button>
     </aside>
   );
 }
