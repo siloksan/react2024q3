@@ -5,6 +5,7 @@
   height: 100%;
   background: url('../../shared/assets/images/star-trek-background.jpg') no-repeat center center fixed;
   background-size: cover;
+  transition: background-image 0.5s ease-in-out;
 }
 
 .main {
@@ -14,4 +15,8 @@
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
+}
+
+.dark {
+  background: url('../../shared/assets/images/star-trek-background-dark.jpg') no-repeat center center fixed;
 }

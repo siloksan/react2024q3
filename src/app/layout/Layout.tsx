@@ -7,9 +7,13 @@ import styles from './Layout.module.scss';
 export default function Layout() {
   const dark = useTheme();
 
-  console.log('theme: ', dark);
+  let rootClass = styles.root;
+  if (dark) {
+    rootClass += ` ${styles.dark}`;
+  }
+
   return (
-    <div className={styles.root}>
+    <div className={rootClass}>
       <Header />
       <main className={styles.main}>
         <Outlet />

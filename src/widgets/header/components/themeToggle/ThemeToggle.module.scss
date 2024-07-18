@@ -1,3 +1,12 @@
+.container {
+  display: flex;
+  width: 200px;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--color--black);
+  font-size: 2rem;
+}
+
 .label {
   width: 50px;
   height: 26px;
@@ -36,17 +45,6 @@
   background-color: var(--color--light-blue--disabled);
 }
 
-.dark,
-.light {
-  width: 50%;
-  height: 50%;
-  z-index: 100;
-}
-
 .dark {
-  background-image: url(assets/night-mode.svg);
-}
-
-.light {
-  background-image: url(assets/light-mode.svg);
+  color: var(--color--wheat);
 }
