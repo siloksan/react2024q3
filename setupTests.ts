@@ -7,6 +7,8 @@ afterEach(() => {
   cleanup();
 });
 
+global.URL.createObjectURL = vi.fn();
+
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());

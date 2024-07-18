@@ -29,7 +29,7 @@ export default function Flyout() {
   };
 
   const file = new Blob([formatData(selectedItems)], { type: 'text/csv' });
-  const url = URL.createObjectURL(file);
+  const url = selectedItems.length > 0 ? URL.createObjectURL(file) : undefined;
 
   if (numberOfSelectedItems === 0 && !isUnmount) {
     return null;
@@ -41,7 +41,7 @@ export default function Flyout() {
   }
 
   return (
-    <div className={containerClassName}>
+    <div className={containerClassName} data-testid="flyout">
       <p className={styles.info}>
         The number of selected items - <strong>{numberOfSelectedItems}</strong>
       </p>
