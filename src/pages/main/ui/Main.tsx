@@ -10,6 +10,7 @@ import useStorage from 'shared/lib/useStorage/useStorage';
 import { useGetItemsQuery } from 'shared/api/services';
 import { SpaceCraftsRequestParams } from 'shared/api/types';
 import { setSpacecrafts } from 'features/reduxSlices/spacecrafts';
+import Flyout from 'shared/ui/flyout/Flyout';
 import CardList from '../components/cardList/CardList';
 
 import styles from './Main.module.scss';
@@ -68,6 +69,7 @@ export default function Main() {
           <Outlet />
         </ErrorBoundary>
       </div>
+      <Flyout />
     </>
   );
 }
