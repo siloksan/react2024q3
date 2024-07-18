@@ -1,0 +1,52 @@
+.label {
+  width: 50px;
+  height: 26px;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color--dark-blue);
+  display: flex;
+  padding: 5px;
+  border-radius: 50px;
+  position: relative;
+  transform: scale(1.5);
+  cursor: pointer;
+  transition: all 0.2s linear;
+}
+
+.ball {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background-color: white;
+  border-radius: 50%;
+  transition: all 0.2s linear;
+}
+
+.checkbox {
+  opacity: 0;
+  position: absolute;
+}
+
+.checkbox:checked + .label .ball {
+  transform: translateX(90%);
+  background-color: var(--color--light-blue);
+}
+
+.checkbox:checked + .label {
+  background-color: var(--color--light-blue--disabled);
+}
+
+.dark,
+.light {
+  width: 50%;
+  height: 50%;
+  z-index: 100;
+}
+
+.dark {
+  background-image: url(assets/night-mode.svg);
+}
+
+.light {
+  background-image: url(assets/light-mode.svg);
+}
