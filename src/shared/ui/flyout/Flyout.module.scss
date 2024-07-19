@@ -8,13 +8,17 @@
   top: 0;
   z-index: 9;
   min-width: 380px;
-  background-color: var(--color--white);
+  background-color: var(--color--wheat);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 20px;
   animation: popUp 0.3s ease-out;
+  &.dark {
+    color: var(--color--wheat);
+    background-color: var(--color--card-details);
+  }
 }
 
 .hidden {
@@ -29,25 +33,12 @@
 .buttons {
   display: flex;
   gap: 10px;
-  button,
   a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 140px;
-    padding: 3px;
-    font-size: 1.4rem;
-    color: var(--color--white);
-    height: 44px;
-    background-color: var(--color--light-blue);
-    border-radius: 3px;
-    @include font(500, var(--font-family--genos));
+    color: inherit;
+    display: inline-block;
+    width: 100%;
     &:hover {
-      background-color: var(--color--light-blue--hover);
       text-decoration: none;
-    }
-    &:active {
-      background-color: var(--color--light-blue--active);
     }
   }
 }
