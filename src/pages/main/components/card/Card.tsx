@@ -1,9 +1,9 @@
 import { Spacecraft } from 'entities/spacecraft/models';
 
-import React, { useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'app/store';
+import { useTheme } from 'app/providers/themeProvider';
 import styles from './Card.module.scss';
 
 interface Props {
@@ -15,16 +15,17 @@ export default function Card({ spacecraft }: Props) {
   const { spacecraftId } = useParams();
   const selectedItems = useSelector((state: RootState) => state.selectedItems.value);
   const dispatch = useDispatch();
+  const dark = useTheme();
 
-  const [className, setClassName] = useState(`${styles.container}`);
+  let containerClassName = styles.container;
 
-  useEffect(() => {
-    if (spacecraftId === spacecraft.uid) {
-      setClassName(`${styles.container} ${styles.active}`);
-    } else {
-      setClassName(`${styles.container}`);
-    }
-  }, [spacecraftId, spacecraft.uid]);
+  if (dark) {
+    containerClassName += ` ${styles.dark}`;
+  }
+
+  if (spacecraftId === spacecraft.uid) {
+    containerClassName += ` ${styles.active}`;
+  }
 
   const dateStatus = spacecraft.dateStatus || 'unknown';
   const status = spacecraft.status || 'unknown';
@@ -46,7 +47,7 @@ export default function Card({ spacecraft }: Props) {
   const isChecked = selectedItems.some((item) => item.uid === spacecraft.uid);
 
   return (
-    <li className={className}>
+    <li className={containerClassName}>
       <Link to={`spacecrafts/${spacecraft.uid}?${searchParams.toString()}`} className={styles.link}>
         <input
           className={styles.checkbox}

@@ -6,17 +6,24 @@
   align-items: center;
   padding: 10px;
   border: 1px solid #ccc;
-  background-color: var(--color--card);
-  color: var(--color--white);
+  background-color: var(--color--wheat);
+  &.dark {
+    background-color: var(--color--card-details);
+    color: var(--color--white);
+  }
   a {
     width: 100%;
+    color: inherit;
     &:hover {
       text-decoration: none;
     }
   }
 
   &:hover {
-    background-color: var(--color--card--hover);
+    background-color: var(--color--wheat--hover);
+    &.dark {
+      background-color: var(--color--card--hover);
+    }
   }
   h2 {
     @include font(700, var(--font-family--genos));
@@ -40,5 +47,8 @@
 }
 
 .active {
-  background-color: var(--color--card--active);
+  background-color: var(--color--wheat--active);
+  &.dark {
+    background-color: var(--color--card--active);
+  }
 }
