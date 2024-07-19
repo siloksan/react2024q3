@@ -1,15 +1,18 @@
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import Loader from 'shared/ui/loader/Loader';
 
+import { useTheme } from 'app/providers/themeProvider';
 import { useGetItemQuery } from 'shared/api/services';
 import { SpaceCraftRequestParams } from 'shared/api/types';
 import Button from 'shared/ui/button/Button';
+
 import styles from './CardDetails.module.scss';
 
 export default function CardDetails() {
   const { spacecraftId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const dark = useTheme();
 
   const requestParams: SpaceCraftRequestParams = { endpoint: 'spacecraft', params: { uid: spacecraftId || '' } };
 
@@ -42,6 +45,11 @@ export default function CardDetails() {
   const operator = spacecraft.operator ? spacecraft.operator.name : 'unknown';
   const dateStatus = spacecraft.dateStatus || 'unknown';
   const status = spacecraft.status || 'unknown';
+
+  let containerClass = styles.container;
+  if (dark) {
+    containerClass += ` ${styles.dark}`;
+  }
 
   const leftSide = (
     <div>
@@ -81,7 +89,7 @@ export default function CardDetails() {
   ) : null;
 
   return (
-    <aside className={styles.container} data-testid="card-details">
+    <aside className={containerClass} data-testid="card-details">
       <h3>
         <strong>Name:</strong> {name}
       </h3>
