@@ -1,4 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import itemDetails from 'features/reduxSlices/itemDetails';
 import selectedItems from 'features/reduxSlices/selectedItems';
 import spacecrafts from 'features/reduxSlices/spacecrafts';
 import { starTrekApi } from 'shared/api/services';
@@ -6,6 +7,7 @@ import { starTrekApi } from 'shared/api/services';
 const rootReducer = combineReducers({
   selectedItems,
   spacecrafts,
+  itemDetails,
   [starTrekApi.reducerPath]: starTrekApi.reducer,
 });
 

@@ -1,19 +1,23 @@
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import Loader from 'shared/ui/loader/Loader';
 
+import { SpaceCraftRequestParams } from 'shared/api/types';
 import { useTheme } from 'app/providers/themeProvider';
 import { useGetItemQuery } from 'shared/api/services';
-import { SpaceCraftRequestParams } from 'shared/api/types';
+import { memo, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { saveDetails } from 'features/reduxSlices/itemDetails';
 import Button from 'shared/ui/button/Button';
 
 import styles from './CardDetails.module.scss';
 
-export default function CardDetails() {
+function CardDetails() {
   const { spacecraftId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const dark = useTheme();
+  const dispatch = useDispatch();
 
+  const dark = useTheme();
   const requestParams: SpaceCraftRequestParams = { endpoint: 'spacecraft', params: { uid: spacecraftId || '' } };
 
   const closeDetails = () => {
@@ -21,6 +25,12 @@ export default function CardDetails() {
   };
 
   const { data, error, isFetching } = useGetItemQuery(requestParams);
+
+  useEffect(() => {
+    if (data) {
+      dispatch(saveDetails(data.spacecraft));
+    }
+  }, [data, dispatch]);
 
   if (error) {
     if (error) {
@@ -101,3 +111,5 @@ export default function CardDetails() {
     </aside>
   );
 }
+
+export default memo(CardDetails);
