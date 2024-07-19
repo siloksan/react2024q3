@@ -1,3 +1,4 @@
+import { useTheme } from 'app/providers/themeProvider';
 import styles from './Button.module.scss';
 
 interface Props extends React.HTMLAttributes<HTMLButtonElement> {
@@ -6,11 +7,23 @@ interface Props extends React.HTMLAttributes<HTMLButtonElement> {
   type?: 'button' | 'submit' | 'reset';
 }
 
-export default function Button({ children, additionalStyles, type, disabled, ...props }: Props) {
+export default function Button({
+  children,
+  additionalStyles = '',
+  type = 'button',
+  disabled = false,
+  ...props
+}: Props) {
+  const dark = useTheme();
+
   let className = styles.button;
 
   if (additionalStyles) {
     className += ` ${additionalStyles}`;
+  }
+
+  if (dark) {
+    className += ` ${styles.dark}`;
   }
 
   return (
@@ -19,9 +32,3 @@ export default function Button({ children, additionalStyles, type, disabled, ...
     </button>
   );
 }
-
-Button.defaultProps = {
-  disabled: false,
-  additionalStyles: '',
-  type: 'button',
-};

@@ -8,22 +8,33 @@
   justify-content: center;
 }
 
-.pagination__button {
+.button {
   background-color: var(--color--dark-blue);
   min-width: 50px;
   padding: 6px;
   font-size: 1.3rem;
   @include font(500, var(--font-family--genos));
+  transition: all 0.2s linear;
+  &.dark {
+    color: var(--color--wheat);
+    background-color: var(--color--dark);
+  }
 }
 
-.pagination__button_disabled {
+.disabled {
   background-color: var(--color--light-blue--disabled);
+  &.dark {
+    background-color: var(--color--dark--disabled);
+  }
   &:hover,
   &:active {
     cursor: default;
   }
 }
 
-.pagination__button_current {
+.current {
   background-color: var(--color--light-blue);
+  &.dark {
+    background-color: var(--color--dark--active);
+  }
 }
