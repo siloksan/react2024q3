@@ -1,9 +1,12 @@
 .container {
   flex-grow: 0.5;
   padding: 2px 4px;
-  background-color: var(--color--black);
-  background-color: var(--color--dark-blue);
+  background-color: var(--color--wheat);
   border-radius: 3px;
+  transition: all 0.2s linear;
+  &.dark {
+    background-color: var(--color--dark-blue);
+  }
 }
 
 .form {
@@ -18,20 +21,28 @@
   flex-grow: 1;
   height: 100%;
   font-size: 1.6rem;
-  color: var(--color--white);
   padding: 3px 8px;
-  background-color: var(--color--dark-blue);
+  background-color: var(--color--wheat);
+  transition: all 0.2s linear;
+  &.dark {
+    background-color: var(--color--dark-blue);
+    color: var(--color--wheat);
+  }
 }
 
 .button {
   width: 40px;
   height: 100%;
-  background-color: var(--color--light-blue);
-  border-radius: 3px;
-  &:hover {
-    background-color: var(--color--light-blue--hover);
-  }
-  &:active {
-    background-color: var(--color--light-blue--active);
+  background-color: var(--color--wheat);
+  margin: 0;
+  transition: all 0.2s linear;
+  &.dark {
+    background-color: var(--color--dark-blue);
+    &:hover {
+      background-color: var(--color--dark--hover);
+    }
+    &:active {
+      background-color: var(--color--dark--active);
+    }
   }
 }
