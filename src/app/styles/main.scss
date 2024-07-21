@@ -30,7 +30,6 @@ html {
 
 body {
   font-size: 10px;
-  height: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   @include font(400, var(--font-family--genos));
@@ -43,7 +42,7 @@ body {
 }
 
 a {
-  color: var(--color--white);
+  color: var(--color--black);
   transition: color 0.3s;
   text-decoration: none;
   &:hover {

@@ -1,8 +1,10 @@
 @use 'src/app/styles/mixins.scss' as *;
 
 .title {
+  margin: 0 auto;
   text-align: center;
   @include font(700, var(--font-family--genos));
+  color: var(--color--white);
   font-size: 3.6rem;
 }
 

@@ -1,46 +1,44 @@
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { Spacecraft } from 'entities/spacecraft/models';
-import { useEffect, useRef, useState } from 'react';
-import { getSpaceCraftDetails } from 'shared/api/axiosMethods';
 import Loader from 'shared/ui/loader/Loader';
+
+import { SpaceCraftRequestParams } from 'shared/api/types';
+import { useTheme } from 'app/providers/themeProvider';
+import { useGetItemQuery } from 'shared/api/services';
+import { memo, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { saveDetails } from 'features/reduxSlices/itemDetails';
+import Button from 'shared/ui/button/Button';
 
 import styles from './CardDetails.module.scss';
 
-export default function CardDetails() {
+function CardDetails() {
   const { spacecraftId } = useParams();
-  const [data, setData] = useState<Spacecraft | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const getDetails = async (uid: string) => {
-    setData(null);
-    try {
-      const response = await getSpaceCraftDetails('spacecraft', { params: { uid } });
-      setData(response);
-    } catch (err) {
-      if (err instanceof Error) {
-        setError('err.message');
-      }
-    }
-  };
+  const dispatch = useDispatch();
+
+  const dark = useTheme();
+  const requestParams: SpaceCraftRequestParams = { endpoint: 'spacecraft', params: { uid: spacecraftId || '' } };
 
   const closeDetails = () => {
     navigate(`/?${searchParams.toString()}`);
   };
 
-  const savedCallback = useRef(getDetails);
+  const { data, error, isFetching } = useGetItemQuery(requestParams);
 
   useEffect(() => {
-    if (spacecraftId) {
-      savedCallback.current(spacecraftId);
+    if (data) {
+      dispatch(saveDetails(data.spacecraft));
     }
-  }, [spacecraftId]);
+  }, [data, dispatch]);
 
   if (error) {
-    throw new Error(error);
+    if (error) {
+      throw new Error('Failed to fetch data details in CardDetails');
+    }
   }
 
-  if (!data) {
+  if (isFetching || !data) {
     return (
       <aside className={styles.container} data-testid="card-details">
         <Loader />
@@ -48,13 +46,20 @@ export default function CardDetails() {
     );
   }
 
-  const { name, spacecraftClass } = data;
+  const { spacecraft } = data;
 
-  const owner = data.owner ? data.owner.name : 'unknown';
-  const registry = data.registry ? data.registry : 'unknown';
-  const operator = data.operator ? data.operator.name : 'unknown';
-  const dateStatus = data.dateStatus || 'unknown';
-  const status = data.status || 'unknown';
+  const { name, spacecraftClass } = spacecraft;
+
+  const owner = spacecraft.owner ? spacecraft.owner.name : 'unknown';
+  const registry = spacecraft.registry ? spacecraft.registry : 'unknown';
+  const operator = spacecraft.operator ? spacecraft.operator.name : 'unknown';
+  const dateStatus = spacecraft.dateStatus || 'unknown';
+  const status = spacecraft.status || 'unknown';
+
+  let containerClass = styles.container;
+  if (dark) {
+    containerClass += ` ${styles.dark}`;
+  }
 
   const leftSide = (
     <div>
@@ -94,7 +99,7 @@ export default function CardDetails() {
   ) : null;
 
   return (
-    <aside className={styles.container} data-testid="card-details">
+    <aside className={containerClass} data-testid="card-details">
       <h3>
         <strong>Name:</strong> {name}
       </h3>
@@ -102,9 +107,9 @@ export default function CardDetails() {
         {leftSide}
         {rightSide}
       </div>
-      <button className={styles.btn} onClick={closeDetails} type="button">
-        Close details
-      </button>
+      <Button onClick={closeDetails}>Close details</Button>
     </aside>
   );
 }
+
+export default memo(CardDetails);

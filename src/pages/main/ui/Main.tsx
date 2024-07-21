@@ -1,90 +1,75 @@
-import { useEffect, useRef, useState } from 'react';
-import { AxiosRequestConfig } from 'axios';
+import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-
-import Payload from 'shared/api/types/apiTypes';
-import { SpacecraftsResponse } from 'entities/spacecraft/models';
-import { getSpaceCrafts } from 'shared/api/axiosMethods';
+import { useDispatch } from 'react-redux';
 
 import ErrorBoundary from 'shared/ui/errorBoundary/ErrorBoundary';
 import Loader from 'shared/ui/loader/Loader';
 import SearchBox from 'shared/ui/search/SearchBox';
 import Pagination from 'widgets/pagination';
 import useStorage from 'shared/lib/useStorage/useStorage';
+import { useGetItemsQuery } from 'shared/api/services';
+import { SpaceCraftsRequestParams } from 'shared/api/types';
+import { setSpacecrafts } from 'features/reduxSlices/spacecrafts';
+import Flyout from 'shared/ui/flyout/Flyout';
 import CardList from '../components/cardList/CardList';
 
 import styles from './Main.module.scss';
 
 export default function Main() {
   const pageSize = 5;
-  const { searchParams, setKeyAndValue } = useStorage();
+  const { searchParams } = useStorage();
+  const dispatch = useDispatch();
 
-  const [data, setData] = useState<SpacecraftsResponse | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [pageNumber, setPageNumber] = useState<number>(() => {
+    const currentPage = searchParams.get('page');
+    return currentPage ? Number(currentPage) : 1;
+  });
 
-  const pageDataString = searchParams.get('page');
-  const nameDataString = searchParams.get('name');
-  const updateData = async (searchQuery: string = '', pageNumber?: number) => {
-    setData(null);
-    const options: AxiosRequestConfig = {
-      params: {
-        pageSize,
-        ...(pageNumber ? { pageNumber: pageNumber - 1 } : {}),
-      },
-    };
-    const payload: Payload = {
-      name: searchQuery,
+  const [searchTerm, setSearchTerm] = useState<string>(searchParams.get('name') || '');
+
+  const requestParams: SpaceCraftsRequestParams = {
+    endpoint: 'spacecraft/search',
+    payload: {
+      name: searchTerm,
       registry: '',
       status: '',
-    };
-    try {
-      const response = await getSpaceCrafts('spacecraft/search', payload, options);
-      setData(response);
-      setKeyAndValue('page', (response.page.pageNumber + 1).toString());
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      }
-    }
+    },
+    params: { pageNumber: pageNumber - 1, pageSize },
   };
 
-  const firstLoad = () => {
-    const page = pageDataString ? Number(pageDataString) : undefined;
-    const searchTerm = nameDataString || undefined;
-    updateData(searchTerm, page);
-  };
+  const { data, error, isFetching } = useGetItemsQuery(requestParams);
 
-  const savedCallback = useRef(firstLoad);
-
-  // This trick is necessary to avoid re-render every time when search input is changed
   useEffect(() => {
-    savedCallback.current();
-  }, []);
+    if (data) {
+      dispatch(setSpacecrafts(data.spacecrafts));
+    }
+  }, [data, dispatch]);
 
   const pagination = data ? (
     <Pagination
-      currentPage={pageDataString ? Number(pageDataString) : 1}
+      currentPage={pageNumber}
       itemPerPage={pageSize}
       totalItems={data.page.totalElements}
-      searchTerm={nameDataString || ''}
-      updateData={updateData}
+      setPageNumber={setPageNumber}
     />
   ) : null;
 
   if (error) {
-    throw new Error(error);
+    throw new Error('Failed to fetch data in Main');
   }
+
   return (
     <>
       <h1 className={styles.title}>Spacecrafts</h1>
-      <div className={styles.pagination}>{pagination}</div>
-      <SearchBox updateData={updateData} searchTerm={nameDataString || ''} setStorageSearchParams={setKeyAndValue} />
+      {isFetching && !data ? <Loader /> : <div className={styles.pagination}>{pagination}</div>}
+      <SearchBox setSearchTerm={setSearchTerm} searchTerm={searchTerm} setPageNumber={setPageNumber} />
       <div className={styles.content}>
-        <div className={styles.list}>{data ? <CardList spacecrafts={data.spacecrafts} /> : <Loader />}</div>
+        <div className={styles.list}>{!isFetching ? <CardList /> : <Loader />}</div>
         <ErrorBoundary>
           <Outlet />
         </ErrorBoundary>
       </div>
+      <Flyout />
     </>
   );
 }

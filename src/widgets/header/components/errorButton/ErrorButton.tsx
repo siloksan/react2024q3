@@ -1,20 +1,16 @@
 import { useState } from 'react';
-import styles from './ErrorButton.module.scss';
+import Button from 'shared/ui/button/Button';
 
 function ErrorButton() {
   const [error, setError] = useState(false);
-  function throwError() {
+  const throwError = () => {
     setError(true);
-  }
+  };
 
   if (error) {
     throw new Error("It seems like you've broken something!");
   }
-  return (
-    <button type="button" onClick={throwError} className={styles.btn}>
-      throw error
-    </button>
-  );
+  return <Button onClick={throwError}>throw error</Button>;
 }
 
 export default ErrorButton;

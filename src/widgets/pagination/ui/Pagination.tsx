@@ -1,23 +1,36 @@
+import useStorage from 'shared/lib/useStorage/useStorage';
+import { useTheme } from 'app/providers/themeProvider';
 import getButtonsNameArray from '../lib/getButtonsNameArray';
 import styles from './Pagination.module.scss';
 
-interface Props {
+export interface PropsPagination {
   itemPerPage: number;
   totalItems: number;
-  updateData: (searchQuery: string, pageNumber: number) => void;
+  setPageNumber: (pageNumber: number) => void;
   currentPage: number;
-  searchTerm: string;
 }
 
-function Pagination({ itemPerPage, totalItems, currentPage, updateData, searchTerm }: Props) {
+function Pagination({ itemPerPage, totalItems, currentPage, setPageNumber }: PropsPagination) {
   const totalPages = Math.ceil(totalItems / itemPerPage);
+  const { setData } = useStorage();
+  const dark = useTheme();
+  let buttonClass = styles.button;
+  let { disabled } = styles;
+  let { current } = styles;
+
+  if (dark) {
+    buttonClass += ` ${styles.dark}`;
+    disabled += ` ${styles.dark}`;
+    current += ` ${styles.dark}`;
+  }
 
   if (totalPages < 2) {
     return null;
   }
 
   const handler = (pageNumber: number) => {
-    updateData(searchTerm, pageNumber);
+    setPageNumber(pageNumber);
+    setData('page', String(pageNumber));
   };
 
   const prevBtnDisabled = currentPage === 1;
@@ -25,27 +38,27 @@ function Pagination({ itemPerPage, totalItems, currentPage, updateData, searchTe
 
   const PAGINATION_ARRAY: (string | number)[] = getButtonsNameArray(currentPage, totalPages);
 
-  let prevBtnClassName = `${styles.pagination__button}`;
-  let nextBtnClassName = `${styles.pagination__button}`;
+  let prevBtnClassName = buttonClass;
+  let nextBtnClassName = buttonClass;
 
   if (currentPage === 1) {
-    prevBtnClassName += ` ${styles.pagination__button_disabled}`;
+    prevBtnClassName += ` ${disabled}`;
   }
 
   if (totalPages === currentPage) {
-    nextBtnClassName += ` ${styles.pagination__button_disabled}`;
+    nextBtnClassName += ` ${disabled}`;
   }
   let key = 0;
   const listButtons = PAGINATION_ARRAY.map((pageNumber: string | number) => {
     key += 1;
-    let className = `${styles.pagination__button}`;
+    let className = buttonClass;
     const isCurrentButton = typeof pageNumber === 'number' && pageNumber === currentPage;
     const isDisabled = typeof pageNumber === 'string' || pageNumber === currentPage;
     if (isCurrentButton) {
-      className += ` ${styles.pagination__button_current}`;
+      className += ` ${current}`;
     }
     if (isDisabled) {
-      className += ` ${styles.pagination__button_disabled}`;
+      className += ` ${disabled}`;
     }
     const clickHandler = !isDisabled ? () => handler(pageNumber) : () => {};
     return (

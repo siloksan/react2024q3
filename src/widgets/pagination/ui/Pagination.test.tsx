@@ -1,48 +1,41 @@
 import { render, screen } from '@testing-library/react';
-
+import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
-import Pagination from './Pagination';
+
+import Pagination, { PropsPagination } from './Pagination';
+
+const customRender = (props: PropsPagination) =>
+  render(
+    <BrowserRouter>
+      <Pagination {...props} />
+    </BrowserRouter>
+  );
 
 describe('Pagination', () => {
   const props = {
     currentPage: 1,
     itemPerPage: 10,
-    updateData: vi.fn(),
+    setPageNumber: vi.fn(),
     totalItems: 100,
-    searchTerm: '',
-    closeDetails: vi.fn(),
   };
-
   it('renders Pagination', () => {
-    render(<Pagination {...props} />);
+    customRender(props);
 
     const container = screen.getByTestId('pagination');
-
     expect(container).toBeInTheDocument();
   });
-
   it('button for current page should be disabled', () => {
-    render(<Pagination {...props} />);
-
+    customRender(props);
     const currentBtn = screen.getByRole('button', { name: props.currentPage.toString() });
-
     expect(currentBtn).toHaveProperty('disabled', true);
   });
-
   it('should correctly renders last page', () => {
     const currentPage = 3;
     const itemPerPage = 5;
     const totalItems = 67;
     const lastPage = Math.ceil(totalItems / itemPerPage);
-    render(
-      <Pagination
-        currentPage={currentPage}
-        itemPerPage={itemPerPage}
-        updateData={props.updateData}
-        totalItems={totalItems}
-        searchTerm=""
-      />
-    );
+
+    customRender({ ...props, currentPage, itemPerPage, totalItems });
 
     const paginationButtons = screen.getAllByTestId('pagination-button');
 
@@ -52,62 +45,41 @@ describe('Pagination', () => {
     const currentPage = 7;
     const itemPerPage = 5;
     const totalItems = 67;
-    render(
-      <Pagination
-        currentPage={currentPage}
-        itemPerPage={itemPerPage}
-        updateData={props.updateData}
-        totalItems={totalItems}
-        searchTerm=""
-      />
-    );
+    customRender({ ...props, currentPage, itemPerPage, totalItems });
 
     const paginationButtons = screen.getAllByTestId('pagination-button');
     const middleButtons = paginationButtons.slice(2, 5);
+
     middleButtons.forEach((btn, idx) => {
       expect(btn).toHaveTextContent((currentPage - 1 + idx).toString());
     });
   });
 
   it('should return null if totalPages < 2', () => {
-    const { container } = render(
-      <Pagination
-        currentPage={props.currentPage}
-        itemPerPage={props.itemPerPage}
-        updateData={props.updateData}
-        totalItems={1}
-        searchTerm={props.searchTerm}
-      />
-    );
+    const { container } = customRender({ ...props, totalItems: 1 });
 
     expect(container.firstChild).toBeNull();
   });
 
   it('should call updateData when button is clicked', async () => {
-    render(<Pagination {...props} />);
+    customRender(props);
 
     const paginationButtons = screen.getAllByTestId('pagination-button');
     const user = userEvent.setup();
     await user.click(paginationButtons[2]);
 
-    expect(props.updateData).toHaveBeenCalled();
+    expect(props.setPageNumber).toHaveBeenCalled();
   });
 
   it('should disable next button if current page is equal to total pages', () => {
     const currentPage = 10;
     const itemPerPage = 5;
     const totalItems = 50;
-    render(
-      <Pagination
-        currentPage={currentPage}
-        itemPerPage={itemPerPage}
-        updateData={props.updateData}
-        totalItems={totalItems}
-        searchTerm=""
-      />
-    );
+
+    customRender({ ...props, currentPage, itemPerPage, totalItems });
 
     const nextBtn = screen.getByRole('button', { name: /next/i });
+
     expect(nextBtn).toHaveProperty('disabled', true);
   });
 });

@@ -1,42 +1,42 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from 'app/store';
 import SearchBox from './SearchBox';
 
 describe('SearchBox', () => {
   const props = {
-    updateData: vi.fn(),
+    setSearchTerm: vi.fn(),
     searchTerm: '',
-    setStorageSearchParams: vi.fn(),
-    closeDetails: vi.fn(),
+    setPageNumber: vi.fn(),
   };
 
+  const customRender = () =>
+    render(
+      <BrowserRouter>
+        <Provider store={store}>
+          <SearchBox {...props} />
+        </Provider>
+      </BrowserRouter>
+    );
   it('should renders SearchBox', () => {
-    render(<SearchBox {...props} />);
-
+    customRender();
     const input = screen.getByRole('textbox');
-
     expect(input).toBeInTheDocument();
   });
-
   it('should call updateData when button is clicked', async () => {
-    render(<SearchBox {...props} />);
-
+    customRender();
     const button = screen.getByRole('button');
-
     const user = userEvent.setup();
     await user.click(button);
-
-    expect(props.updateData).toHaveBeenCalledOnce();
+    expect(props.setSearchTerm).toHaveBeenCalledOnce();
   });
-
   it('should change value in input', async () => {
-    render(<SearchBox {...props} />);
-
+    customRender();
     const input = screen.getByRole('textbox');
-
     const user = userEvent.setup();
     await user.type(input, 'test');
-
     expect(input).toHaveValue('test');
   });
 });

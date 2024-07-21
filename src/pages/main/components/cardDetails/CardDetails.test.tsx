@@ -3,6 +3,9 @@ import { server } from 'shared/api/mock/mocks/node';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 
 import { handlersError } from 'shared/api/mock/handlersError';
+import { Provider } from 'react-redux';
+import { store } from 'app/store';
+import ErrorBoundary from 'shared/ui/errorBoundary/ErrorBoundary';
 import CardDetails from './CardDetails';
 
 describe('CardDetails', () => {
@@ -19,7 +22,13 @@ describe('CardDetails', () => {
       initialIndex: 1,
     });
 
-    render(<RouterProvider router={router} />);
+    render(
+      <Provider store={store}>
+        <ErrorBoundary>
+          <RouterProvider router={router} />
+        </ErrorBoundary>
+      </Provider>
+    );
   }
 
   it('should renders CardDetails', async () => {
@@ -50,7 +59,7 @@ describe('CardDetails', () => {
   it('should throws an error when the request fails', async () => {
     server.use(handlersError.spaceCraftGetDetails);
 
-    customRender('test');
+    customRender('error');
 
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 

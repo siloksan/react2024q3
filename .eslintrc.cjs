@@ -28,6 +28,16 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'react-refresh', 'prettier', 'react-compiler'],
   rules: {
+    'react/require-default-props': [
+      'error',
+      {
+        ignoreFunctionalComponents: true,
+      },
+    ],
+    'react/button-has-type': 'off',
+    'jsx-a11y/label-has-associated-control': 'off',
+    'consistent-return': 'off',
+    'no-param-reassign': ['error', { props: false }],
     'react/jsx-props-no-spreading': 'off',
     'react-compiler/react-compiler': 'error',
     '@typescript-eslint/no-explicit-any': 'error',

@@ -5,15 +5,23 @@
 
   // =====colors====
   --color--white: #fff;
+  --color--wheat: rgb(236, 215, 177);
+  --color--wheat--hover: rgb(225, 194, 136);
+  --color--wheat--active: rgb(232, 187, 104);
+  --color--dark: rgb(69, 63, 51);
+  --color--dark--hover: rgb(81, 91, 63);
+  --color--dark--active: rgb(140, 167, 93);
+  --color--dark--disabled: rgb(118, 109, 109);
   --color--black: #171d25;
   --color--error: rgb(241, 125, 125);
   --color--card: #045772;
   --color--card--hover: #063848;
   --color--card--active: #06504d;
   --color--card-details: #744090;
-  --color--dark-blue: #316282;
-  --color--light-blue: #3c98d6;
-  --color--light-blue--hover: #2ba2f2;
+  --color--dark-blue: #8d72a0;
+  --color--light-blue: #1d9bf0;
+  --color--light-header: #a6b9c6;
+  --color--light-blue--hover: #78c9ff;
   --color--light-blue--active: #2bf23f;
   --color--light-blue--disabled: #8d969bff;
 }
