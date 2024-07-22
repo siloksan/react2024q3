@@ -1,4 +1,4 @@
-import { useThemeUpdate, useTheme } from '@/app/providers/themeProvider';
+import { useTheme, useThemeUpdate } from '@/features/providers/themeProvider';
 import styles from './ThemeToggle.module.scss';
 
 export function ThemeToggle() {
@@ -14,7 +14,12 @@ export function ThemeToggle() {
     <div className={container}>
       Light
       <div>
-        <input type="checkbox" className={styles.checkbox} id="themeToggle" onClick={toggleTheme} />
+        <input
+          type="checkbox"
+          className={styles.checkbox}
+          id="themeToggle"
+          onClick={toggleTheme}
+        />
         <label className={styles.label} htmlFor="themeToggle">
           <div className={styles.ball} />
         </label>

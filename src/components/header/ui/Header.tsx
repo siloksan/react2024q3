@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import Link from 'next/link';
 
-import { useTheme } from '@/app/providers/themeProvider';
+import { useTheme } from '@/features/providers/themeProvider';
 import { ThemeToggle } from '../components/themeToggle/ThemeToggle';
 import ErrorButton from '../components/errorButton/ErrorButton';
 

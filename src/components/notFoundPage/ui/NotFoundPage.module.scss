@@ -1,0 +1,27 @@
+@use '@/pages//styles/mixins' as *;
+
+.title {
+  text-align: center;
+  @include font(700, var(--font-family--genos));
+  font-size: 3.6rem;
+}
+
+.description,
+.link {
+  font-size: 2rem;
+  margin: 10px auto;
+  text-align: center;
+}
+
+.link {
+  margin: 10px auto;
+  color: var(--color--light-blue);
+}
+
+.img {
+  max-width: 600px;
+  margin: 10px auto;
+  img {
+    border-radius: 10px;
+  }
+}

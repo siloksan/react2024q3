@@ -1,4 +1,4 @@
-import { useTheme } from '@/app/providers/themeProvider';
+import { useTheme } from '@/features/providers/themeProvider';
 import styles from './Button.module.scss';
 
 interface Props extends React.HTMLAttributes<HTMLButtonElement> {
