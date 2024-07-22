@@ -1,23 +1,25 @@
-import { Outlet } from 'react-router-dom';
-import Header from 'widgets/header';
+import Header from "../header";
 
-import { useTheme } from 'app/providers/themeProvider';
-import styles from './Layout.module.scss';
+// import { useTheme } from 'app/providers/themeProvider';
+// import styles from './Layout.module.scss';
 
-export default function Layout() {
-  const dark = useTheme();
+interface Props {
+  children: React.ReactNode;
+}
 
-  let rootClass = styles.root;
-  if (dark) {
-    rootClass += ` ${styles.dark}`;
-  }
+export default function Layout({ children }: Props) {
+  // const dark = useTheme();
+
+  // let rootClass = styles.root;
+  // if (dark) {
+  //   rootClass += ` ${styles.dark}`;
+  // }
 
   return (
-    <div className={rootClass}>
+    <div>
+      {/* <h2>Header</h2> */}
       <Header />
-      <main className={styles.main}>
-        <Outlet />
-      </main>
+        {children}
     </div>
   );
 }
