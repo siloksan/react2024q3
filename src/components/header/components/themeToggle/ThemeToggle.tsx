@@ -1,5 +1,4 @@
-import { useTheme, useThemeUpdate } from 'app/providers/themeProvider';
-
+import { useThemeUpdate, useTheme } from '@/app/providers/themeProvider';
 import styles from './ThemeToggle.module.scss';
 
 export function ThemeToggle() {
