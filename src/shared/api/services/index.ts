@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
-import { Spacecraft, SpacecraftsResponse } from 'entities/spacecraft/models';
-import { baseUrl } from '../const';
+import { Spacecraft, SpacecraftsResponse } from '@/entities/spacecraft/models';
 import { SpaceCraftRequestParams, SpaceCraftsRequestParams } from '../types';
+
+import { baseUrl } from '../const';
 
 const baseQuery = fetchBaseQuery({
   baseUrl,
@@ -22,14 +22,18 @@ export const starTrekApi = createApi({
         params,
       }),
     }),
-    getItem: builder.query<{ spacecraft: Spacecraft }, SpaceCraftRequestParams>({
-      query: ({ endpoint, params }) => ({
-        url: endpoint,
-        params,
-        method: 'GET',
-      }),
-    }),
+    getItem: builder.query<{ spacecraft: Spacecraft }, SpaceCraftRequestParams>(
+      {
+        query: ({ endpoint, params }) => ({
+          url: endpoint,
+          params,
+          method: 'GET',
+        }),
+      }
+    ),
   }),
 });
+
+starTrekApi.endpoints.getItems.select = () => ({});
 
 export const { useGetItemsQuery, useGetItemQuery } = starTrekApi;
