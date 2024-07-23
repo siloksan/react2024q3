@@ -1,3 +1,4 @@
+import Main from '@/components/main';
 import Head from 'next/head';
 
 export default function Home() {
@@ -10,7 +11,7 @@ export default function Home() {
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Head>
       <main>
-        <h1>Hi John!</h1>
+        <Main />
       </main>
     </>
   );
