@@ -1,11 +1,15 @@
-import { RootState } from 'app/store';
 import { useSelector } from 'react-redux';
+import { RootState } from '@/shared/store';
 import Card from '../card/Card';
 
 import styles from './CardList.module.scss';
+import { Spacecraft } from '@/entities/spacecraft/models';
 
-export default function CardList() {
-  const spacecrafts = useSelector((state: RootState) => state.spacecrafts.value);
+interface Props {
+  spacecrafts: Spacecraft[];
+}
+
+export default function CardList({ spacecrafts }: Props) {
 
   const spacecraftsView =
     spacecrafts.length === 0 ? (

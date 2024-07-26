@@ -1,39 +1,69 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Spacecraft, SpacecraftsResponse } from '@/entities/spacecraft/models';
-import { SpaceCraftRequestParams, SpaceCraftsRequestParams } from '../types';
-
 import { baseUrl } from '../const';
+import { Payload, QueryParams } from '../types';
+import { GetServerSidePropsContext, PreviewData } from 'next/types';
+import { ParsedUrlQuery } from 'querystring';
+import getStringParam from '@/shared/lib/getStringParam/getStringParam';
 
-const baseQuery = fetchBaseQuery({
-  baseUrl,
-  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-  timeout: 7777,
-  method: 'POST',
-});
+export async function getSpacecrafts(context: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>): Promise<SpacecraftsResponse | undefined> {
+  const basePayload: Payload = {
+    name: '',
+    registry: '',
+    status: '',
+  };
 
-export const starTrekApi = createApi({
-  reducerPath: 'starTrekApi',
-  baseQuery,
-  endpoints: (builder) => ({
-    getItems: builder.query<SpacecraftsResponse, SpaceCraftsRequestParams>({
-      query: ({ endpoint, payload, params }) => ({
-        url: endpoint,
-        body: new URLSearchParams(payload).toString(),
-        params,
-      }),
-    }),
-    getItem: builder.query<{ spacecraft: Spacecraft }, SpaceCraftRequestParams>(
+  const { query } = context;
+  const name = getStringParam(query, 'name');
+  const pageNumber = getStringParam(query, 'pageNumber') || '1';
+  const queryParams = {
+    pageNumber: (Number(pageNumber) - 1).toString(),
+    pageSize: '5',
+  }
+
+  const newPayload: Record<string, string> = {...basePayload, ...{ name } };
+  try {
+    const response = await fetch(
+      `${baseUrl}spacecraft/search?${new URLSearchParams(queryParams)}`,
       {
-        query: ({ endpoint, params }) => ({
-          url: endpoint,
-          params,
-          method: 'GET',
-        }),
+        method: 'POST',
+        body: new URLSearchParams(newPayload).toString(),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       }
-    ),
-  }),
-});
+    );
 
-starTrekApi.endpoints.getItems.select = () => ({});
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
 
-export const { useGetItemsQuery, useGetItemQuery } = starTrekApi;
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching spacecrafts:', error);
+  }
+}
+
+export async function getSpacecraft(context: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>): Promise<Spacecraft | undefined> {
+  const { params } = context
+  console.log('params: ', params);
+  if (!params) return;
+
+  try {
+    const response = await fetch(
+      `${baseUrl}spacecraft?${new URLSearchParams(params as QueryParams)}`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('data: ', data);
+    return data.spacecraft;
+  } catch (error) {
+    console.error('Error fetching spacecraft:', error);
+  }
+}

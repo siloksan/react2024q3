@@ -1,7 +1,22 @@
+import Layout from '@/components/layout/Layout';
 import Main from '@/components/main';
+import { SpacecraftsResponse } from '@/entities/spacecraft/models';
+import { getSpacecrafts } from '@/shared/api/services';
 import Head from 'next/head';
+import { GetServerSideProps } from 'next/types';
+import { ReactElement } from 'react';
 
-export default function Home() {
+interface Props {
+  spacecraftsRes: SpacecraftsResponse
+}
+
+export const getServerSideProps: GetServerSideProps = (async (context) => {
+  const spacecraftsRes = await getSpacecrafts(context)
+
+  return { props: { spacecraftsRes } }
+})
+
+export default function Home({ spacecraftsRes }: Props) {
   return (
     <>
       <Head>
@@ -11,8 +26,13 @@ export default function Home() {
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Head>
       <main>
-        <Main />
+        <Main spacecraftsRes={spacecraftsRes}/>
       </main>
     </>
   );
 }
+
+
+Home.getLayout = (page: ReactElement) => {
+  return <Layout>{page}</Layout>;
+};

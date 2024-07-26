@@ -1,3 +1,13 @@
+export interface Payload {
+  name: string;
+  registry: string;
+  status: string;
+}
+
+export interface QueryParams {
+  [key: string]: string
+}
+
 interface SpaceCraftsParams {
   pageNumber: number;
   pageSize: number;

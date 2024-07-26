@@ -1,20 +1,30 @@
-import { Spacecraft } from 'entities/spacecraft/models';
+// import { useDispatch, useSelector } from 'react-redux';
 
-import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'app/store';
-import { useTheme } from 'app/providers/themeProvider';
+import { Spacecraft } from '@/entities/spacecraft/models';
+import { useTheme } from '@/features/providers/themeProvider';
+
 import styles from './Card.module.scss';
+import { useRouter } from 'next/router';
 
 interface Props {
   spacecraft: Spacecraft;
 }
 
 export default function Card({ spacecraft }: Props) {
+  const router = useRouter();
+  
+  const openDetails = () => {
+    const { query } = router;
+    const { uid, ...newQuery } = query;
+    router.push({ pathname: `/spacecraft/${spacecraft.uid}`, query: { ...newQuery } });
+  };
+
   const { name } = spacecraft;
-  const { spacecraftId } = useParams();
-  const selectedItems = useSelector((state: RootState) => state.selectedItems.value);
-  const dispatch = useDispatch();
+  // const { spacecraftId } = useParams();
+  // const selectedItems = useSelector(
+  //   (state: RootState) => state.selectedItems.value
+  // );
+  // const dispatch = useDispatch();
   const dark = useTheme();
 
   let containerClassName = styles.container;
@@ -23,37 +33,40 @@ export default function Card({ spacecraft }: Props) {
     containerClassName += ` ${styles.dark}`;
   }
 
-  if (spacecraftId === spacecraft.uid) {
-    containerClassName += ` ${styles.active}`;
-  }
+  // if (spacecraftId === spacecraft.uid) {
+  //   containerClassName += ` ${styles.active}`;
+  // }
 
   const dateStatus = spacecraft.dateStatus || 'unknown';
   const status = spacecraft.status || 'unknown';
 
-  const [searchParams] = useSearchParams();
+  // const [searchParams] = useSearchParams();
 
-  const handleClick: React.ComponentProps<'input'>['onClick'] = (e) => {
+  const checkCard: React.ComponentProps<'input'>['onClick'] = (e) => {
     e.stopPropagation();
-    if (e.target instanceof HTMLInputElement) {
-      const { checked } = e.target;
-      if (checked) {
-        dispatch({ type: 'selectedItems/selectItem', payload: spacecraft });
-      } else {
-        dispatch({ type: 'selectedItems/removeItem', payload: spacecraft });
-      }
-    }
+    // if (e.target instanceof HTMLInputElement) {
+    //   const { checked } = e.target;
+    //   if (checked) {
+    //     dispatch({ type: 'selectedItems/selectItem', payload: spacecraft });
+    //   } else {
+    //     dispatch({ type: 'selectedItems/removeItem', payload: spacecraft });
+    //   }
+    // }
   };
 
-  const isChecked = selectedItems.some((item) => item.uid === spacecraft.uid);
+  // const isChecked = selectedItems.some((item) => item.uid === spacecraft.uid);
 
   return (
     <li className={containerClassName}>
-      <Link to={`spacecrafts/${spacecraft.uid}?${searchParams.toString()}`} className={styles.link}>
+      <div 
+        onClick={openDetails}
+        className={styles.link}
+      >
         <input
           className={styles.checkbox}
           type="checkbox"
-          onClick={handleClick}
-          checked={isChecked}
+          onClick={checkCard}
+          // checked={isChecked}
           onChange={() => {}}
         />
         <div>
@@ -67,7 +80,7 @@ export default function Card({ spacecraft }: Props) {
             <strong>Status:</strong> {status}
           </p>
         </div>
-      </Link>
+      </div>
     </li>
   );
 }

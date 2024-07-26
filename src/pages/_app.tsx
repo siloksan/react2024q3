@@ -1,20 +1,29 @@
-import { Provider } from 'react-redux';
-import Layout from '@/components/layout/Layout';
 import type { AppProps } from 'next/app';
+import { ReactElement, ReactNode } from 'react';
+import { NextPage } from 'next/types';
 
-import { store } from '@/shared/store';
 import { ThemeProvider } from '@/features/providers/themeProvider';
+import { SpacecraftsResponse } from '@/entities/spacecraft/models';
 
 import '@/styles/index.scss';
 
-export default function App({ Component, pageProps }: AppProps) {
+interface GetLayoutProps {
+  spacecraftsRes: SpacecraftsResponse;
+}
+
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement, props: GetLayoutProps) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+export default function App({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout || ((page) => page);
   return (
     <ThemeProvider>
-      <Provider store={store}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </Provider>
+      {getLayout(<Component {...pageProps} />, pageProps)}
     </ThemeProvider>
   );
 }
