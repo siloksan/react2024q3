@@ -2,19 +2,31 @@ import { Provider } from 'react-redux';
 import Layout from '@/components/layout/Layout';
 import type { AppProps } from 'next/app';
 
-import { store } from '@/shared/store';
 import { ThemeProvider } from '@/features/providers/themeProvider';
 
 import '@/styles/index.scss';
+import { wrapper } from '@/shared/store';
 
-export default function App({ Component, pageProps }: AppProps) {
+const { default: fetch, Headers, Request, Response } = require("node-fetch");
+const { default: AbortController } = require("abort-controller");
+
+Object.assign(globalThis, {
+  fetch,
+  Headers,
+  Request,
+  Response,
+  AbortController,
+});
+
+function App({ Component, pageProps }: AppProps) {
+
   return (
-    <ThemeProvider>
-      <Provider store={store}>
+      <ThemeProvider>
         <Layout>
           <Component {...pageProps} />
         </Layout>
-      </Provider>
-    </ThemeProvider>
+      </ThemeProvider>
   );
 }
+
+export default wrapper.withRedux(App);

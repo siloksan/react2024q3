@@ -1,5 +1,5 @@
-import { RootState } from 'app/store';
 import { useSelector } from 'react-redux';
+import { RootState } from '@/shared/store';
 import Card from '../card/Card';
 
 import styles from './CardList.module.scss';
