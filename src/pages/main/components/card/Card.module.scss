@@ -1,0 +1,54 @@
+@use 'src/app/styles/mixins.scss' as *;
+
+.container {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: var(--color--wheat);
+  &.dark {
+    background-color: var(--color--card-details);
+    color: var(--color--white);
+  }
+  a {
+    width: 100%;
+    color: inherit;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  &:hover {
+    background-color: var(--color--wheat--hover);
+    &.dark {
+      background-color: var(--color--card--hover);
+    }
+  }
+  h2 {
+    @include font(700, var(--font-family--genos));
+    font-size: 2rem;
+  }
+  p {
+    @include font(400, var(--font-family--genos));
+    font-size: 1.4rem;
+  }
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkbox {
+  width: 25px;
+  height: 25px;
+}
+
+.active {
+  background-color: var(--color--wheat--active);
+  &.dark {
+    background-color: var(--color--card--active);
+  }
+}
