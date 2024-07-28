@@ -109,3 +109,6 @@ dist
 
 # Vite
 .vite
+
+# Next
+next-env.d.ts
