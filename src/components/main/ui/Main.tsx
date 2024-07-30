@@ -1,135 +1,64 @@
-// import SearchBox from 'shared/ui/search/SearchBox';
-// import Pagination from 'widgets/pagination';
-// import useStorage from 'shared/lib/useStorage/useStorage';
-// import { useGetItemsQuery } from 'shared/api/services';
-// import { SpaceCraftsRequestParams } from 'shared/api/types';
-// import { setSpacecrafts } from 'features/reduxSlices/spacecrafts';
-// import Flyout from 'shared/ui/flyout/Flyout';
+import { useRouter } from 'next/router';
+
+import getStringParam from '@/shared/lib/getStringParam/getStringParam';
+
 import CardList from '../components/cardList/CardList';
 
-import styles from './Main.module.scss';
-import { GetServerSidePropsContext } from 'next/types';
-import { SpaceCraftsRequestParams } from '@/shared/api/types';
-import {
-  getItems,
-  getRunningQueriesThunk,
-  starTrekApi,
-  useGetItemsQuery,
-} from '@/shared/api/services';
-// import { store } from '@/shared/store';
 import { SpacecraftsResponse } from '@/entities/spacecraft/models';
-import { RootState, useAppSelector, wrapper } from '@/shared/store';
-import { useRouter } from 'next/dist/client/router';
+import Pagination from '@/components/pagination';
+import SearchBox from '@/shared/ui/search/SearchBox';
+import Flyout from '@/shared/ui/flyout/Flyout';
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async (context) => {
-    const pageSize = 5;
-    let name = '';
-    if (typeof context.query.name === 'string') {
-      name = context.query.name;
-    }
+import styles from './Main.module.scss';
 
-    let pageNumber = 1;
-    if (typeof context.query.page === 'string') {
-      pageNumber = Number(context.query.page);
-    }
+interface Props {
+  spacecraftsRes: SpacecraftsResponse;
+  children?: React.ReactNode;
+}
 
-    const requestParams: SpaceCraftsRequestParams = {
-      endpoint: 'spacecraft/search',
-      payload: {
-        name,
-        registry: '',
-        status: '',
-      },
-      params: { pageNumber: pageNumber - 1, pageSize },
-    };
-    store.dispatch(getItems.initiate(requestParams));
+export default function Main({ spacecraftsRes, children = null }: Props) {
+  const router = useRouter();
 
-    await Promise.all(store.dispatch(getRunningQueriesThunk()));
+  const { page, spacecrafts } = spacecraftsRes;
 
-    return {
-      props: {},
-    };
+  const { pageNumber, pageSize, totalElements } = page;
+  
+  function setPageNumber(pageNumber: number) {
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, pageNumber },
+    });
   }
-);
 
-export default function Main() {
-  // const router = useRouter();
+  function setSearchTerm(name: string) {
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, name, pageNumber: 1 },
+    });
+  }
 
-  // const pageSize = 5;
-
-  // const requestParams: SpaceCraftsRequestParams = {
-  //   endpoint: 'spacecraft/search',
-  //   payload: {
-  //     name: router.query.name as string,
-  //     registry: '',
-  //     status: '',
-  //   },
-  //   params: { pageNumber: Number(router.query.page) - 1, pageSize },
-  // };
-
-  // const result = useGetItemsQuery(requestParams);
-  // const { isLoading, error, data } = result;
-
-  // const data = useAppSelector((state: RootState) => state.starTrekApi.queries['getItems(null)']?.data.spacecrafts);
-
-  // console.log('data: ', data);
-  // const pageSize = 5;
-  // const { searchParams } = useStorage();
-  // const dispatch = useDispatch();
-
-  // const [pageNumber, setPageNumber] = useState<number>(() => {
-  //   const currentPage = searchParams.get('page');
-  //   return currentPage ? Number(currentPage) : 1;
-  // });
-
-  // const [searchTerm, setSearchTerm] = useState<string>(searchParams.get('name') || '');
-
-  // const requestParams: SpaceCraftsRequestParams = {
-  //   endpoint: 'spacecraft/search',
-  //   payload: {
-  //     name: searchTerm,
-  //     registry: '',
-  //     status: '',
-  //   },
-  //   params: { pageNumber: pageNumber - 1, pageSize },
-  // };
-
-  // const { data, error, isFetching } = useGetItemsQuery(requestParams);
-
-  // useEffect(() => {
-  //   if (data) {
-  //     dispatch(setSpacecrafts(data.spacecrafts));
-  //   }
-  // }, [data, dispatch]);
-
-  // const pagination = data ? (
-  //   <Pagination
-  //     currentPage={pageNumber}
-  //     itemPerPage={pageSize}
-  //     totalItems={data.page.totalElements}
-  //     setPageNumber={setPageNumber}
-  //   />
-  // ) : null;
-
-  // if (error) {
-  //   throw new Error('Failed to fetch data in Main');
-  // }
+  const searchTerm = getStringParam(router.query, 'name');
 
   return (
     <>
       <h1 className={styles.title}>Spacecrafts</h1>
-      {/* {isFetching && !data ? <Loader /> : <div className={styles.pagination}>{pagination}</div>} */}
-      {/* <SearchBox setSearchTerm={setSearchTerm} searchTerm={searchTerm} setPageNumber={setPageNumber} /> */}
+      <Pagination
+        currentPage={pageNumber + 1}
+        itemPerPage={pageSize}
+        totalItems={totalElements}
+        setPageNumber={setPageNumber}
+      />
+      <SearchBox
+        setSearchTerm={setSearchTerm}
+        searchTerm={searchTerm}
+      />
       <div className={styles.content}>
-        {/* <div className={styles.list}>
-          <CardList />
-        </div> */}
-        {/* <ErrorBoundary>
-          <Outlet />
-        </ErrorBoundary> */}
+        <div className={styles.list}>
+          <CardList spacecrafts={spacecrafts} />
+        </div>
+        {children}
       </div>
-      {/* <Flyout /> */}
+      <Flyout />
     </>
   );
 }

@@ -1,32 +1,32 @@
-import { Provider } from 'react-redux';
-import Layout from '@/components/layout/Layout';
 import type { AppProps } from 'next/app';
+import { ReactElement, ReactNode } from 'react';
+import { NextPage } from 'next/types';
 
 import { ThemeProvider } from '@/features/providers/themeProvider';
+import { SpacecraftsResponse } from '@/entities/spacecraft/models';
 
 import '@/styles/index.scss';
-import { wrapper } from '@/shared/store';
+import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
 
-const { default: fetch, Headers, Request, Response } = require("node-fetch");
-const { default: AbortController } = require("abort-controller");
-
-Object.assign(globalThis, {
-  fetch,
-  Headers,
-  Request,
-  Response,
-  AbortController,
-});
-
-function App({ Component, pageProps }: AppProps) {
-
-  return (
-      <ThemeProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ThemeProvider>
-  );
+interface GetLayoutProps {
+  spacecraftsRes: SpacecraftsResponse;
 }
 
-export default wrapper.withRedux(App);
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement, props: GetLayoutProps) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+export default function App({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout || ((page) => page);
+  return (
+    <SelectedItemsProvider>
+      <ThemeProvider>
+        {getLayout(<Component {...pageProps} />, pageProps)}
+      </ThemeProvider>
+    </SelectedItemsProvider>
+  );
+}

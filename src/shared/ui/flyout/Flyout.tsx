@@ -1,18 +1,14 @@
-import { useDispatch, useSelector } from 'react-redux';
-
-import { RootState } from 'app/store';
-
-import { removeAll } from 'features/reduxSlices/selectedItems';
 import { useEffect, useState } from 'react';
-import spacecrafts from 'features/reduxSlices/spacecrafts';
-import formatData from 'shared/lib/formatData/formatData';
-import { useTheme } from 'app/providers/themeProvider';
-import styles from './Flyout.module.scss';
+
+import formatData from '@/shared/lib/formatData/formatData';
+import { useSelectedItems, useSelectedItemsUpdate } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
+import { useTheme } from '@/features/providers/themeProvider';
 import Button from '../button/Button';
 
+import styles from './Flyout.module.scss';
+
 export default function Flyout() {
-  const selectedItems = useSelector((state: RootState) => state.selectedItems.value);
-  const dispatch = useDispatch();
+  const selectedItems = useSelectedItems();
   const numberOfSelectedItems = selectedItems.length;
   const [isUnmount, setIsUnmount] = useState(false);
   const dark = useTheme();
@@ -27,9 +23,12 @@ export default function Flyout() {
     }
   }, [numberOfSelectedItems]);
 
-  const unselectAll = () => {
-    dispatch(removeAll());
-  };
+  const update = useSelectedItemsUpdate();
+  if (update === null) {
+    return null;
+  }
+
+  const { clearSelectedItems } = update;
 
   const file = new Blob([formatData(selectedItems)], { type: 'text/csv' });
   const url = selectedItems.length > 0 ? URL.createObjectURL(file) : undefined;
@@ -53,9 +52,9 @@ export default function Flyout() {
         The number of selected items - <strong>{numberOfSelectedItems}</strong>
       </p>
       <div className={styles.buttons}>
-        <Button onClick={unselectAll}>Unselect all</Button>
+        <Button onClick={clearSelectedItems}>Unselect all</Button>
         <Button>
-          <a href={url} download={`${spacecrafts.length}_spacecrafts.csv`}>
+          <a href={url} download={`${selectedItems.length}_spacecrafts.csv`}>
             Download
           </a>
         </Button>

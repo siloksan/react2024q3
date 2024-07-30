@@ -1,52 +1,25 @@
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import Loader from 'shared/ui/loader/Loader';
+import { useRouter } from 'next/router';
 
-import { SpaceCraftRequestParams } from 'shared/api/types';
-import { useTheme } from 'app/providers/themeProvider';
-import { useGetItemQuery } from 'shared/api/services';
-import { memo, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { saveDetails } from 'features/reduxSlices/itemDetails';
-import Button from 'shared/ui/button/Button';
+import { useTheme } from '@/features/providers/themeProvider';
+import { Spacecraft } from '@/entities/spacecraft/models';
+import Button from '@/shared/ui/button/Button';
 
 import styles from './CardDetails.module.scss';
 
-function CardDetails() {
-  const { spacecraftId } = useParams();
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+interface Props {
+  spacecraft: Spacecraft;
+}
+
+export default function CardDetails({ spacecraft }: Props) {
+  const router = useRouter();
 
   const dark = useTheme();
-  const requestParams: SpaceCraftRequestParams = { endpoint: 'spacecraft', params: { uid: spacecraftId || '' } };
 
   const closeDetails = () => {
-    navigate(`/?${searchParams.toString()}`);
+    const { query } = router;
+    const { uid, ...newQuery } = query;
+    router.push({ pathname: '/', query: { ...newQuery } });
   };
-
-  const { data, error, isFetching } = useGetItemQuery(requestParams);
-
-  useEffect(() => {
-    if (data) {
-      dispatch(saveDetails(data.spacecraft));
-    }
-  }, [data, dispatch]);
-
-  if (error) {
-    if (error) {
-      throw new Error('Failed to fetch data details in CardDetails');
-    }
-  }
-
-  if (isFetching || !data) {
-    return (
-      <aside className={styles.container} data-testid="card-details">
-        <Loader />
-      </aside>
-    );
-  }
-
-  const { spacecraft } = data;
 
   const { name, spacecraftClass } = spacecraft;
 
@@ -111,5 +84,3 @@ function CardDetails() {
     </aside>
   );
 }
-
-export default memo(CardDetails);

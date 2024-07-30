@@ -1,4 +1,5 @@
 import { useTheme, useThemeUpdate } from '@/features/providers/themeProvider';
+
 import styles from './ThemeToggle.module.scss';
 
 export function ThemeToggle() {

@@ -1,37 +1,27 @@
-import { useState } from 'react';
-import useStorage from 'shared/lib/useStorage/useStorage';
-import { useTheme } from 'app/providers/themeProvider';
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import loupe from './assets/search-icon.svg';
 
 import styles from './SearchBox.module.scss';
 import Button from '../button/Button';
+import { useTheme } from '@/features/providers/themeProvider';
 
 interface Props {
   setSearchTerm: (searchTerm: string) => void;
   searchTerm: string;
-  setPageNumber: (page: number) => void;
 }
 
-export default function SearchBox({ setSearchTerm, searchTerm, setPageNumber }: Props) {
+export default function SearchBox({
+  setSearchTerm,
+  searchTerm,
+}: Props) {
   const [value, setValue] = useState(searchTerm);
-  const { setData } = useStorage();
+
   const dark = useTheme();
 
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
-  };
-
-  const handleSubmit = () => {
-    setData('name', value.trim());
-    setData('page', '1');
-    setPageNumber(1);
-    setSearchTerm(value.trim());
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      handleSubmit();
-    }
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSearchTerm(value);
   };
 
   let containerClassName = styles.container;
@@ -45,19 +35,22 @@ export default function SearchBox({ setSearchTerm, searchTerm, setPageNumber }: 
 
   return (
     <div className={containerClassName}>
-      <div className={styles.form}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <input
           value={value}
-          onChange={handleInput}
-          onKeyDown={handleKeyDown}
           type="text"
           className={inputClassName}
           placeholder="Search"
+          onChange={(e) => setValue(e.target.value)}
         />
-        <Button onClick={handleSubmit} aria-label="Search" type="submit" additionalStyles={buttonClassName}>
-          <img src={loupe} alt="loupe icon" />
+        <Button
+          aria-label="Search"
+          type="submit"
+          additionalStyles={buttonClassName}
+        >
+          <Image src={loupe} alt="loupe icon" />
         </Button>
-      </div>
+      </form>
     </div>
   );
 }
