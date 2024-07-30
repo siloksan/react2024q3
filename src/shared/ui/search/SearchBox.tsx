@@ -9,13 +9,11 @@ import { useTheme } from '@/features/providers/themeProvider';
 interface Props {
   setSearchTerm: (searchTerm: string) => void;
   searchTerm: string;
-  setPageNumber: (page: number) => void;
 }
 
 export default function SearchBox({
   setSearchTerm,
   searchTerm,
-  setPageNumber,
 }: Props) {
   const [value, setValue] = useState(searchTerm);
 

@@ -1,9 +1,7 @@
-import { useSelector } from 'react-redux';
-import { RootState } from '@/shared/store';
 import Card from '../card/Card';
+import { Spacecraft } from '@/entities/spacecraft/models';
 
 import styles from './CardList.module.scss';
-import { Spacecraft } from '@/entities/spacecraft/models';
 
 interface Props {
   spacecrafts: Spacecraft[];

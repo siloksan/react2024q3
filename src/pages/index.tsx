@@ -1,10 +1,11 @@
+import { ReactElement } from 'react';
+import { GetServerSideProps } from 'next/types';
+import Head from 'next/head';
+
 import Layout from '@/components/layout/Layout';
 import Main from '@/components/main';
 import { SpacecraftsResponse } from '@/entities/spacecraft/models';
 import { getSpacecrafts } from '@/shared/api/services';
-import Head from 'next/head';
-import { GetServerSideProps } from 'next/types';
-import { ReactElement } from 'react';
 
 interface Props {
   spacecraftsRes: SpacecraftsResponse

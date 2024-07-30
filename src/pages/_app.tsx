@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/features/providers/themeProvider';
 import { SpacecraftsResponse } from '@/entities/spacecraft/models';
 
 import '@/styles/index.scss';
+import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
 
 interface GetLayoutProps {
   spacecraftsRes: SpacecraftsResponse;
@@ -22,8 +23,10 @@ type AppPropsWithLayout = AppProps & {
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
   return (
-    <ThemeProvider>
-      {getLayout(<Component {...pageProps} />, pageProps)}
-    </ThemeProvider>
+    <SelectedItemsProvider>
+      <ThemeProvider>
+        {getLayout(<Component {...pageProps} />, pageProps)}
+      </ThemeProvider>
+    </SelectedItemsProvider>
   );
 }

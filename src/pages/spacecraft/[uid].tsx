@@ -1,10 +1,11 @@
-import Layout from '@/components/layout/Layout';
+import { GetServerSideProps } from 'next';
+
 import CardDetails from '@/components/main/components/cardDetails/CardDetails';
 import Main from '@/components/main/ui/Main';
 import { Spacecraft, SpacecraftsResponse } from '@/entities/spacecraft/models';
 import { getSpacecraft, getSpacecrafts } from '@/shared/api/services';
-import getStringParam from '@/shared/lib/getStringParam/getStringParam';
-import { GetServerSideProps } from 'next';
+
+import Layout from '@/components/layout/Layout';
 
 interface Props {
   spacecraft: Spacecraft;
@@ -19,7 +20,6 @@ export const getServerSideProps: GetServerSideProps = (async (context) => {
 })
 
 export default function CardDetailsWrapper({ spacecraft }: Omit<Props, 'spacecraftsRes'>) {
-  console.log('spacecraft: ', spacecraft);
   return (
     <>
       <CardDetails spacecraft={spacecraft} />
@@ -32,19 +32,3 @@ CardDetailsWrapper.getLayout = (children: React.ReactNode, { spacecraftsRes }: O
     <Main spacecraftsRes={spacecraftsRes}>{children}</Main>
   </Layout>
 );
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const { id } = context.params!;
-//   const res = await fetch(`https://api.example.com/spacecraft/${id}`);
-//   const spacecraft = await res.json();
-
-//   if (!spacecraft) {
-//     return {
-//       notFound: true,
-//     };
-//   }
-
-//   return {
-//     props: { spacecraft },
-//   };
-// };

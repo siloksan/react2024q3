@@ -1,21 +1,15 @@
-// import SearchBox from 'shared/ui/search/SearchBox';
-// import Pagination from 'widgets/pagination';
-// import useStorage from 'shared/lib/useStorage/useStorage';
-// import { useGetItemsQuery } from 'shared/api/services';
-// import { SpaceCraftsRequestParams } from 'shared/api/types';
-// import { setSpacecrafts } from 'features/reduxSlices/spacecrafts';
-// import Flyout from 'shared/ui/flyout/Flyout';
+import { useRouter } from 'next/router';
+
+import getStringParam from '@/shared/lib/getStringParam/getStringParam';
+
 import CardList from '../components/cardList/CardList';
 
-import styles from './Main.module.scss';
 import { SpacecraftsResponse } from '@/entities/spacecraft/models';
-import { RootState, useAppSelector, wrapper } from '@/shared/store';
-import { useRouter } from 'next/dist/client/router';
 import Pagination from '@/components/pagination';
 import SearchBox from '@/shared/ui/search/SearchBox';
-import getStringParam from '@/shared/lib/getStringParam/getStringParam';
 import Flyout from '@/shared/ui/flyout/Flyout';
-import CardDetailsWrapper from '@/pages/spacecraft/[uid]';
+
+import styles from './Main.module.scss';
 
 interface Props {
   spacecraftsRes: SpacecraftsResponse;
@@ -45,23 +39,6 @@ export default function Main({ spacecraftsRes, children = null }: Props) {
 
   const searchTerm = getStringParam(router.query, 'name');
 
-  // const [pageNumber, setPageNumber] = useState<number>(() => {
-  //   const currentPage = searchParams.get('page');
-  //   return currentPage ? Number(currentPage) : 1;
-  // });
-
-  // const [searchTerm, setSearchTerm] = useState<string>(searchParams.get('name') || '');
-
-  // const requestParams: SpaceCraftsRequestParams = {
-  //   endpoint: 'spacecraft/search',
-  //   payload: {
-  //     name: searchTerm,
-  //     registry: '',
-  //     status: '',
-  //   },
-  //   params: { pageNumber: pageNumber - 1, pageSize },
-  // };
-
   return (
     <>
       <h1 className={styles.title}>Spacecrafts</h1>
@@ -74,7 +51,6 @@ export default function Main({ spacecraftsRes, children = null }: Props) {
       <SearchBox
         setSearchTerm={setSearchTerm}
         searchTerm={searchTerm}
-        setPageNumber={setPageNumber}
       />
       <div className={styles.content}>
         <div className={styles.list}>
@@ -82,7 +58,7 @@ export default function Main({ spacecraftsRes, children = null }: Props) {
         </div>
         {children}
       </div>
-      {/* <Flyout /> */}
+      <Flyout />
     </>
   );
 }

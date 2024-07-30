@@ -12,7 +12,6 @@ export interface PropsPagination {
 
 function Pagination({ itemPerPage, totalItems, currentPage, setPageNumber }: PropsPagination) {
   const totalPages = Math.ceil(totalItems / itemPerPage);
-  // const { setData } = useStorage();
   const dark = useTheme();
   let buttonClass = styles.button;
   let { disabled } = styles;
@@ -30,7 +29,6 @@ function Pagination({ itemPerPage, totalItems, currentPage, setPageNumber }: Pro
 
   const handler = (pageNumber: number) => {
     setPageNumber(pageNumber);
-    // setData('page', String(pageNumber));
   };
 
   const prevBtnDisabled = currentPage === 1;
