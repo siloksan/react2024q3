@@ -14,7 +14,7 @@ export default function NotFoundPage() {
         Return to the Main page
       </Link>
       <div className={styles.img}>
-        <Image src={backHole} alt="back hole" priority />
+        <Image src={backHole} alt="back hole" priority width={600} height={600} />
       </div>
     </>
   );

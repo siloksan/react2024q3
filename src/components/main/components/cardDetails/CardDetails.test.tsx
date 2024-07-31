@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import { DUMMY_SPACECRAFTS_RESPONSE } from '@/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
 import CardDetails from './CardDetails';
 import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
-import { ThemeProvider } from '@/features/providers/themeProvider';
 import { SpacecraftClass } from '@/entities/spacecraft/models';
 
 const props = {
@@ -35,13 +34,17 @@ vi.mock('next/router', () => {
   };
 });
 
+vi.mock('@/features/providers/themeProvider', () => {
+  return {
+    useTheme: vi.fn().mockReturnValue(true),
+  };
+});
+
 describe('CardDetails', () => {
   function customRender() {
     render(
       <SelectedItemsProvider>
-        <ThemeProvider>
-          <CardDetails {...props} />
-        </ThemeProvider>
+        <CardDetails {...props} />
       </SelectedItemsProvider>
     );
   }
@@ -80,5 +83,13 @@ describe('CardDetails', () => {
     const rightSide = screen.getByTestId('right-side');
 
     expect(rightSide).toBeInTheDocument();
+  });
+
+  it('should be in dark mode', async () => {
+    customRender();
+
+    const container = screen.getByTestId('card-details');
+
+    expect(container).toHaveClass(/dark/i);
   });
 });

@@ -16,7 +16,7 @@ export default function Layout({ children }: Props) {
   }
 
   return (
-    <div className={rootClass}>
+    <div className={rootClass} data-testid="layout">
       <Header />
       <div className={styles.main}>{children}</div>
     </div>

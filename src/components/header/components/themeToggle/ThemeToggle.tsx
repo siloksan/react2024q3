@@ -2,7 +2,7 @@ import { useTheme, useThemeUpdate } from '@/features/providers/themeProvider';
 
 import styles from './ThemeToggle.module.scss';
 
-export function ThemeToggle() {
+export default function ThemeToggle() {
   const toggleTheme = useThemeUpdate();
   const dark = useTheme();
   let { container } = styles;
@@ -12,7 +12,7 @@ export function ThemeToggle() {
   }
 
   return (
-    <div className={container}>
+    <div className={container} data-testid="toggle">
       Light
       <div>
         <input type="checkbox" className={styles.checkbox} id="themeToggle" onClick={toggleTheme} />

@@ -1,12 +1,27 @@
+import { render, screen } from '@testing-library/react';
+import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
+import { ThemeProvider } from '@/features/providers/themeProvider';
+import Flyout from './Flyout';
+
 describe('Flyout', () => {
+  function customRender() {
+    render(
+      <SelectedItemsProvider>
+        <ThemeProvider>
+          <Flyout />
+        </ThemeProvider>
+      </SelectedItemsProvider>
+    );
+  }
+
   it.todo('should renders Flyout');
-  // it('should render Flyout', () => {
-  //   renderWithProviders(<Flyout />);
+  it('should render Flyout', () => {
+    customRender();
 
-  //   const flyout = screen.getByTestId('flyout');
+    const flyout = screen.getByTestId('flyout');
 
-  //   expect(flyout).toBeInTheDocument();
-  // });
+    expect(flyout).toBeInTheDocument();
+  });
 
   // it('should unselected all items when button clicked', async () => {
   //   const createObjectURLMock = vi.spyOn(URL, 'createObjectURL').mockImplementation(() => 'mock-url');

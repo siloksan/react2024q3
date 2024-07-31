@@ -8,7 +8,7 @@ import { SpacecraftsResponse } from '@/entities/spacecraft/models';
 import '@/styles/index.scss';
 import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
 
-interface GetLayoutProps {
+export interface GetLayoutProps {
   spacecraftsRes: SpacecraftsResponse;
 }
 

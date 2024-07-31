@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import { DUMMY_SPACECRAFTS_RESPONSE } from '@/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
 import Card from './Card';
 import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
-import { ThemeProvider } from '@/features/providers/themeProvider';
 
 const props = {
   spacecraft: DUMMY_SPACECRAFTS_RESPONSE.spacecrafts[0],
@@ -21,12 +20,16 @@ vi.mock('next/router', () => {
   };
 });
 
+vi.mock('@/features/providers/themeProvider', () => {
+  return {
+    useTheme: vi.fn().mockReturnValue(true),
+  };
+});
+
 function customRender() {
   render(
     <SelectedItemsProvider>
-      <ThemeProvider>
-        <Card {...props} />
-      </ThemeProvider>
+      <Card {...props} />
     </SelectedItemsProvider>
   );
 }
@@ -81,11 +84,11 @@ describe('Card', () => {
     expect(checkbox).not.toBeChecked();
   });
 
-  it("shouldn't in dark mode", async () => {
+  it('should be in dark mode', async () => {
     customRender();
 
     const item = screen.getByRole('listitem');
 
-    expect(item).not.toHaveClass(/dark/i);
+    expect(item).toHaveClass(/dark/i);
   });
 });
