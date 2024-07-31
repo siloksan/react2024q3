@@ -1,18 +1,13 @@
-// import { render, screen } from '@testing-library/react';
-// import { BrowserRouter } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
 
-// import Header from './Header';
+import Header from './Header';
 
-// describe('Header', () => {
-//   it('renders Header', () => {
-//     render(
-//       <BrowserRouter>
-//         <Header />
-//       </BrowserRouter>
-//     );
+describe('Header', () => {
+  it('renders Header', () => {
+    render(<Header />);
 
-//     const header = screen.getByTestId('header');
+    const header = screen.getByTestId('header');
 
-//     expect(header).toBeInTheDocument();
-//   });
-// });
+    expect(header).toBeInTheDocument();
+  });
+});

@@ -34,3 +34,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Dependency directories
+jspm_packages/
+.idea
+.husky/_/
+.vscode/
+.editorconfig

@@ -9,22 +9,18 @@ import Layout from '@/components/layout/Layout';
 
 interface Props {
   spacecraft: Spacecraft;
-  spacecraftsRes: SpacecraftsResponse
+  spacecraftsRes: SpacecraftsResponse;
 }
 
-export const getServerSideProps: GetServerSideProps = (async (context) => {
-  const spacecraftsRes = await getSpacecrafts(context)
-  const spacecraft = await getSpacecraft(context)  
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const spacecraftsRes = await getSpacecrafts(context);
+  const spacecraft = await getSpacecraft(context);
 
-  return { props: { spacecraft, spacecraftsRes } }
-})
+  return { props: { spacecraft, spacecraftsRes } };
+};
 
 export default function CardDetailsWrapper({ spacecraft }: Omit<Props, 'spacecraftsRes'>) {
-  return (
-    <>
-      <CardDetails spacecraft={spacecraft} />
-    </>
-  );
+  return <CardDetails spacecraft={spacecraft} />;
 }
 
 CardDetailsWrapper.getLayout = (children: React.ReactNode, { spacecraftsRes }: Omit<Props, 'spacecraft'>) => (

@@ -8,14 +8,14 @@ import { SpacecraftsResponse } from '@/entities/spacecraft/models';
 import { getSpacecrafts } from '@/shared/api/services';
 
 interface Props {
-  spacecraftsRes: SpacecraftsResponse
+  spacecraftsRes: SpacecraftsResponse;
 }
 
-export const getServerSideProps: GetServerSideProps = (async (context) => {
-  const spacecraftsRes = await getSpacecrafts(context)
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const spacecraftsRes = await getSpacecrafts(context);
 
-  return { props: { spacecraftsRes } }
-})
+  return { props: { spacecraftsRes } };
+};
 
 export default function Home({ spacecraftsRes }: Props) {
   return (
@@ -27,12 +27,11 @@ export default function Home({ spacecraftsRes }: Props) {
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Head>
       <main>
-        <Main spacecraftsRes={spacecraftsRes}/>
+        <Main spacecraftsRes={spacecraftsRes} />
       </main>
     </>
   );
 }
-
 
 Home.getLayout = (page: ReactElement) => {
   return <Layout>{page}</Layout>;

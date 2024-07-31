@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 
 import formatData from '@/shared/lib/formatData/formatData';
-import { useSelectedItems, useSelectedItemsUpdate } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
+import {
+  useSelectedItems,
+  useSelectedItemsUpdate,
+} from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
 import { useTheme } from '@/features/providers/themeProvider';
 import Button from '../button/Button';
 
@@ -23,12 +26,7 @@ export default function Flyout() {
     }
   }, [numberOfSelectedItems]);
 
-  const update = useSelectedItemsUpdate();
-  if (update === null) {
-    return null;
-  }
-
-  const { clearSelectedItems } = update;
+  const { clearSelectedItems } = useSelectedItemsUpdate();
 
   const file = new Blob([formatData(selectedItems)], { type: 'text/csv' });
   const url = selectedItems.length > 0 ? URL.createObjectURL(file) : undefined;

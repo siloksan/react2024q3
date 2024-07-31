@@ -1,8 +1,10 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { useTheme } from '@/features/providers/themeProvider';
-import { useSelectedItems, useSelectedItemsUpdate } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
+import {
+  useSelectedItems,
+  useSelectedItemsUpdate,
+} from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
 import { Spacecraft } from '@/entities/spacecraft/models';
 
 import styles from './Card.module.scss';
@@ -15,16 +17,9 @@ export default function Card({ spacecraft }: Props) {
   const router = useRouter();
   const dark = useTheme();
   const selectedItems = useSelectedItems();
-  const [checked, setChecked] = useState(() => {
-    return selectedItems.some((item) => item.uid === spacecraft.uid);
-  });
+  const checked = selectedItems.some((item) => item.uid === spacecraft.uid);
 
-  const update = useSelectedItemsUpdate();
-  if (update === null) {
-    return null;
-  }
-
-  const { addSelectedItem, removeSelectedItem } = update;
+  const { addSelectedItem, removeSelectedItem } = useSelectedItemsUpdate();
 
   const openDetails = () => {
     const { query } = router;
@@ -49,7 +44,7 @@ export default function Card({ spacecraft }: Props) {
 
   const dateStatus = spacecraft.dateStatus || 'unknown';
   const status = spacecraft.status || 'unknown';
-  
+
   const checkCard: React.ComponentProps<'input'>['onClick'] = (e) => {
     e.stopPropagation();
     if (checked) {
@@ -57,19 +52,19 @@ export default function Card({ spacecraft }: Props) {
     } else {
       addSelectedItem(spacecraft);
     }
-    setChecked(!checked);
   };
 
   return (
     <li className={containerClassName}>
-      <div onClick={openDetails} className={styles.link}>
-        <input
-          className={styles.checkbox}
-          type="checkbox"
-          onClick={checkCard}
-          checked={checked}
-          onChange={() => {}}
-        />
+      <div
+        onClick={openDetails}
+        className={styles.link}
+        role="button"
+        tabIndex={0}
+        onKeyDown={() => {}}
+        data-testid="card"
+      >
+        <input className={styles.checkbox} type="checkbox" onClick={checkCard} checked={checked} onChange={() => {}} />
         <div>
           <h2>
             <strong>Name:</strong> {name}

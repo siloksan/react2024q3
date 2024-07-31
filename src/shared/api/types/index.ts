@@ -5,7 +5,7 @@ export interface Payload {
 }
 
 export interface QueryParams {
-  [key: string]: string
+  [key: string]: string;
 }
 
 interface SpaceCraftsParams {

@@ -1,73 +1,84 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { server } from 'shared/api/mock/mocks/node';
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
 
-import { handlersError } from 'shared/api/mock/handlersError';
-import { Provider } from 'react-redux';
-import { store } from 'app/store';
-import ErrorBoundary from 'shared/ui/errorBoundary/ErrorBoundary';
+import userEvent from '@testing-library/user-event';
+import { useRouter } from 'next/router';
+import { DUMMY_SPACECRAFTS_RESPONSE } from '@/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
 import CardDetails from './CardDetails';
+import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
+import { ThemeProvider } from '@/features/providers/themeProvider';
+import { SpacecraftClass } from '@/entities/spacecraft/models';
+
+const props = {
+  spacecraft: DUMMY_SPACECRAFTS_RESPONSE.spacecrafts[0],
+};
+
+const spacecraftClass: SpacecraftClass = {
+  activeFrom: '25th century',
+  activeTo: '25th century',
+  alternateReality: false,
+  crew: '1',
+  mirror: false,
+  name: 'Space Transport',
+  numberOfDecks: '1',
+  species: 'Human',
+  uid: 'SCMA0000278211',
+  warpCapable: true,
+};
+
+vi.mock('next/router', () => {
+  const router = {
+    push: vi.fn(),
+    query: { uid: 'test1' },
+  };
+  return {
+    useRouter: vi.fn().mockReturnValue(router),
+  };
+});
 
 describe('CardDetails', () => {
-  function customRender(id: string) {
-    const routes = [
-      {
-        path: '/details/:spacecraftId',
-        element: <CardDetails />,
-      },
-    ];
-
-    const router = createMemoryRouter(routes, {
-      initialEntries: ['/', `/details/${id}`],
-      initialIndex: 1,
-    });
-
+  function customRender() {
     render(
-      <Provider store={store}>
-        <ErrorBoundary>
-          <RouterProvider router={router} />
-        </ErrorBoundary>
-      </Provider>
+      <SelectedItemsProvider>
+        <ThemeProvider>
+          <CardDetails {...props} />
+        </ThemeProvider>
+      </SelectedItemsProvider>
     );
   }
 
   it('should renders CardDetails', async () => {
-    customRender('test');
+    customRender();
 
     const container = screen.getByTestId('card-details');
 
     expect(container).toBeInTheDocument();
   });
-  it('should renders loader', async () => {
-    customRender('test');
 
-    const loader = screen.getByTestId('loader');
+  it('should call closeDetails when close button is clicked', async () => {
+    customRender();
 
-    expect(loader).toBeInTheDocument();
+    const button = screen.getByRole('button', { name: /close/i });
+    const user = userEvent.setup();
+
+    await user.click(button);
+
+    expect(useRouter().push).toHaveBeenCalledTimes(1);
   });
 
-  it('should fetch data successfully', async () => {
-    customRender('test');
+  it("should't have right side when spacecraftClass is null", async () => {
+    customRender();
 
-    await waitFor(() => {
-      const h3 = screen.getByRole('heading', { level: 3 });
+    const rightSide = screen.queryByTestId('right-side');
 
-      expect(h3).toBeInTheDocument();
-    });
+    expect(rightSide).not.toBeInTheDocument();
   });
 
-  it('should throws an error when the request fails', async () => {
-    server.use(handlersError.spaceCraftGetDetails);
+  it('should have right side when spacecraftClass is not null', async () => {
+    props.spacecraft.spacecraftClass = spacecraftClass;
+    customRender();
 
-    customRender('error');
+    const rightSide = screen.getByTestId('right-side');
 
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-    await waitFor(() => {
-      const errorMessage = screen.getByText(/Hey developer/i);
-      expect(errorMessage).toBeInTheDocument();
-    });
-
-    consoleErrorSpy.mockRestore();
+    expect(rightSide).toBeInTheDocument();
   });
 });

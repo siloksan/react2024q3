@@ -55,7 +55,7 @@ export default function CardDetails({ spacecraft }: Props) {
   );
 
   const rightSide = spacecraftClass ? (
-    <div>
+    <div data-testid="right-side">
       <p>
         <strong>Class:</strong> {spacecraftClass.name}
       </p>

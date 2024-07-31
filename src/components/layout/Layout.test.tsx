@@ -1,12 +1,12 @@
-// import { render, screen } from '@testing-library/react';
-// import { BrowserRouter } from 'react-router-dom';
-// import Layout from './Layout';
+import { render, screen } from '@testing-library/react';
+import Layout from './Layout';
 
-// describe('Layout', () => {
-//   it('renders Layout', () => {
-//     render(<Layout />, { wrapper: BrowserRouter });
+describe('Layout', () => {
+  const children = <div>test</div>;
+  it('renders Layout', () => {
+    render(<Layout>{children}</Layout>);
 
-//     const header = screen.getByTestId('header');
-//     expect(header).toBeInTheDocument();
-//   });
-// });
+    const header = screen.getByTestId('header');
+    expect(header).toBeInTheDocument();
+  });
+});

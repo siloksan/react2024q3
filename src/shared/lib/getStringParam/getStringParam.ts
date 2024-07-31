@@ -1,5 +1,5 @@
-import { ParsedUrlQuery } from "querystring";
+import { ParsedUrlQuery } from 'querystring';
 
 export default function getStringParam(query: ParsedUrlQuery | undefined, key: string): string {
-  return query && key in query && typeof query[key] === 'string' ? query[key]: '';
+  return query && key in query && typeof query[key] === 'string' ? query[key] : '';
 }

@@ -2,12 +2,11 @@ import { useRouter } from 'next/router';
 
 import getStringParam from '@/shared/lib/getStringParam/getStringParam';
 
-import CardList from '../components/cardList/CardList';
-
 import { SpacecraftsResponse } from '@/entities/spacecraft/models';
 import Pagination from '@/components/pagination';
 import SearchBox from '@/shared/ui/search/SearchBox';
 import Flyout from '@/shared/ui/flyout/Flyout';
+import CardList from '../components/cardList/CardList';
 
 import styles from './Main.module.scss';
 
@@ -22,20 +21,20 @@ export default function Main({ spacecraftsRes, children = null }: Props) {
   const { page, spacecrafts } = spacecraftsRes;
 
   const { pageNumber, pageSize, totalElements } = page;
-  
-  function setPageNumber(pageNumber: number) {
+
+  const setPageNumber = (nextPage: number) => {
     router.push({
       pathname: router.pathname,
-      query: { ...router.query, pageNumber },
+      query: { ...router.query, pageNumber: nextPage },
     });
-  }
+  };
 
-  function setSearchTerm(name: string) {
+  const setSearchTerm = (name: string) => {
     router.push({
       pathname: router.pathname,
       query: { ...router.query, name, pageNumber: 1 },
     });
-  }
+  };
 
   const searchTerm = getStringParam(router.query, 'name');
 
@@ -48,10 +47,7 @@ export default function Main({ spacecraftsRes, children = null }: Props) {
         totalItems={totalElements}
         setPageNumber={setPageNumber}
       />
-      <SearchBox
-        setSearchTerm={setSearchTerm}
-        searchTerm={searchTerm}
-      />
+      <SearchBox setSearchTerm={setSearchTerm} searchTerm={searchTerm} />
       <div className={styles.content}>
         <div className={styles.list}>
           <CardList spacecrafts={spacecrafts} />

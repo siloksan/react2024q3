@@ -11,7 +11,10 @@
 
 .logo {
   display: block;
-  max-width: 200px;
+  img {
+    width: auto;
+    height: auto;
+  }
 }
 
 .dark {

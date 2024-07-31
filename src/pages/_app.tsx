@@ -12,7 +12,7 @@ interface GetLayoutProps {
   spacecraftsRes: SpacecraftsResponse;
 }
 
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement, props: GetLayoutProps) => ReactNode;
 };
 
@@ -24,9 +24,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
   return (
     <SelectedItemsProvider>
-      <ThemeProvider>
-        {getLayout(<Component {...pageProps} />, pageProps)}
-      </ThemeProvider>
+      <ThemeProvider>{getLayout(<Component {...pageProps} />, pageProps)}</ThemeProvider>
     </SelectedItemsProvider>
   );
 }

@@ -1,4 +1,4 @@
-import { Spacecraft } from "@/entities/spacecraft/models";
+import { Spacecraft } from '@/entities/spacecraft/models';
 
 export default function formatData(data: Spacecraft[]): string {
   const tableHead = ['Uid', 'Spacecraft', 'Status', 'Date'];

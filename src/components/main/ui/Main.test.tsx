@@ -1,43 +1,40 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from 'app/store';
+import { render, screen } from '@testing-library/react';
 
-import ErrorBoundary from 'shared/ui/errorBoundary/ErrorBoundary';
+import { DUMMY_SPACECRAFTS_RESPONSE } from '@/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
 import Main from './Main';
+import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
+import { ThemeProvider } from '@/features/providers/themeProvider';
 
-const customRender = () =>
-  render(
-    <ErrorBoundary>
-      <BrowserRouter>
-        <Provider store={store}>
-          <Main />
-        </Provider>
-      </BrowserRouter>
-    </ErrorBoundary>
-  );
+const props = {
+  spacecraftsRes: DUMMY_SPACECRAFTS_RESPONSE,
+};
+
+vi.mock('next/router', () => {
+  const router = {
+    push: vi.fn(),
+    query: { uid: 'test1' },
+  };
+  return {
+    useRouter: vi.fn().mockReturnValue(router),
+  };
+});
 
 describe('Main', () => {
+  function customRender() {
+    render(
+      <SelectedItemsProvider>
+        <ThemeProvider>
+          <Main {...props} />
+        </ThemeProvider>
+      </SelectedItemsProvider>
+    );
+  }
+  it.todo('renders Main');
   it('renders Main', () => {
     customRender();
 
     const h1 = screen.getByRole('heading', { level: 1 });
 
     expect(h1).toBeInTheDocument();
-  });
-
-  it.todo('throws an error when the request fails');
-
-  it('renders loader and fetches data successfully', async () => {
-    customRender();
-
-    const loader = screen.getAllByTestId('loader');
-    expect(loader[0]).toBeInTheDocument();
-
-    await waitFor(() => {
-      const cardList = screen.getByTestId('card-list');
-
-      expect(cardList).toBeInTheDocument();
-    });
   });
 });

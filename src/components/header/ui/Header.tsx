@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { useTheme } from '@/features/providers/themeProvider';
@@ -22,7 +22,7 @@ export default function Header() {
     <header className={containerClass} data-testid="header">
       <Link href="/">
         <div className={styles.logo}>
-          <Image src={logo} alt="Star Trek logo" priority/>
+          <Image src={logo} alt="Star Trek logo" priority width={200} height={200} />
         </div>
       </Link>
       <ThemeToggle />

@@ -1,5 +1,6 @@
+import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+
 import { Spacecraft } from '@/entities/spacecraft/models';
-import { createContext, useCallback, useContext, useState } from 'react';
 
 type SelectedItemsContextUpdateValue = {
   addSelectedItem: (value: Spacecraft) => void;
@@ -9,24 +10,21 @@ type SelectedItemsContextUpdateValue = {
 
 const defaultItems: Spacecraft[] = [];
 const SelectedItemsContext = createContext(defaultItems);
-const SelectedItemsContextUpdate = createContext<SelectedItemsContextUpdateValue | null>(null);
+const SelectedItemsContextUpdate = createContext<SelectedItemsContextUpdateValue | undefined>(undefined);
 
 export const useSelectedItems = () => {
   return useContext(SelectedItemsContext);
 };
 
 export const useSelectedItemsUpdate = () => {
-  if (SelectedItemsContextUpdate === null) {
-    throw new Error('SelectedItemsContextUpdate is null');
+  const context = useContext(SelectedItemsContextUpdate);
+  if (!context) {
+    throw new Error('useSelectedItemsUpdate must be used within a SelectedItemsProvider');
   }
-  return useContext(SelectedItemsContextUpdate);
+  return context;
 };
 
-export function SelectedItemsProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function SelectedItemsProvider({ children }: { children: React.ReactNode }) {
   const [selectedItems, setSelectedItems] = useState<Spacecraft[]>([]);
 
   const addSelectedItem = useCallback((value: Spacecraft) => {
@@ -34,22 +32,25 @@ export function SelectedItemsProvider({
   }, []);
 
   const removeSelectedItem = useCallback((value: Spacecraft) => {
-    setSelectedItems((prevItems) =>
-      prevItems.filter((item) => item.uid !== value.uid)
-    );
+    setSelectedItems((prevItems) => prevItems.filter((item) => item.uid !== value.uid));
   }, []);
 
   const clearSelectedItems = useCallback(() => {
     setSelectedItems([]);
   }, []);
 
+  const contextValue = useMemo(
+    () => ({
+      addSelectedItem,
+      removeSelectedItem,
+      clearSelectedItems,
+    }),
+    [addSelectedItem, removeSelectedItem, clearSelectedItems]
+  );
+
   return (
     <SelectedItemsContext.Provider value={selectedItems}>
-      <SelectedItemsContextUpdate.Provider
-        value={{ addSelectedItem, removeSelectedItem, clearSelectedItems }}
-      >
-        {children}
-      </SelectedItemsContextUpdate.Provider>
+      <SelectedItemsContextUpdate.Provider value={contextValue}>{children}</SelectedItemsContextUpdate.Provider>
     </SelectedItemsContext.Provider>
   );
 }

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "lib": [
+      "ES2020",
       "dom",
       "dom.iterable",
       "esnext"
@@ -16,6 +17,19 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+
+    /* Bundler mode */
+    "allowImportingTsExtensions": true,
+    /* Linting */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "types": [
+      "vitest/globals",
+      "@types/react-dom"
+    ],
     "paths": {
       "@/*": [
         "./src/*"
@@ -31,9 +45,16 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    ".eslintrc.cjs",
+    "setupTests.ts",
   ],
   "exclude": [
     "node_modules"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }

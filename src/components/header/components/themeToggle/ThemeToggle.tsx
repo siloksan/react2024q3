@@ -15,12 +15,7 @@ export function ThemeToggle() {
     <div className={container}>
       Light
       <div>
-        <input
-          type="checkbox"
-          className={styles.checkbox}
-          id="themeToggle"
-          onClick={toggleTheme}
-        />
+        <input type="checkbox" className={styles.checkbox} id="themeToggle" onClick={toggleTheme} />
         <label className={styles.label} htmlFor="themeToggle">
           <div className={styles.ball} />
         </label>

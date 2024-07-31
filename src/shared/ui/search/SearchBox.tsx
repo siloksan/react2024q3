@@ -1,20 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import loupe from './assets/search-icon.svg';
 
-import styles from './SearchBox.module.scss';
-import Button from '../button/Button';
+import { useState } from 'react';
 import { useTheme } from '@/features/providers/themeProvider';
+
+import Button from '../button/Button';
+
+import loupe from './assets/search-icon.svg';
+import styles from './SearchBox.module.scss';
 
 interface Props {
   setSearchTerm: (searchTerm: string) => void;
   searchTerm: string;
 }
 
-export default function SearchBox({
-  setSearchTerm,
-  searchTerm,
-}: Props) {
+export default function SearchBox({ setSearchTerm, searchTerm }: Props) {
   const [value, setValue] = useState(searchTerm);
 
   const dark = useTheme();
@@ -43,12 +42,8 @@ export default function SearchBox({
           placeholder="Search"
           onChange={(e) => setValue(e.target.value)}
         />
-        <Button
-          aria-label="Search"
-          type="submit"
-          additionalStyles={buttonClassName}
-        >
-          <Image src={loupe} alt="loupe icon" />
+        <Button aria-label="Search" type="submit" additionalStyles={buttonClassName}>
+          <Image src={loupe} alt="loupe icon" width={24} height={24} />
         </Button>
       </form>
     </div>
