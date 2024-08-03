@@ -1,22 +1,34 @@
+'use client';
+
 import Image from 'next/image';
 
 import { useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from '@/features/providers/themeProvider';
 
 import Button from '../button/Button';
 
 import loupe from './assets/search-icon.svg';
 import styles from './SearchBox.module.scss';
+import useQueryString from '@/shared/lib/useQueryString/useQueryString';
 
 interface Props {
-  setSearchTerm: (searchTerm: string) => void;
   searchTerm: string;
 }
 
-export default function SearchBox({ setSearchTerm, searchTerm }: Props) {
+export default function SearchBox({ searchTerm }: Props) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const { createQueryString } = useQueryString();
+
   const [value, setValue] = useState(searchTerm);
 
   const dark = useTheme();
+
+  const setSearchTerm = (name: string) => {
+    const newQueryParams = createQueryString({ name, pageNumber: '1' });
+    router.push(`${pathname}?${newQueryParams}`);
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

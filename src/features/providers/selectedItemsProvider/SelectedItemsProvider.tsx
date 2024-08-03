@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 import { Spacecraft } from '@/entities/spacecraft/models';

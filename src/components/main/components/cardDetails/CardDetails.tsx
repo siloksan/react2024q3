@@ -1,24 +1,26 @@
-import { useRouter } from 'next/router';
+'use client';
+
+import { useRouter } from 'next/navigation';
 
 import { useTheme } from '@/features/providers/themeProvider';
 import { Spacecraft } from '@/entities/spacecraft/models';
 import Button from '@/shared/ui/button/Button';
 
 import styles from './CardDetails.module.scss';
+import useQueryString from '@/shared/lib/useQueryString/useQueryString';
 
 interface Props {
   spacecraft: Spacecraft;
 }
 
 export default function CardDetails({ spacecraft }: Props) {
-  const router = useRouter();
-
   const dark = useTheme();
+  const router = useRouter();
+  const { createQueryString } = useQueryString();
 
   const closeDetails = () => {
-    const { query } = router;
-    const { uid, ...newQuery } = query;
-    router.push({ pathname: '/', query: { ...newQuery } });
+    const newQueryParams = createQueryString({});
+    router.push(`/?${newQueryParams}`);
   };
 
   const { name, spacecraftClass } = spacecraft;

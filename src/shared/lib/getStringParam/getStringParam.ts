@@ -1,5 +1,5 @@
-import { ParsedUrlQuery } from 'querystring';
+import { SearchParams } from '@/shared/types';
 
-export default function getStringParam(query: ParsedUrlQuery | undefined, key: string): string {
-  return query && key in query && typeof query[key] === 'string' ? query[key] : '';
+export default function getStringParam(searchParams: SearchParams, key: string): string {
+  return searchParams && key in searchParams && typeof searchParams[key] === 'string' ? searchParams[key] : '';
 }

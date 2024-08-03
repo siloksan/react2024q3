@@ -1,18 +1,30 @@
+'use client';
+
+import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from '@/features/providers/themeProvider';
 import getButtonsNameArray from '../lib/getButtonsNameArray';
 
 import styles from './Pagination.module.scss';
+import useQueryString from '@/shared/lib/useQueryString/useQueryString';
 
 export interface PropsPagination {
   itemPerPage: number;
   totalItems: number;
-  setPageNumber: (pageNumber: number) => void;
   currentPage: number;
 }
 
-function Pagination({ itemPerPage, totalItems, currentPage, setPageNumber }: PropsPagination) {
+function Pagination({ itemPerPage, totalItems, currentPage }: PropsPagination) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const { createQueryString } = useQueryString();
   const totalPages = Math.ceil(totalItems / itemPerPage);
   const dark = useTheme();
+
+  const setPageNumber = (nextPage: number) => {
+    const newQueryParams = createQueryString({ pageNumber: `${nextPage}` });
+    router.push(`${pathname}?${newQueryParams}`);
+  };
+
   let buttonClass = styles.button;
   let { disabled } = styles;
   let { current } = styles;

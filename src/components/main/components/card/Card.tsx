@@ -1,4 +1,7 @@
-import { useRouter } from 'next/router';
+'use client';
+
+import { usePathname, useRouter } from 'next/navigation';
+import { ComponentProps } from 'react';
 
 import { useTheme } from '@/features/providers/themeProvider';
 import {
@@ -8,6 +11,7 @@ import {
 import { Spacecraft } from '@/entities/spacecraft/models';
 
 import styles from './Card.module.scss';
+import useQueryString from '@/shared/lib/useQueryString/useQueryString';
 
 interface Props {
   spacecraft: Spacecraft;
@@ -15,19 +19,16 @@ interface Props {
 
 export default function Card({ spacecraft }: Props) {
   const router = useRouter();
+  const pathName = usePathname();
   const dark = useTheme();
   const selectedItems = useSelectedItems();
+  const { createQueryString } = useQueryString();
   const checked = selectedItems.some((item) => item.uid === spacecraft.uid);
-
   const { addSelectedItem, removeSelectedItem } = useSelectedItemsUpdate();
 
   const openDetails = () => {
-    const { query } = router;
-    const { uid, ...newQuery } = query;
-    router.push({
-      pathname: `/spacecraft/${spacecraft.uid}`,
-      query: { ...newQuery },
-    });
+    const newQueryParams = createQueryString({});
+    router.push(`/spacecraft/${spacecraft.uid}?${newQueryParams}`);
   };
 
   const { name } = spacecraft;
@@ -38,14 +39,14 @@ export default function Card({ spacecraft }: Props) {
     containerClassName += ` ${styles.dark}`;
   }
 
-  if (router.query.uid === spacecraft.uid) {
+  if (pathName.includes(spacecraft.uid)) {
     containerClassName += ` ${styles.active}`;
   }
 
   const dateStatus = spacecraft.dateStatus || 'unknown';
   const status = spacecraft.status || 'unknown';
 
-  const checkCard: React.ComponentProps<'input'>['onClick'] = (e) => {
+  const checkCard: ComponentProps<'input'>['onClick'] = (e) => {
     e.stopPropagation();
     if (checked) {
       removeSelectedItem(spacecraft);

@@ -1,25 +1,20 @@
-import { GetServerSidePropsContext, PreviewData } from 'next/types';
-import { ParsedUrlQuery } from 'querystring';
-
 import { Spacecraft, SpacecraftsResponse } from '@/entities/spacecraft/models';
 import getStringParam from '@/shared/lib/getStringParam/getStringParam';
 import logger from '@/shared/lib/logger/logger';
 
 import { baseUrl } from '../const';
-import { Payload, QueryParams } from '../types';
+import { Payload } from '../types';
+import { SearchParams } from '@/shared/types';
 
-export async function getSpacecrafts(
-  context: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>
-): Promise<SpacecraftsResponse | undefined> {
+export async function getSpacecrafts(searchParams: SearchParams): Promise<SpacecraftsResponse | undefined> {
   const basePayload: Payload = {
     name: '',
     registry: '',
     status: '',
   };
 
-  const { query } = context;
-  const name = getStringParam(query, 'name');
-  const pageNumber = getStringParam(query, 'pageNumber') || '1';
+  const name = getStringParam(searchParams, 'name');
+  const pageNumber = getStringParam(searchParams, 'pageNumber') || '1';
   const queryParams = {
     pageNumber: (Number(pageNumber) - 1).toString(),
     pageSize: '5',
@@ -44,14 +39,9 @@ export async function getSpacecrafts(
   }
 }
 
-export async function getSpacecraft(
-  context: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>
-): Promise<Spacecraft | undefined> {
-  const { params } = context;
-  if (!params) return;
-
+export async function getSpacecraft({ uid }: { uid: string }): Promise<Spacecraft | undefined> {
   try {
-    const response = await fetch(`${baseUrl}spacecraft?${new URLSearchParams(params as QueryParams)}`, {
+    const response = await fetch(`${baseUrl}spacecraft?${new URLSearchParams({ uid })}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
