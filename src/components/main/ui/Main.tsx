@@ -17,7 +17,6 @@ interface Props {
 
 export default async function Main({ searchParams, children }: Props) {
   const spacecraftsRes = await getSpacecrafts(searchParams);
-
   if (!spacecraftsRes) {
     throw new Error('The spacecrafts failed to load!');
   }

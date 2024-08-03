@@ -1,7 +1,8 @@
+import { Suspense } from 'react';
 import Main from '@/components/main';
-import CardDetails from '@/components/main/components/cardDetails/CardDetails';
-import { getSpacecraft } from '@/shared/api/services';
 import { SearchParams } from '@/shared/types';
+import CardDetailsWrapper from '@/components/main/components/cardDetails/CardDetailsWrapper';
+import Loader from '@/shared/ui/loader/Loader';
 
 interface Props {
   searchParams: SearchParams;
@@ -10,16 +11,12 @@ interface Props {
   };
 }
 
-export default async function Page({ searchParams, params }: Props) {
-  const spacecraft = await getSpacecraft({ uid: params.spacecraftId });
-
-  if (!spacecraft) {
-    throw new Error('The spacecraft failed to load!');
-  }
-
+export default function Page({ searchParams, params }: Props) {
   return (
     <Main searchParams={searchParams}>
-      <CardDetails spacecraft={spacecraft} />
+      <Suspense fallback={<Loader />}>
+        <CardDetailsWrapper spacecraftId={params.spacecraftId} />
+      </Suspense>
     </Main>
   );
 }
