@@ -34,8 +34,8 @@ const spacecraftContext: GetServerSidePropsContext<ParsedUrlQuery, PreviewData> 
   params: {},
 };
 
-describe('Home', () => {
-  it('should render Home', () => {
+describe('cardDetails', () => {
+  it('should render cardDetails', () => {
     render(
       <SelectedItemsProvider>
         <ThemeProvider>
