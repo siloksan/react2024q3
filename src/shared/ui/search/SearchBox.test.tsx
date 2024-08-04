@@ -1,12 +1,37 @@
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
+import { useRouter } from 'next/navigation';
 import SearchBox from './SearchBox';
+
+vi.mock('next/navigation', () => {
+  const router = {
+    push: vi.fn(),
+  };
+  const pathName = '/test';
+  return {
+    useRouter: vi.fn().mockReturnValue(router),
+    usePathname: vi.fn().mockReturnValue(pathName),
+    useSearchParams: vi.fn().mockReturnValue(new URLSearchParams()),
+  };
+});
+
+vi.mock('@/shared/lib/useQueryString/useQueryString', () => {
+  return {
+    useQueryString: vi.fn().mockReturnValue({
+      createQueryString: vi.fn(),
+    }),
+  };
+});
+
+vi.mock('@/features/providers/themeProvider', () => {
+  return {
+    useTheme: vi.fn().mockReturnValue(false),
+  };
+});
 
 describe('SearchBox', () => {
   const props = {
-    setSearchTerm: vi.fn(),
     searchTerm: '',
-    setPageNumber: vi.fn(),
   };
 
   it('should renders SearchBox', () => {
@@ -21,7 +46,7 @@ describe('SearchBox', () => {
     const button = screen.getByRole('button');
     const user = userEvent.setup();
     await user.click(button);
-    expect(props.setSearchTerm).toHaveBeenCalledOnce();
+    expect(useRouter().push).toHaveBeenCalledOnce();
   });
   it('should change value in input', async () => {
     render(<SearchBox {...props} />);

@@ -1,13 +1,39 @@
 import { render, screen } from '@testing-library/react';
+import { useRouter } from 'next/navigation';
 import userEvent from '@testing-library/user-event';
 
 import Pagination from './Pagination';
+
+vi.mock('next/navigation', () => {
+  const router = {
+    push: vi.fn(),
+  };
+  const pathName = '/test';
+  return {
+    useRouter: vi.fn().mockReturnValue(router),
+    usePathname: vi.fn().mockReturnValue(pathName),
+    useSearchParams: vi.fn().mockReturnValue(new URLSearchParams()),
+  };
+});
+
+vi.mock('@/shared/lib/useQueryString/useQueryString', () => {
+  return {
+    useQueryString: vi.fn().mockReturnValue({
+      createQueryString: vi.fn(),
+    }),
+  };
+});
+
+vi.mock('@/features/providers/themeProvider', () => {
+  return {
+    useTheme: vi.fn().mockReturnValue(false),
+  };
+});
 
 describe('Pagination', () => {
   const props = {
     currentPage: 1,
     itemPerPage: 10,
-    setPageNumber: vi.fn(),
     totalItems: 100,
   };
   it('renders Pagination', () => {
@@ -62,7 +88,7 @@ describe('Pagination', () => {
     const user = userEvent.setup();
     await user.click(paginationButtons[2]);
 
-    expect(props.setPageNumber).toHaveBeenCalled();
+    expect(useRouter().push).toHaveBeenCalled();
   });
 
   it('should disable next button if current page is equal to total pages', () => {
@@ -70,7 +96,7 @@ describe('Pagination', () => {
     const itemPerPage = 5;
     const totalItems = 50;
 
-    render(<Pagination {...props} currentPage={currentPage} itemPerPage={itemPerPage} totalItems={totalItems} />);
+    render(<Pagination currentPage={currentPage} itemPerPage={itemPerPage} totalItems={totalItems} />);
 
     const nextBtn = screen.getByRole('button', { name: /next/i });
 

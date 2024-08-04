@@ -3,11 +3,11 @@
 import { useRouter } from 'next/navigation';
 
 import { useTheme } from '@/features/providers/themeProvider';
+import { useQueryString } from '@/shared/lib/useQueryString/useQueryString';
 import { Spacecraft } from '@/entities/spacecraft/models';
 import Button from '@/shared/ui/button/Button';
 
 import styles from './CardDetails.module.scss';
-import useQueryString from '@/shared/lib/useQueryString/useQueryString';
 
 interface Props {
   spacecraft: Spacecraft;

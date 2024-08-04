@@ -10,7 +10,7 @@ import Button from '../button/Button';
 
 import loupe from './assets/search-icon.svg';
 import styles from './SearchBox.module.scss';
-import useQueryString from '@/shared/lib/useQueryString/useQueryString';
+import { useQueryString } from '@/shared/lib/useQueryString/useQueryString';
 
 interface Props {
   searchTerm: string;

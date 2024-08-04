@@ -1,67 +1,39 @@
-// import { GetServerSidePropsContext, PreviewData } from 'next';
-// import { IncomingMessage, ServerResponse } from 'http';
-// import { Socket } from 'net';
-// import { ParsedUrlQuery } from 'querystring';
-// import { getSpacecraft, getSpacecrafts } from './apiServices';
-// import { DUMMY_SPACECRAFTS_RESPONSE } from '../mock/mocks/dummyData/dummySpaceCraftsResponse';
-// import { DUMMY_SPACECRAFT_DETAILS_RESPONSE } from '../mock/mocks/dummyData/dummySpaceCraftDetailsResponse';
-// import { server } from '../mock/mocks/node';
-// import { handlersError } from '../mock/handlersError';
-
-// const socket = new Socket();
-// const mockReq = Object.assign(new IncomingMessage(socket), {
-//   cookies: {},
-// });
-
-// const mockRes = new ServerResponse(mockReq);
-
-// const spacecraftsContext: GetServerSidePropsContext<ParsedUrlQuery, PreviewData> = {
-//   query: {},
-//   req: mockReq,
-//   res: mockRes,
-//   resolvedUrl: '',
-//   params: {},
-// };
-
-// const spacecraftContext: GetServerSidePropsContext<ParsedUrlQuery, PreviewData> = {
-//   query: { uid: 'test' },
-//   req: mockReq,
-//   res: mockRes,
-//   resolvedUrl: '',
-//   params: {},
-// };
+import { getSpacecraft, getSpacecrafts } from './apiServices';
+import { DUMMY_SPACECRAFTS_RESPONSE } from '../mock/mocks/dummyData/dummySpaceCraftsResponse';
+import { DUMMY_SPACECRAFT_DETAILS_RESPONSE } from '../mock/mocks/dummyData/dummySpaceCraftDetailsResponse';
+import { server } from '../mock/mocks/node';
+import { handlersError } from '../mock/handlersError';
 
 describe('apiServices', () => {
-  it.todo('fetch spacecrafts with default parameters');
-  // it('should fetch spacecrafts with default parameters', async () => {
-  //   const result = await getSpacecrafts(spacecraftsContext);
+  it('should fetch spacecrafts with default parameters', async () => {
+    const result = await getSpacecrafts({});
 
-  //   expect(result).toEqual(DUMMY_SPACECRAFTS_RESPONSE);
-  // });
+    expect(result).toEqual(DUMMY_SPACECRAFTS_RESPONSE);
+  });
 
-  // it('should throw an error when the request spacecrafts fails', async () => {
-  //   server.use(handlersError.spacecraftsPost);
+  it('should throw an error when the request spacecrafts fails', async () => {
+    server.use(handlersError.spacecraftsPost);
 
-  //   const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-  //   const result = await getSpacecrafts(spacecraftsContext);
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const result = await getSpacecrafts({});
 
-  //   expect(result).toBeUndefined();
-  //   consoleErrorSpy.mockRestore();
-  // });
+    expect(result).toBeUndefined();
+    consoleErrorSpy.mockRestore();
+  });
 
-  // it('should fetch spacecraft details by id', async () => {
-  //   const result = await getSpacecraft(spacecraftContext);
+  it('should fetch spacecraft details by id', async () => {
+    const result = await getSpacecraft({ uid: 'test' });
 
-  //   expect(result).toEqual(DUMMY_SPACECRAFT_DETAILS_RESPONSE.spacecraft);
-  // });
+    expect(result).toEqual(DUMMY_SPACECRAFT_DETAILS_RESPONSE.spacecraft);
+  });
 
-  // it('should throw an error when the request spacecraft details fails', async () => {
-  //   server.use(handlersError.spaceCraftGetDetails);
+  it('should throw an error when the request spacecraft details fails', async () => {
+    server.use(handlersError.spaceCraftGetDetails);
 
-  //   const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-  //   const result = await getSpacecraft(spacecraftsContext);
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const result = await getSpacecraft({ uid: 'test' });
 
-  //   expect(result).toBeUndefined();
-  //   consoleErrorSpy.mockRestore();
-  // });
+    expect(result).toBeUndefined();
+    consoleErrorSpy.mockRestore();
+  });
 });

@@ -1,10 +1,9 @@
 import { render, screen } from '@testing-library/react';
-
 import userEvent from '@testing-library/user-event';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
+
 import { DUMMY_SPACECRAFTS_RESPONSE } from '@/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
 import CardDetails from './CardDetails';
-import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
 import { SpacecraftClass } from '@/entities/spacecraft/models';
 
 const props = {
@@ -24,13 +23,23 @@ const spacecraftClass: SpacecraftClass = {
   warpCapable: true,
 };
 
-vi.mock('next/router', () => {
+vi.mock('next/navigation', () => {
   const router = {
     push: vi.fn(),
-    query: { uid: 'test1' },
   };
+  const pathName = `/test`;
   return {
     useRouter: vi.fn().mockReturnValue(router),
+    usePathname: vi.fn().mockReturnValue(pathName),
+    useSearchParams: vi.fn().mockReturnValue(new URLSearchParams()),
+  };
+});
+
+vi.mock('@/shared/lib/useQueryString/useQueryString', () => {
+  return {
+    useQueryString: vi.fn().mockReturnValue({
+      createQueryString: vi.fn(),
+    }),
   };
 });
 
@@ -41,16 +50,8 @@ vi.mock('@/features/providers/themeProvider', () => {
 });
 
 describe('CardDetails', () => {
-  function customRender() {
-    render(
-      <SelectedItemsProvider>
-        <CardDetails {...props} />
-      </SelectedItemsProvider>
-    );
-  }
-
-  it('should renders CardDetails', async () => {
-    customRender();
+  it('should renders CardDetails', () => {
+    render(<CardDetails {...props} />);
 
     const container = screen.getByTestId('card-details');
 
@@ -58,7 +59,7 @@ describe('CardDetails', () => {
   });
 
   it('should call closeDetails when close button is clicked', async () => {
-    customRender();
+    render(<CardDetails {...props} />);
 
     const button = screen.getByRole('button', { name: /close/i });
     const user = userEvent.setup();
@@ -69,7 +70,7 @@ describe('CardDetails', () => {
   });
 
   it("should't have right side when spacecraftClass is null", async () => {
-    customRender();
+    render(<CardDetails {...props} />);
 
     const rightSide = screen.queryByTestId('right-side');
 
@@ -78,7 +79,7 @@ describe('CardDetails', () => {
 
   it('should have right side when spacecraftClass is not null', async () => {
     props.spacecraft.spacecraftClass = spacecraftClass;
-    customRender();
+    render(<CardDetails {...props} />);
 
     const rightSide = screen.getByTestId('right-side');
 
@@ -86,7 +87,7 @@ describe('CardDetails', () => {
   });
 
   it('should be in dark mode', async () => {
-    customRender();
+    render(<CardDetails {...props} />);
 
     const container = screen.getByTestId('card-details');
 

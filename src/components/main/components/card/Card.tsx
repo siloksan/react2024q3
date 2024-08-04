@@ -11,7 +11,7 @@ import {
 import { Spacecraft } from '@/entities/spacecraft/models';
 
 import styles from './Card.module.scss';
-import useQueryString from '@/shared/lib/useQueryString/useQueryString';
+import { useQueryString } from '@/shared/lib/useQueryString/useQueryString';
 
 interface Props {
   spacecraft: Spacecraft;

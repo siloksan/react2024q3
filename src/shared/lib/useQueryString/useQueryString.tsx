@@ -5,7 +5,7 @@ interface NewParams {
   [key: string]: string;
 }
 
-export default function useQueryString() {
+export function useQueryString() {
   const searchParams = useSearchParams();
   const createQueryString = useCallback(
     (newParams: NewParams) => {

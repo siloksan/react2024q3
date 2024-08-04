@@ -14,6 +14,7 @@ import styles from './Flyout.module.scss';
 export default function Flyout() {
   const selectedItems = useSelectedItems();
   const numberOfSelectedItems = selectedItems.length;
+  const { clearSelectedItems } = useSelectedItemsUpdate();
   const [isUnmount, setIsUnmount] = useState(false);
   const dark = useTheme();
 
@@ -26,8 +27,6 @@ export default function Flyout() {
       return () => clearTimeout(timeoutId);
     }
   }, [numberOfSelectedItems]);
-
-  const { clearSelectedItems } = useSelectedItemsUpdate();
 
   const file = new Blob([formatData(selectedItems)], { type: 'text/csv' });
   const url = selectedItems.length > 0 ? URL.createObjectURL(file) : undefined;

@@ -1,22 +1,32 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { DUMMY_SPACECRAFTS_RESPONSE } from '@/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
-import Card from './Card';
 import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
+import Card from './Card';
 
 const props = {
   spacecraft: DUMMY_SPACECRAFTS_RESPONSE.spacecrafts[0],
 };
 
-vi.mock('next/router', () => {
+vi.mock('next/navigation', () => {
   const router = {
     push: vi.fn(),
-    query: { uid: 'test1' },
   };
+  const pathName = '/test1';
   return {
     useRouter: vi.fn().mockReturnValue(router),
+    usePathname: vi.fn().mockReturnValue(pathName),
+    useSearchParams: vi.fn().mockReturnValue(new URLSearchParams()),
+  };
+});
+
+vi.mock('@/shared/lib/useQueryString/useQueryString', () => {
+  return {
+    useQueryString: vi.fn().mockReturnValue({
+      createQueryString: vi.fn(),
+    }),
   };
 });
 
@@ -53,7 +63,7 @@ describe('Card', () => {
     expect(useRouter().push).toHaveBeenCalledTimes(1);
   });
 
-  it("should add class active when uid don't match with spacecraft.uid", async () => {
+  it('should add class active when uid match with spacecraft.uid', async () => {
     customRender();
 
     const item = screen.getByRole('listitem');
