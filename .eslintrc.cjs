@@ -8,6 +8,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
     'plugin:prettier/recommended',
+    'next/core-web-vitals',
   ],
   ignorePatterns: [
     'dist',
@@ -18,6 +19,7 @@ module.exports = {
     'coverage/',
     'public/',
     'package.json',
+    '.next',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {

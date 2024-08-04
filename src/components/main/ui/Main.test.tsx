@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
 
 import { DUMMY_SPACECRAFTS_RESPONSE } from '@/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
-import Main from './Main';
 import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
 import { ThemeProvider } from '@/features/providers/themeProvider';
+import Main from './Main';
 
 const props = {
   spacecraftsRes: DUMMY_SPACECRAFTS_RESPONSE,

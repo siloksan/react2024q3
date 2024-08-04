@@ -5,9 +5,9 @@ import { GetServerSidePropsContext, PreviewData } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
 import { ThemeProvider } from '@/features/providers/themeProvider';
-import CardDetailsWrapper, { getServerSideProps } from './[uid]';
 import { DUMMY_SPACECRAFTS_RESPONSE } from '@/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
 import { DUMMY_SPACECRAFT_DETAILS_RESPONSE } from '@/shared/api/mock/mocks/dummyData/dummySpaceCraftDetailsResponse';
+import CardDetailsWrapper, { getServerSideProps } from './[uid]';
 
 vi.mock('next/router', () => {
   const router = {

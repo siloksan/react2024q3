@@ -3,9 +3,9 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useRouter } from 'next/router';
 import { DUMMY_SPACECRAFTS_RESPONSE } from '@/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
-import CardDetails from './CardDetails';
 import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
 import { SpacecraftClass } from '@/entities/spacecraft/models';
+import CardDetails from './CardDetails';
 
 const props = {
   spacecraft: DUMMY_SPACECRAFTS_RESPONSE.spacecrafts[0],

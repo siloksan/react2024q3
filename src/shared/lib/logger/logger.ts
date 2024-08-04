@@ -17,5 +17,6 @@ class Logger {
     this.loggerFunc.error(`[ERROR]: ${message}`);
   }
 }
+const logger = new Logger();
 
-export default new Logger();
+export default logger;

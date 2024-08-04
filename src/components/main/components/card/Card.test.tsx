@@ -2,9 +2,9 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useRouter } from 'next/router';
 
+import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
 import { DUMMY_SPACECRAFTS_RESPONSE } from '@/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
 import Card from './Card';
-import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
 
 const props = {
   spacecraft: DUMMY_SPACECRAFTS_RESPONSE.spacecrafts[0],

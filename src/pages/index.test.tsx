@@ -4,9 +4,9 @@ import { GetServerSidePropsContext, PreviewData } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { Socket } from 'net';
 import { DUMMY_SPACECRAFTS_RESPONSE } from '@/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
-import Home, { getServerSideProps } from '.';
 import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
 import { ThemeProvider } from '@/features/providers/themeProvider';
+import Home, { getServerSideProps } from '.';
 
 const props = {
   spacecraftsRes: DUMMY_SPACECRAFTS_RESPONSE,
