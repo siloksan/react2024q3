@@ -1,9 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
-
-import Main from './Main';
-import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
 import { server } from '@/shared/api/mock/mocks/node';
 import { handlersError } from '@/shared/api/mock/handlersError';
+import CardDetailsWrapper from './CardDetailsWrapper';
 
 vi.mock('next/navigation', () => {
   const router = {
@@ -31,26 +29,26 @@ vi.mock('@/features/providers/themeProvider', () => {
   };
 });
 
-describe('Main', () => {
-  it('renders Main', async () => {
-    const jsx = await Main({ searchParams: {} });
-    render(<SelectedItemsProvider>{jsx}</SelectedItemsProvider>);
+describe('CardDetailsWrapper', () => {
+  it('renders CardDetailsWrapper', async () => {
+    const jsx = await CardDetailsWrapper({ spacecraftId: 'test' });
+    render(jsx);
 
-    const h1 = screen.getByRole('heading', { level: 1 });
+    const cardDetails = screen.getByTestId('card-details');
 
-    expect(h1).toBeInTheDocument();
+    expect(cardDetails).toBeInTheDocument();
   });
 
   it('throws an error when spacecraft data fails to load', async () => {
-    server.use(handlersError.spacecraftsPost);
+    server.use(handlersError.spaceCraftGetDetails);
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     try {
       await act(async () => {
-        await Main({ searchParams: {} });
+        await CardDetailsWrapper({ spacecraftId: 'test' });
       });
     } catch (error) {
-      expect(error).toEqual(new Error('The spacecrafts failed to load!'));
+      expect(error).toEqual(new Error('The spacecraft failed to load!'));
     }
 
     consoleErrorSpy.mockRestore();

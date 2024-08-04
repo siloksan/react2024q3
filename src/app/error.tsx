@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import logger from '@/shared/lib/logger/logger';
 import Button from '@/shared/ui/button/Button';
 
-export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+export default function ErrorPage({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
     logger.error(error.message);
   }, [error]);

@@ -17,7 +17,7 @@ export default defineConfig({
     coverage: {
       include: ['src/**/*.{ts,tsx}'],
       reporter: ['text', 'json', 'html'],
-      exclude: ['.eslintrc.cjs'],
+      exclude: ['.eslintrc.cjs', '.next/**/*.{js,jsx}'],
     },
   },
 });
