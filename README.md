@@ -1,93 +1,40 @@
-# react-app application
+# Welcome to Remix!
 
-This is a project for the [Rolling Scopes School React Course](#).
+- 📖 [Remix docs](https://remix.run/docs)
 
-## About the project
+## Development
 
-## Technology stack
+Run the dev server:
 
-### NotFoundPage technologies
-
-- React + TypeScript
-- Sass + modules.scss
-
-### Development tools
-
-- Vite
-- Vitest
-- Husky
-- ESlint + Prettier
-
-## Setting up locally
-
-1. Clone the repository:
-
-```bash
-git clone link
-```
-
-2. Go to the project folder:
-
-```bash
-cd react2024q3
-```
-
-3. Install dependencies
-
-```bash
-npm i
-```
-
-To see preview run:
-
-```
-npm run preview
-```
-
-and open address displayed in the terminal after `Local:` in the web browser.
-
-To see other ways of running the application see Available scripts below. To execute them, make sure to run them in the project folder.
-
-### Available Scripts
-
-In this project, you can run the following scripts:
-
-#### 1. Development Server
-
-To start the development server using webpack with hot reload enabled, use the following command:
-
-```bash
+```shellscript
 npm run dev
 ```
 
-#### 2. Build for Production
+## Deployment
 
-To build the project for production, use the following command:
+First, build your app for production:
 
-```bash
+```sh
 npm run build
 ```
 
-#### 3. Format Code
+Then run the app in production mode:
 
-To format all TypeScript files using Prettier, use the following command:
-
-```bash
-npm run format:fix
+```sh
+npm start
 ```
 
-#### 4. Check Code Formatting
+Now you'll need to pick a host to deploy it to.
 
-To check whether the code in TypeScript files conforms to the formatting standards set by Prettier, use the following command:
+### DIY
 
-```bash
-npm run format
-```
+If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
 
-#### 5. Lint Code
+Make sure to deploy the output of `npm run build`
 
-To run ESLint checking for syntax and style errors, use the following command:
+- `build/server`
+- `build/client`
 
-```bash
-npm run lint
-```
+## Styling
+
+This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
