@@ -6,9 +6,11 @@
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
+    // "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
-    "format:fix": "prettier --write ./app",
-    "format": "prettier --check ./app",
+    // "typecheck": "tsc",
+    "format:fix": "prettier --write ./src",
+    "format": "prettier --check ./src",
     "test": "vitest --run",
     "test:coverage": "vitest --coverage",
     "test:ui": "vitest --ui --coverage",
