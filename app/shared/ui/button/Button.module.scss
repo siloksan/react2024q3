@@ -1,0 +1,30 @@
+@use 'src/styles/mixins.scss' as *;
+
+.button {
+  width: 180px;
+  padding: 3px;
+  font-size: 1.4rem;
+  color: var(--color--white);
+  height: 44px;
+  background-color: var(--color--light-blue);
+  border-radius: 3px;
+  transition: all 0.2s linear;
+  @include font(500, var(--font-family--genos));
+  &:hover {
+    background-color: var(--color--light-blue--hover);
+  }
+  &:active {
+    background-color: var(--color--light-blue--active);
+  }
+}
+
+.dark {
+  background-color: var(--color--dark);
+  color: var(--color--wheat);
+  &:hover {
+    background-color: var(--color--dark--hover);
+  }
+  &:active {
+    background-color: var(--color--dark--active);
+  }
+}

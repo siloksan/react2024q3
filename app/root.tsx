@@ -1,4 +1,9 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
+import './styles/index.scss';
+import Header from './components/header';
+import Main from './components/main';
+import { LoaderFunctionArgs } from '@remix-run/node';
+import { getSpacecrafts } from './shared/api/services/apiServices';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -10,7 +15,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <Header />
+        <Main>{children}</Main>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -20,4 +26,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return <Outlet />;
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+  const spacecraftsRes = await getSpacecrafts(url.searchParams);
 }
