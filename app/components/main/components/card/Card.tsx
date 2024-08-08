@@ -1,12 +1,7 @@
-import { useRouter } from 'next/router';
-
-import { useTheme } from '@/features/providers/themeProvider';
-import {
-  useSelectedItems,
-  useSelectedItemsUpdate,
-} from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
-import { Spacecraft } from '@/entities/spacecraft/models';
-
+import { Spacecraft } from '~/entities/spacecraft/models';
+import { useTheme } from '~/features/providers/themeProvider';
+import { useSelectedItems, useSelectedItemsUpdate } from '~/features/providers/selectedItemsProvider';
+import { useNavigate, useParams, useSearchParams } from '@remix-run/react';
 import styles from './Card.module.scss';
 
 interface Props {
@@ -14,19 +9,19 @@ interface Props {
 }
 
 export default function Card({ spacecraft }: Props) {
-  const router = useRouter();
   const dark = useTheme();
+  const params = useParams();
   const selectedItems = useSelectedItems();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const checked = selectedItems.some((item) => item.uid === spacecraft.uid);
 
   const { addSelectedItem, removeSelectedItem } = useSelectedItemsUpdate();
 
   const openDetails = () => {
-    const { query } = router;
-    const { uid, ...newQuery } = query;
-    router.push({
+    navigate({
       pathname: `/spacecraft/${spacecraft.uid}`,
-      query: { ...newQuery },
+      search: `${searchParams.toString()}`,
     });
   };
 
@@ -38,7 +33,7 @@ export default function Card({ spacecraft }: Props) {
     containerClassName += ` ${styles.dark}`;
   }
 
-  if (router.query.uid === spacecraft.uid) {
+  if (params.uid === spacecraft.uid) {
     containerClassName += ` ${styles.active}`;
   }
 

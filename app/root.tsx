@@ -1,11 +1,15 @@
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
-import './styles/index.scss';
-import Header from './components/header';
-import Main from './components/main';
+import { json, Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
 import { LoaderFunctionArgs } from '@remix-run/node';
+import Main from './components/main';
 import { getSpacecrafts } from './shared/api/services/apiServices';
+import Provider from './features/providers';
+
+import './styles/index.scss';
+import Wrapper from './components/layout/Wrapper';
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { spacecraftsRes } = useLoaderData<typeof loader>();
+
   return (
     <html lang="en">
       <head>
@@ -15,8 +19,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <Header />
-        <Main>{children}</Main>
+        <Provider>
+          <Wrapper>
+            <Main spacecraftsRes={spacecraftsRes}>{children}</Main>
+          </Wrapper>
+        </Provider>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -31,4 +38,8 @@ export default function App() {
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const spacecraftsRes = await getSpacecrafts(url.searchParams);
+  if (!spacecraftsRes) {
+    throw new Error('Spacecraft not found');
+  }
+  return json({ spacecraftsRes });
 }

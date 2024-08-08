@@ -1,4 +1,4 @@
-import { Spacecraft } from '@/entities/spacecraft/models';
+import { Spacecraft } from '~/entities/spacecraft/models';
 import Card from '../card/Card';
 
 import styles from './CardList.module.scss';

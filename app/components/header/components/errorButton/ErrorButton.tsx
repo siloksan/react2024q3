@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import Button from '@/shared/ui/button/Button';
+import Button from '~/shared/ui/button/Button';
 
 function ErrorButton() {
   const [error, setError] = useState(false);

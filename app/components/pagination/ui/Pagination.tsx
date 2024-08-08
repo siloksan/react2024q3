@@ -1,4 +1,5 @@
-import { useTheme } from '@/features/providers/themeProvider';
+import { useTheme } from '~/features/providers/themeProvider';
+import { useSearchParams } from '@remix-run/react';
 import getButtonsNameArray from '../lib/getButtonsNameArray';
 
 import styles from './Pagination.module.scss';
@@ -6,13 +7,13 @@ import styles from './Pagination.module.scss';
 export interface PropsPagination {
   itemPerPage: number;
   totalItems: number;
-  setPageNumber: (pageNumber: number) => void;
   currentPage: number;
 }
 
-function Pagination({ itemPerPage, totalItems, currentPage, setPageNumber }: PropsPagination) {
+function Pagination({ itemPerPage, totalItems, currentPage }: PropsPagination) {
   const totalPages = Math.ceil(totalItems / itemPerPage);
   const dark = useTheme();
+  const [searchParams, setSearchParams] = useSearchParams();
   let buttonClass = styles.button;
   let { disabled } = styles;
   let { current } = styles;
@@ -28,7 +29,7 @@ function Pagination({ itemPerPage, totalItems, currentPage, setPageNumber }: Pro
   }
 
   const handler = (pageNumber: number) => {
-    setPageNumber(pageNumber);
+    setSearchParams({ ...searchParams, pageNumber: pageNumber.toString() });
   };
 
   const prevBtnDisabled = currentPage === 1;

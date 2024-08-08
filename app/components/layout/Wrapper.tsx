@@ -1,13 +1,13 @@
-import { useTheme } from '@/features/providers/themeProvider';
+import { useTheme } from '~/features/providers/themeProvider';
 import Header from '../header';
 
-import styles from './Layout.module.scss';
+import styles from './Wrapper.module.scss';
 
 interface Props {
   children: React.ReactNode;
 }
 
-export default function Layout({ children }: Props) {
+export default function Wrapper({ children }: Props) {
   const dark = useTheme();
 
   let rootClass = styles.root;

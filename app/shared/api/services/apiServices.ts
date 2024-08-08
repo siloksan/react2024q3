@@ -1,10 +1,8 @@
-import { ParsedUrlQuery } from 'querystring';
-
 import getStringParam from '~/shared/lib/getStringParam/getStringParam';
-import { SpacecraftsResponse } from '~/entities/spacecraft/models';
+import { Spacecraft, SpacecraftsResponse } from '~/entities/spacecraft/models';
 import logger from '~/shared/lib/logger/logger';
 import { baseUrl } from '../const';
-import { Payload, QueryParams } from '../types';
+import { Payload } from '../types';
 
 export async function getSpacecrafts(searchParams: URLSearchParams): Promise<SpacecraftsResponse | undefined> {
   const basePayload: Payload = {
@@ -39,14 +37,9 @@ export async function getSpacecrafts(searchParams: URLSearchParams): Promise<Spa
   }
 }
 
-export async function getSpacecraft(
-  context: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>
-): Promise<Spacecraft | undefined> {
-  const { params } = context;
-  if (!params) return;
-
+export async function getSpacecraft({ uid }: { uid: string }): Promise<Spacecraft | undefined> {
   try {
-    const response = await fetch(`${baseUrl}spacecraft?${new URLSearchParams(params as QueryParams)}`, {
+    const response = await fetch(`${baseUrl}spacecraft?uid=${uid}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });

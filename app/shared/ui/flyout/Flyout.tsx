@@ -1,11 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import formatData from '@/shared/lib/formatData/formatData';
-import {
-  useSelectedItems,
-  useSelectedItemsUpdate,
-} from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
-import { useTheme } from '@/features/providers/themeProvider';
+import { useSelectedItems, useSelectedItemsUpdate } from '~/features/providers/selectedItemsProvider';
+import { useTheme } from '~/features/providers/themeProvider';
+import formatData from '~/shared/lib/formatData/formatData';
 import Button from '../button/Button';
 
 import styles from './Flyout.module.scss';

@@ -1,12 +1,9 @@
-import Image from 'next/image';
-import Link from 'next/link';
-
-import { useTheme } from '@/features/providers/themeProvider';
-import ThemeToggle from '../components/themeToggle/ThemeToggle';
+import { useTheme } from '~/features/providers/themeProvider';
+import { Link } from '@remix-run/react';
 
 import ErrorButton from '../components/errorButton/ErrorButton';
-
 import logo from '../assets/startrek-logo.png';
+import ThemeToggle from '../components/themeToggle/ThemeToggle';
 
 import styles from './Header.module.scss';
 
@@ -20,9 +17,9 @@ export default function Header() {
 
   return (
     <header className={containerClass} data-testid="header">
-      <Link href="/">
+      <Link to="/">
         <div className={styles.logo}>
-          <Image src={logo} alt="Star Trek logo" priority width={200} height={200} />
+          <img src={logo} alt="Star Trek logo" />
         </div>
       </Link>
       <ThemeToggle />

@@ -1,8 +1,8 @@
-import { useRouter } from 'next/router';
+import { Spacecraft } from '~/entities/spacecraft/models';
+import { useTheme } from '~/features/providers/themeProvider';
 
-import { useTheme } from '@/features/providers/themeProvider';
-import { Spacecraft } from '@/entities/spacecraft/models';
-import Button from '@/shared/ui/button/Button';
+import { useNavigate, useSearchParams } from '@remix-run/react';
+import Button from '~/shared/ui/button/Button';
 
 import styles from './CardDetails.module.scss';
 
@@ -11,14 +11,14 @@ interface Props {
 }
 
 export default function CardDetails({ spacecraft }: Props) {
-  const router = useRouter();
-
   const dark = useTheme();
-
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const closeDetails = () => {
-    const { query } = router;
-    const { uid, ...newQuery } = query;
-    router.push({ pathname: '/', query: { ...newQuery } });
+    navigate({
+      pathname: '/',
+      search: `${searchParams.toString()}`,
+    });
   };
 
   const { name, spacecraftClass } = spacecraft;

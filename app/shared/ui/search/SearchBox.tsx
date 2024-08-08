@@ -1,26 +1,21 @@
-import Image from 'next/image';
-
 import { useState } from 'react';
-import { useTheme } from '@/features/providers/themeProvider';
 
+import { useTheme } from '~/features/providers/themeProvider';
+import { useSearchParams } from '@remix-run/react';
+import loupe from './assets/search-icon.svg';
+
+import styles from './SearchBox.module.scss';
 import Button from '../button/Button';
 
-import loupe from './assets/search-icon.svg';
-import styles from './SearchBox.module.scss';
-
-interface Props {
-  setSearchTerm: (searchTerm: string) => void;
-  searchTerm: string;
-}
-
-export default function SearchBox({ setSearchTerm, searchTerm }: Props) {
-  const [value, setValue] = useState(searchTerm);
+export default function SearchBox() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [value, setValue] = useState(searchParams.get('name') || '');
 
   const dark = useTheme();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSearchTerm(value);
+    setSearchParams({ ...searchParams, name: value, pageNumber: '1' });
   };
 
   let containerClassName = styles.container;
@@ -43,7 +38,7 @@ export default function SearchBox({ setSearchTerm, searchTerm }: Props) {
           onChange={(e) => setValue(e.target.value)}
         />
         <Button aria-label="Search" type="submit" additionalStyles={buttonClassName}>
-          <Image src={loupe} alt="loupe icon" width={24} height={24} />
+          <img src={loupe} alt="loupe icon" />
         </Button>
       </form>
     </div>
