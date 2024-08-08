@@ -1,9 +1,10 @@
 import { Spacecraft } from '~/entities/spacecraft/models';
 import { useTheme } from '~/features/providers/themeProvider';
 
-import { useNavigate, useSearchParams } from '@remix-run/react';
+import { useNavigate, useNavigation, useSearchParams } from '@remix-run/react';
 import Button from '~/shared/ui/button/Button';
 
+import Loader from '~/shared/ui/loader/Loader';
 import styles from './CardDetails.module.scss';
 
 interface Props {
@@ -14,6 +15,10 @@ export default function CardDetails({ spacecraft }: Props) {
   const dark = useTheme();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { state } = useNavigation();
+
+  if (state === 'loading') return <Loader />;
+
   const closeDetails = () => {
     navigate({
       pathname: '/',

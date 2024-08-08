@@ -31,6 +31,7 @@ vi.mock('@remix-run/react', () => {
     useNavigate: vi.fn().mockReturnValue(navigate),
     useParams: vi.fn().mockReturnValue(params),
     useSearchParams: vi.fn().mockReturnValue([searchParams, setSearchParams]),
+    useNavigation: vi.fn().mockReturnValue({ state: 'idle' }),
   };
 });
 

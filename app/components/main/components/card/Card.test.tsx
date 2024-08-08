@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useNavigate } from '@remix-run/react';
 
 import { SelectedItemsProvider } from '~/features/providers/selectedItemsProvider';
 import { DUMMY_SPACECRAFTS_RESPONSE } from '~/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
