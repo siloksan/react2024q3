@@ -1,13 +1,31 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { useSearchParams } from '@remix-run/react';
 
 import Pagination from './Pagination';
+
+vi.mock('@remix-run/react', () => {
+  const navigate = vi.fn();
+  const params = { uid: 'test1' };
+  const searchParams = new URLSearchParams();
+  const setSearchParams = vi.fn();
+  return {
+    useNavigate: vi.fn().mockReturnValue(navigate),
+    useParams: vi.fn().mockReturnValue(params),
+    useSearchParams: vi.fn().mockReturnValue([searchParams, setSearchParams]),
+  };
+});
+
+vi.mock('~/features/providers/themeProvider', () => {
+  return {
+    useTheme: vi.fn().mockReturnValue(true),
+  };
+});
 
 describe('Pagination', () => {
   const props = {
     currentPage: 1,
     itemPerPage: 10,
-    setPageNumber: vi.fn(),
     totalItems: 100,
   };
   it('renders Pagination', () => {
@@ -62,7 +80,7 @@ describe('Pagination', () => {
     const user = userEvent.setup();
     await user.click(paginationButtons[2]);
 
-    expect(props.setPageNumber).toHaveBeenCalled();
+    expect(useSearchParams()[1]).toHaveBeenCalled();
   });
 
   it('should disable next button if current page is equal to total pages', () => {

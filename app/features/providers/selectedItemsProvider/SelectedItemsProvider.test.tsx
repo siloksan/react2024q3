@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 
-import { DUMMY_SPACECRAFTS_RESPONSE } from '@/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
+import { DUMMY_SPACECRAFTS_RESPONSE } from '~/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
 import { SelectedItemsProvider, useSelectedItems, useSelectedItemsUpdate } from './SelectedItemsProvider';
 
 describe('SelectedItemsProvider', () => {

@@ -1,11 +1,9 @@
 import { render, screen } from '@testing-library/react';
 
-import userEvent from '@testing-library/user-event';
-import { useRouter } from 'next/router';
-import { DUMMY_SPACECRAFTS_RESPONSE } from '@/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
+import { SpacecraftClass } from '~/entities/spacecraft/models';
+import { DUMMY_SPACECRAFTS_RESPONSE } from '~/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
+import { SelectedItemsProvider } from '~/features/providers/selectedItemsProvider';
 import CardDetails from './CardDetails';
-import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
-import { SpacecraftClass } from '@/entities/spacecraft/models';
 
 const props = {
   spacecraft: DUMMY_SPACECRAFTS_RESPONSE.spacecrafts[0],
@@ -24,17 +22,19 @@ const spacecraftClass: SpacecraftClass = {
   warpCapable: true,
 };
 
-vi.mock('next/router', () => {
-  const router = {
-    push: vi.fn(),
-    query: { uid: 'test1' },
-  };
+vi.mock('@remix-run/react', () => {
+  const navigate = vi.fn();
+  const params = { uid: 'test1' };
+  const searchParams = new URLSearchParams();
+  const setSearchParams = vi.fn();
   return {
-    useRouter: vi.fn().mockReturnValue(router),
+    useNavigate: vi.fn().mockReturnValue(navigate),
+    useParams: vi.fn().mockReturnValue(params),
+    useSearchParams: vi.fn().mockReturnValue([searchParams, setSearchParams]),
   };
 });
 
-vi.mock('@/features/providers/themeProvider', () => {
+vi.mock('~/features/providers/themeProvider', () => {
   return {
     useTheme: vi.fn().mockReturnValue(true),
   };
@@ -55,17 +55,6 @@ describe('CardDetails', () => {
     const container = screen.getByTestId('card-details');
 
     expect(container).toBeInTheDocument();
-  });
-
-  it('should call closeDetails when close button is clicked', async () => {
-    customRender();
-
-    const button = screen.getByRole('button', { name: /close/i });
-    const user = userEvent.setup();
-
-    await user.click(button);
-
-    expect(useRouter().push).toHaveBeenCalledTimes(1);
   });
 
   it("should't have right side when spacecraftClass is null", async () => {

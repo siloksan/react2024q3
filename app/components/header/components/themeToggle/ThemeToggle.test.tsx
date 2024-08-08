@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import ThemeToggle from './ThemeToggle';
 
-vi.mock('@/features/providers/themeProvider', () => {
+vi.mock('~/features/providers/themeProvider', () => {
   return {
     useTheme: vi.fn().mockReturnValue(true),
     useThemeUpdate: vi.fn(),

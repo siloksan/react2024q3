@@ -2,7 +2,23 @@ import { render, screen } from '@testing-library/react';
 
 import Header from './Header';
 
-vi.mock('@/features/providers/themeProvider', () => {
+vi.mock('@remix-run/react', () => {
+  const navigate = vi.fn();
+  const params = { uid: 'test1' };
+  const searchParams = new URLSearchParams();
+  const setSearchParams = vi.fn();
+  function Link({ to, children }: { to: string; children: React.ReactNode }) {
+    return <a href={to}>{children}</a>;
+  }
+  return {
+    useNavigate: vi.fn().mockReturnValue(navigate),
+    useParams: vi.fn().mockReturnValue(params),
+    useSearchParams: vi.fn().mockReturnValue([searchParams, setSearchParams]),
+    Link,
+  };
+});
+
+vi.mock('~/features/providers/themeProvider', () => {
   return {
     useTheme: vi.fn().mockReturnValue(true),
     useThemeUpdate: vi.fn(),

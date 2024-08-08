@@ -10,6 +10,7 @@
     "format:fix": "prettier --write ./app",
     "format": "prettier --check ./app",
     "test": "vitest --run",
+    "test:watch": "vitest",
     "test:coverage": "vitest --coverage",
     "test:ui": "vitest --ui --coverage",
     "lint": "npm run lint:code && npm run lint:types",

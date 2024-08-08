@@ -1,6 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
-
-import { Spacecraft } from '@/entities/spacecraft/models';
+import { Spacecraft } from '~/entities/spacecraft/models';
 
 type SelectedItemsContextUpdateValue = {
   addSelectedItem: (value: Spacecraft) => void;

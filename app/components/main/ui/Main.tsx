@@ -13,10 +13,7 @@ interface Props {
 }
 
 export default function Main({ spacecraftsRes, children }: Props) {
-  console.log('spacecraftsRes: ', spacecraftsRes);
-
   const { page, spacecrafts } = spacecraftsRes;
-
   const { pageNumber, pageSize, totalElements } = page;
 
   return (

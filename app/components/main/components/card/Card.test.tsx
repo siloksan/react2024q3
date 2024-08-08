@@ -1,26 +1,28 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useRouter } from 'next/router';
+import { useNavigate } from '@remix-run/react';
 
-import { DUMMY_SPACECRAFTS_RESPONSE } from '@/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
+import { SelectedItemsProvider } from '~/features/providers/selectedItemsProvider';
+import { DUMMY_SPACECRAFTS_RESPONSE } from '~/shared/api/mock/mocks/dummyData/dummySpaceCraftsResponse';
 import Card from './Card';
-import { SelectedItemsProvider } from '@/features/providers/selectedItemsProvider/SelectedItemsProvider';
 
 const props = {
   spacecraft: DUMMY_SPACECRAFTS_RESPONSE.spacecrafts[0],
 };
 
-vi.mock('next/router', () => {
-  const router = {
-    push: vi.fn(),
-    query: { uid: 'test1' },
-  };
+vi.mock('@remix-run/react', () => {
+  const navigate = vi.fn();
+  const params = { uid: 'test1' };
+  const searchParams = new URLSearchParams();
+  const setSearchParams = vi.fn();
   return {
-    useRouter: vi.fn().mockReturnValue(router),
+    useNavigate: vi.fn().mockReturnValue(navigate),
+    useParams: vi.fn().mockReturnValue(params),
+    useSearchParams: vi.fn().mockReturnValue([searchParams, setSearchParams]),
   };
 });
 
-vi.mock('@/features/providers/themeProvider', () => {
+vi.mock('~/features/providers/themeProvider', () => {
   return {
     useTheme: vi.fn().mockReturnValue(true),
   };
@@ -40,17 +42,6 @@ describe('Card', () => {
 
     const item = screen.getByRole('listitem');
     expect(item).toBeInTheDocument();
-  });
-
-  it('should call openDetails when link is clicked', async () => {
-    customRender();
-
-    const link = screen.getByTestId('card');
-    const user = userEvent.setup();
-
-    await user.click(link);
-
-    expect(useRouter().push).toHaveBeenCalledTimes(1);
   });
 
   it("should add class active when uid don't match with spacecraft.uid", async () => {

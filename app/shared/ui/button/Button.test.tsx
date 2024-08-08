@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import Button from './Button';
 
-vi.mock('@/features/providers/themeProvider', () => {
+vi.mock('~/features/providers/themeProvider', () => {
   return {
     useTheme: vi.fn().mockReturnValue(true),
   };

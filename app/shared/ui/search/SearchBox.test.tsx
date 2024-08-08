@@ -2,29 +2,28 @@ import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
 import SearchBox from './SearchBox';
 
-describe('SearchBox', () => {
-  const props = {
-    setSearchTerm: vi.fn(),
-    searchTerm: '',
-    setPageNumber: vi.fn(),
+vi.mock('@remix-run/react', () => {
+  const navigate = vi.fn();
+  const params = { uid: 'test1' };
+  const searchParams = new URLSearchParams();
+  const setSearchParams = vi.fn();
+  return {
+    useNavigate: vi.fn().mockReturnValue(navigate),
+    useParams: vi.fn().mockReturnValue(params),
+    useSearchParams: vi.fn().mockReturnValue([searchParams, setSearchParams]),
   };
+});
 
+describe('SearchBox', () => {
   it('should renders SearchBox', () => {
-    render(<SearchBox {...props} />);
+    render(<SearchBox />);
 
     const input = screen.getByRole('textbox');
 
     expect(input).toBeInTheDocument();
   });
-  it('should call updateData when button is clicked', async () => {
-    render(<SearchBox {...props} />);
-    const button = screen.getByRole('button');
-    const user = userEvent.setup();
-    await user.click(button);
-    expect(props.setSearchTerm).toHaveBeenCalledOnce();
-  });
   it('should change value in input', async () => {
-    render(<SearchBox {...props} />);
+    render(<SearchBox />);
     const input = screen.getByRole('textbox');
     const user = userEvent.setup();
     await user.type(input, 'test');

@@ -1,24 +1,40 @@
 import { render, screen } from '@testing-library/react';
-import Layout from './Wrapper';
+import Wrapper from './Wrapper';
 
-vi.mock('@/features/providers/themeProvider', () => {
+vi.mock('@remix-run/react', () => {
+  const navigate = vi.fn();
+  const params = { uid: 'test1' };
+  const searchParams = new URLSearchParams();
+  const setSearchParams = vi.fn();
+  function Link({ to, children }: { to: string; children: React.ReactNode }) {
+    return <a href={to}>{children}</a>;
+  }
+  return {
+    useNavigate: vi.fn().mockReturnValue(navigate),
+    useParams: vi.fn().mockReturnValue(params),
+    useSearchParams: vi.fn().mockReturnValue([searchParams, setSearchParams]),
+    Link,
+  };
+});
+
+vi.mock('~/features/providers/themeProvider', () => {
   return {
     useTheme: vi.fn().mockReturnValue(true),
     useThemeUpdate: vi.fn(),
   };
 });
 
-describe('Layout', () => {
+describe('Wrapper', () => {
   const children = <div>test</div>;
-  it('renders Layout', () => {
-    render(<Layout>{children}</Layout>);
+  it('renders Wrapper', () => {
+    render(<Wrapper>{children}</Wrapper>);
 
     const header = screen.getByTestId('header');
     expect(header).toBeInTheDocument();
   });
 
   it('should be in dark mode', () => {
-    render(<Layout>{children}</Layout>);
+    render(<Wrapper>{children}</Wrapper>);
 
     const container = screen.getByTestId('layout');
     expect(container).toHaveClass(/dark/i);
