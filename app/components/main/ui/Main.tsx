@@ -1,18 +1,18 @@
-import { SpacecraftsResponse } from '~/entities/spacecraft/models';
-
 import Pagination from '~/components/pagination';
 import SearchBox from '~/shared/ui/search/SearchBox';
 import Flyout from '~/shared/ui/flyout/Flyout';
+import { loader } from '~/root';
+import { useLoaderData } from '@remix-run/react';
 import CardList from '../components/cardList/CardList';
 
 import styles from './Main.module.scss';
 
 interface Props {
   children: React.ReactNode;
-  spacecraftsRes: SpacecraftsResponse;
 }
 
-export default function Main({ spacecraftsRes, children }: Props) {
+export default function Main({ children }: Props) {
+  const { spacecraftsRes } = useLoaderData<typeof loader>();
   const { page, spacecrafts } = spacecraftsRes;
   const { pageNumber, pageSize, totalElements } = page;
 

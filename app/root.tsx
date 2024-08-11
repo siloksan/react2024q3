@@ -1,4 +1,13 @@
-import { json, Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData } from '@remix-run/react';
+import {
+  isRouteErrorResponse,
+  json,
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useRouteError,
+} from '@remix-run/react';
 import { LoaderFunctionArgs } from '@remix-run/node';
 import Main from './components/main';
 import { getSpacecrafts } from './shared/api/services/apiServices';
@@ -6,10 +15,9 @@ import Provider from './features/providers';
 
 import './styles/index.scss';
 import Wrapper from './components/layout/Wrapper';
+import NotFoundPage from './components/notFoundPage';
 
-export function Layout({ children }: { children: React.ReactNode }) {
-  const { spacecraftsRes } = useLoaderData<typeof loader>();
-
+export default function App() {
   return (
     <html lang="en">
       <head>
@@ -24,7 +32,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <Provider>
           <Wrapper>
-            <Main spacecraftsRes={spacecraftsRes}>{children}</Main>
+            <Main>
+              <Outlet />
+            </Main>
           </Wrapper>
         </Provider>
         <ScrollRestoration />
@@ -34,15 +44,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function App() {
-  return <Outlet />;
-}
-
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const spacecraftsRes = await getSpacecrafts(url.searchParams);
   if (!spacecraftsRes) {
-    throw new Error('Spacecraft not found');
+    throw new Response('Spacecrafts not found', { status: 404 });
   }
   return json({ spacecraftsRes });
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  return (
+    <html lang="en">
+      <head>
+        <title>Oops!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        {isRouteErrorResponse(error) && <NotFoundPage />}
+        <Scripts />
+      </body>
+    </html>
+  );
 }

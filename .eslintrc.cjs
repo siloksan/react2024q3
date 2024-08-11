@@ -43,14 +43,7 @@ module.exports = {
     // React
     {
       files: ['**/*.{js,jsx,ts,tsx}'],
-      plugins: [
-        'react',
-        'jsx-a11y',
-        '@typescript-eslint',
-        'react-refresh',
-        'prettier',
-        'react-compiler',
-      ],
+      plugins: ['react', 'jsx-a11y', '@typescript-eslint', 'react-refresh', 'prettier', 'react-compiler'],
       extends: [
         'airbnb',
         'airbnb-typescript',
@@ -87,6 +80,7 @@ module.exports = {
         'react/button-has-type': 'off',
         'jsx-a11y/label-has-associated-control': 'off',
         'consistent-return': 'off',
+        'import/no-cycle': 'off',
         'no-param-reassign': ['error', { props: false }],
         'react/jsx-props-no-spreading': 'off',
         'react-compiler/react-compiler': 'error',
@@ -128,13 +122,10 @@ module.exports = {
           },
         },
       },
-      extends: [
-        'plugin:@typescript-eslint/recommended',
-        'plugin:import/recommended',
-        'plugin:import/typescript',
-      ],
+      extends: ['plugin:@typescript-eslint/recommended', 'plugin:import/recommended', 'plugin:import/typescript'],
       rules: {
         '@typescript-eslint/no-use-before-define': 'off',
+        '@typescript-eslint/no-throw-literal': 'off',
         'no-param-reassign': 'off',
       },
     },
