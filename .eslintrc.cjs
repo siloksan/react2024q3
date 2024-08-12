@@ -19,6 +19,7 @@ module.exports = {
   plugins: ['react-refresh', 'prettier'],
   rules: {
     'import/extensions': 'off',
+    'import/prefer-default-export': 'off',
     'react/react-in-jsx-scope': 0,
     'prettier/prettier': [
       'error',
