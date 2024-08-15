@@ -1,7 +1,12 @@
+import { Link } from 'react-router-dom';
+
+import styles from './header.module.scss';
+
 export default function Header() {
   return (
-    <header>
-      <h2>Header</h2>
+    <header className={styles.header}>
+      <h2>Welcome to the React Form</h2>
+      <Link to="/">Go Home</Link>
     </header>
   );
 }

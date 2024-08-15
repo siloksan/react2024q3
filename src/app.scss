@@ -1,0 +1,82 @@
+:root {
+  // =====colors=====
+  --color--white: #fff;
+  --color--input--focus: #d4ecff;
+  --color--background-form: #e3fffe;
+  --color--dark: rgb(41, 39, 34);
+  --color--dark--hover: rgb(49, 56, 36);
+  --color--dark--active: rgb(90, 103, 68);
+  --color--dark--disabled: rgb(161, 160, 160);
+  --color--header: rgb(10, 118, 133);
+  --color--shadow--dark: rgba(0, 0, 0, 0.5);
+  --color--border--dark: rgb(18, 18, 15);
+  --color--border--light: rgb(218, 218, 206);
+  --color--error: rgb(185, 0, 0);
+  --color--button: rgb(10, 118, 133);
+  --color--button--hover: rgb(0, 100, 110);
+}
+
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+html {
+  height: 100%;
+  font-size: 16px;
+}
+
+body {
+  font-size: 10px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--color--black);
+  transition: color 0.3s;
+  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+button {
+  padding: 0;
+  border: none;
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+form {
+  width: 100%;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+ul {
+  list-style: none;
+}
