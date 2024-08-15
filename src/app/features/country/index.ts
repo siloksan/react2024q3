@@ -220,4 +220,4 @@ export const countriesSlice = createSlice({
   reducers: {},
 });
 
-export default countriesSlice.reducer;
+export const { reducer } = countriesSlice;

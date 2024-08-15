@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import countries from '../features/country';
+import { reducer as countries } from '../features/country';
+import { reducer as usersData } from '../features/submit-form';
 
 const rootReducer = combineReducers({
   countries,
+  usersData,
 });
 
 export const setupStore = (preloadedState?: Partial<RootState>) => {

@@ -1,57 +1,59 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import * as yup from 'yup';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { useSelector } from 'react-redux';
-import styles from './controlled-form.module.scss';
-import { isImage, isValidExtension, isValidFile, isValidSize } from '@/utils/validate';
 import { RootState } from '@/app/store';
+import { schema, type FormData } from '@/utils/validate-schema';
+import { submitForm } from '@/app/features/submit-form';
 
-const schema = yup.object().shape({
-  name: yup
-    .string()
-    .matches(/^[A-Z]/, 'Name must be started with a capital letter')
-    .required('Name is a required field'),
-  age: yup
-    .number()
-    .test('age', 'Invalid age', (value) => Number.isInteger(value))
-    .min(0, 'Invalid age')
-    .required('Name is a required field'),
-  gender: yup.string().required('Gender is a required field'),
-  email: yup.string().email().required('Email is a required field'),
-  password: yup.string().min(8).max(32).required('Password is a required field'),
-  image: yup
-    .mixed()
-    .test('required', 'A file is required', (value) => {
-      return isValidFile(value);
-    })
-    .test('fileType', 'File must be an image', (value) => {
-      return isImage(value);
-    })
-    .test('fileExtension', 'File must have an jpeg or png extension', (value) => {
-      return isValidExtension(value);
-    })
-    .test('fileSize', 'The file is too large', (value) => {
-      return isValidSize(value);
-    }),
-  country: yup.string().required('Password is a required field'),
-  condition: yup.boolean().oneOf([true], 'You must accept the conditions'),
-});
-
-type FormData = yup.InferType<typeof schema>;
+import styles from './controlled-form.module.scss';
 
 export default function ControlledForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     reset,
   } = useForm({
     resolver: yupResolver(schema),
+    mode: 'onChange',
   });
 
+  const navigate = useNavigate();
+  const [county, setCountry] = useState('');
+  const dispatch = useDispatch();
+  const countries = useSelector((state: RootState) => state.countries.value);
   const onSubmitHandler: SubmitHandler<FormData> = (data) => {
-    if (data) reset();
+    if (data.image instanceof FileList && data.image[0]) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (reader.result) {
+          const serializeData = { ...data, image: reader.result.toString(), id: new Date().getTime() };
+          dispatch(submitForm(serializeData));
+        }
+      };
+      reader.readAsDataURL(data.image[0]);
+    }
+    navigate('/');
+    reset();
+  };
+
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    setCountry(event.target.value);
+  };
+
+  const dropdown = () => {
+    return countries
+      .filter((item: string) => item.includes(county) && item !== county && county !== '')
+      .map((item: string) => {
+        return (
+          <li key={item} onClick={() => setCountry(item)} aria-hidden="true">
+            {item}
+          </li>
+        );
+      });
   };
 
   return (
@@ -85,8 +87,19 @@ export default function ControlledForm() {
       </div>
       <div className={styles.field}>
         <label htmlFor="country">Country</label>
-        <input id="country" {...register('country')} type="text" autoComplete="country" />
+        <input
+          id="country"
+          {...register('country')}
+          type="text"
+          placeholder="country"
+          value={county}
+          onChange={onChange}
+          autoComplete="country"
+        />
         {errors.country && <span className={styles.error}>{errors.country.message}</span>}
+        <div className={styles.dropdownContainer}>
+          <ul className={styles.dropdown}>{dropdown()}</ul>
+        </div>
       </div>
       <fieldset className={styles.field}>
         <legend>Your Gender:</legend>
@@ -104,7 +117,7 @@ export default function ControlledForm() {
       </fieldset>
       <div className={styles.field}>
         <label htmlFor="image">Upload your avatar</label>
-        <input id="image" {...register('image')} type="file" />
+        <input id="image" {...register('image')} type="file" accept="image/png, image/jpeg" />
         {errors.image && <span className={styles.error}>{errors.image.message}</span>}
       </div>
       <div className={`${styles.field} ${styles.condition}`}>
@@ -112,7 +125,9 @@ export default function ControlledForm() {
         <label htmlFor="condition">I accept the terms and conditions</label>
       </div>
       {errors.condition && <span className={styles.error}>{errors.condition.message}</span>}
-      <button type="submit">Submit</button>
+      <button className={!isValid ? styles.disabled : ''} type="submit" disabled={!isValid}>
+        Submit
+      </button>
     </form>
   );
 }
