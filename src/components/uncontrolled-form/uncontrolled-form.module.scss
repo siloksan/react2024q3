@@ -69,7 +69,6 @@
 .error {
   color: var(--color--error);
   font-size: .8rem;
-  margin-top: -0.6rem;
 }
 
 .disabled {
@@ -97,4 +96,9 @@
   input {
     margin: 0;
   }
+}
+
+.strength {
+  display: flex;
+  justify-content: space-between;
 }

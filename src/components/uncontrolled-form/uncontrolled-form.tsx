@@ -27,6 +27,16 @@ export default function UncontrolledForm() {
   const dispatch = useDispatch();
   const ref = createRef<HTMLFormElement>();
   const [errors, setErrors] = useState(initialErrors);
+  const [strength, setStrength] = useState(0);
+
+  const getStrength = (password: string) => {
+    if (errors.password.length > 0) return 0;
+    const { length } = password;
+    if (length === 4) return 1;
+    if (length > 4 && length < 10) return 2;
+    if (length >= 10) return 3;
+    return 0;
+  };
 
   const countries = useSelector((state: RootState) => state.countries.value);
   const onSubmitHandler: React.FormEventHandler<HTMLFormElement> = async (event) => {
@@ -34,6 +44,7 @@ export default function UncontrolledForm() {
     setErrors(initialErrors);
     if (!ref.current) return;
     const data = new FormData(ref.current);
+    setStrength(getStrength(data.get('password') as string));
 
     const formDataObj: Record<string, string | File> = {};
     data.forEach((value, key) => {
@@ -104,7 +115,10 @@ export default function UncontrolledForm() {
         {errors.email && <span className={styles.error}>{errors.email}</span>}
       </div>
       <div className={styles.field}>
-        <label htmlFor="password">Password</label>
+        <div className={styles.strength}>
+          <label htmlFor="password">Password</label>
+          <meter id="password_strength" min={0} value={strength} max={3} />
+        </div>
         <div className={styles.password}>
           <input
             id="password"
@@ -118,7 +132,6 @@ export default function UncontrolledForm() {
             togglePasswordVisibility={toggleFirstPasswordVisibility}
           />
         </div>
-
         {errors.password && <span className={styles.error}>{errors.password}</span>}
       </div>
       <div className={styles.field}>
