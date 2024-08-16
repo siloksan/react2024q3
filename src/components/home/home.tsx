@@ -12,7 +12,7 @@ export default function Home() {
     return usersData.map((user, idx) => {
       const isNewUser = idx === 0;
       return (
-        <li className={`${styles.item} ${isNewUser ? styles.last : ''}`} key={user.id}>
+        <li className={`${styles.item} ${isNewUser ? styles.first : ''}`} key={user.id}>
           <Card {...user} />
         </li>
       );

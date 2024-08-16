@@ -25,6 +25,12 @@
   }
 }
 
-.last {
+.users {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.first {
   background-color: var(--color--last-card);
 }
