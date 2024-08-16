@@ -7,21 +7,6 @@
   background-color: var(--color--background-form);
   box-shadow: 0 0 10px var(--color--shadow--dark);
   font-size: 1.1rem;
-
-  button {
-    width: 100%;
-    padding: 10px;
-    background-color: var(--color--button);
-    border: none;
-    border-radius: 5px;
-    color: white;
-    font-size: 1.4rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    &:hover {
-      background-color: var(--color--button--hover);
-    }
-  }
 }
 
 .title {
@@ -90,4 +75,26 @@
 .disabled {
   pointer-events: none;
   opacity: 0.5;
+}
+
+.password {
+  position: relative;
+  input {
+    margin: 0;
+  }
+}
+
+.btn {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--color--button);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: var(--color--button--hover);
+  }
 }

@@ -3,11 +3,13 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import { useState } from 'react';
 import { RootState } from '@/app/store';
 import { schema, type FormData } from '@/utils/validate-schema';
 import { submitForm } from '@/app/features/submit-form';
 
 import styles from './controlled-form.module.scss';
+import ShowPasswordButton from '../show-password-btn/show-password-btn';
 
 export default function ControlledForm() {
   const {
@@ -48,6 +50,18 @@ export default function ControlledForm() {
     });
   };
 
+  const [showFirstPassword, setShowFirstPassword] = useState(false);
+
+  const toggleFirstPasswordVisibility = () => {
+    setShowFirstPassword(!showFirstPassword);
+  };
+
+  const [showSecondPassword, setShowSecondPassword] = useState(false);
+
+  const toggleSecondPasswordVisibility = () => {
+    setShowSecondPassword(!showSecondPassword);
+  };
+
   return (
     <form className={styles.container} onSubmit={handleSubmit(onSubmitHandler)}>
       <h2 className={styles.title}>Controlled Form</h2>
@@ -68,24 +82,36 @@ export default function ControlledForm() {
       </div>
       <div className={styles.field}>
         <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          {...register('password')}
-          placeholder="password"
-          type="password"
-          autoComplete="current-password"
-        />
+        <div className={styles.password}>
+          <input
+            id="password"
+            {...register('password')}
+            placeholder="password"
+            type={showFirstPassword ? 'text' : 'password'}
+            autoComplete="current-password"
+          />
+          <ShowPasswordButton
+            showPassword={showFirstPassword}
+            togglePasswordVisibility={toggleFirstPasswordVisibility}
+          />
+        </div>
         {errors.password && <span className={styles.error}>{errors.password.message}</span>}
       </div>
       <div className={styles.field}>
         <label htmlFor="match_password">Password</label>
-        <input
-          id="match_password"
-          {...register('match_password')}
-          placeholder="password"
-          type="password"
-          autoComplete="current-password"
-        />
+        <div className={styles.password}>
+          <input
+            id="match_password"
+            {...register('match_password')}
+            placeholder="password"
+            type={showSecondPassword ? 'text' : 'password'}
+            autoComplete="current-password"
+          />
+          <ShowPasswordButton
+            showPassword={showSecondPassword}
+            togglePasswordVisibility={toggleSecondPasswordVisibility}
+          />
+        </div>
         {errors.match_password && <span className={styles.error}>{errors.match_password.message}</span>}
       </div>
       <div className={styles.field}>
@@ -118,7 +144,7 @@ export default function ControlledForm() {
         <label htmlFor="condition">I accept the terms and conditions</label>
       </div>
       {errors.condition && <span className={styles.error}>{errors.condition.message}</span>}
-      <button className={!isValid ? styles.disabled : ''} type="submit" disabled={!isValid}>
+      <button className={`${styles.btn} ${!isValid ? styles.disabled : ''}`} type="submit" disabled={!isValid}>
         Submit
       </button>
     </form>

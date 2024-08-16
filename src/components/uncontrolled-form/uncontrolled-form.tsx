@@ -8,6 +8,7 @@ import { SerializeUserData, submitForm } from '@/app/features/submit-form';
 
 import styles from './uncontrolled-form.module.scss';
 import { uncontrolledSchema } from '@/utils/validate-schema-uncontrolled';
+import ShowPasswordButton from '../show-password-btn/show-password-btn';
 
 const initialErrors = {
   name: '',
@@ -73,6 +74,17 @@ export default function UncontrolledForm() {
     });
   };
 
+  const [showFirstPassword, setShowFirstPassword] = useState(false);
+  const [showSecondPassword, setShowSecondPassword] = useState(false);
+
+  const toggleFirstPasswordVisibility = () => {
+    setShowFirstPassword(!showFirstPassword);
+  };
+
+  const toggleSecondPasswordVisibility = () => {
+    setShowSecondPassword(!showSecondPassword);
+  };
+
   return (
     <form className={styles.container} ref={ref} onSubmit={onSubmitHandler}>
       <h2 className={styles.title}>Uncontrolled Form</h2>
@@ -93,18 +105,37 @@ export default function UncontrolledForm() {
       </div>
       <div className={styles.field}>
         <label htmlFor="password">Password</label>
-        <input id="password" name="password" placeholder="password" type="password" autoComplete="current-password" />
+        <div className={styles.password}>
+          <input
+            id="password"
+            name="password"
+            placeholder="password"
+            type={showFirstPassword ? 'text' : 'password'}
+            autoComplete="current-password"
+          />
+          <ShowPasswordButton
+            showPassword={showFirstPassword}
+            togglePasswordVisibility={toggleFirstPasswordVisibility}
+          />
+        </div>
+
         {errors.password && <span className={styles.error}>{errors.password}</span>}
       </div>
       <div className={styles.field}>
         <label htmlFor="match_password">Password</label>
-        <input
-          id="match_password"
-          name="match_password"
-          placeholder="password"
-          type="password"
-          autoComplete="current-password"
-        />
+        <div className={styles.password}>
+          <input
+            id="match_password"
+            name="match_password"
+            placeholder="password"
+            type={showSecondPassword ? 'text' : 'password'}
+            autoComplete="current-password"
+          />
+          <ShowPasswordButton
+            showPassword={showSecondPassword}
+            togglePasswordVisibility={toggleSecondPasswordVisibility}
+          />
+        </div>
         {errors.match_password && <span className={styles.error}>{errors.match_password}</span>}
       </div>
       <div className={styles.field}>
@@ -144,7 +175,9 @@ export default function UncontrolledForm() {
         <label htmlFor="condition">I accept the terms and conditions</label>
       </div>
       {errors.condition && <span className={styles.error}>{errors.condition}</span>}
-      <button type="submit">Submit</button>
+      <button className={styles.btn} type="submit">
+        Submit
+      </button>
     </form>
   );
 }
