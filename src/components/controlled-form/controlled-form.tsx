@@ -86,6 +86,17 @@ export default function ControlledForm() {
         {errors.password && <span className={styles.error}>{errors.password.message}</span>}
       </div>
       <div className={styles.field}>
+        <label htmlFor="match_password">Password</label>
+        <input
+          id="match_password"
+          {...register('match_password')}
+          placeholder="password"
+          type="password"
+          autoComplete="current-password"
+        />
+        {errors.match_password && <span className={styles.error}>{errors.match_password.message}</span>}
+      </div>
+      <div className={styles.field}>
         <label htmlFor="country">Country</label>
         <input
           id="country"

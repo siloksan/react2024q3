@@ -15,6 +15,7 @@ const initialErrors = {
   gender: '',
   email: '',
   password: '',
+  match_password: '',
   image: '',
   country: '',
   condition: '',
@@ -110,6 +111,17 @@ export default function UncontrolledForm() {
         <label htmlFor="password">Password</label>
         <input id="password" name="password" placeholder="password" type="password" autoComplete="current-password" />
         {errors.password && <span className={styles.error}>{errors.password}</span>}
+      </div>
+      <div className={styles.field}>
+        <label htmlFor="match_password">Password</label>
+        <input
+          id="match_password"
+          name="match_password"
+          placeholder="password"
+          type="password"
+          autoComplete="current-password"
+        />
+        {errors.match_password && <span className={styles.error}>{errors.match_password}</span>}
       </div>
       <div className={styles.field}>
         <label htmlFor="country">Country</label>

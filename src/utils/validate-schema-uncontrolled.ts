@@ -20,6 +20,10 @@ export const uncontrolledSchema = yup.object().shape({
       'The password must include at least one uppercase letter, one lowercase letter, one number and one special character!'
     )
     .required('Password is a required field'),
+  match_password: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Passwords must match')
+    .required('Confirm your password'),
   image: yup
     .mixed()
     .test('required', 'A file is required', (value) => {
