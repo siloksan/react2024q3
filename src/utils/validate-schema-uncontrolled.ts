@@ -1,7 +1,7 @@
 import * as yup from 'yup';
-import { isImage, isValidExtension, isValidFile, isValidSize } from '@/utils/validate';
+import { IMAGE_EXTENSIONS, IMAGE_SIZE } from './file-validate-condition';
 
-export const schema = yup.object().shape({
+export const uncontrolledSchema = yup.object().shape({
   name: yup
     .string()
     .matches(/^[A-Z]/, 'Name must be started with a capital letter')
@@ -23,16 +23,20 @@ export const schema = yup.object().shape({
   image: yup
     .mixed()
     .test('required', 'A file is required', (value) => {
-      return isValidFile(value);
+      return value && value instanceof File;
     })
     .test('fileType', 'File must be an image', (value) => {
-      return isImage(value);
+      return value && value instanceof File && value.type.startsWith('image/');
     })
     .test('fileExtension', 'File must have an jpeg or png extension', (value) => {
-      return isValidExtension(value);
+      if (value && value instanceof File) {
+        const extension = value.name.split('.').pop();
+        return extension ? IMAGE_EXTENSIONS.includes(extension) : false;
+      }
+      return false;
     })
     .test('fileSize', 'The file is too large', (value) => {
-      return isValidSize(value);
+      return value && value instanceof File && value.size <= IMAGE_SIZE;
     }),
   country: yup.string().required('Country is a required field'),
   condition: yup
@@ -41,4 +45,4 @@ export const schema = yup.object().shape({
     .required('You must accept the conditions'),
 });
 
-export type FormData = yup.InferType<typeof schema>;
+export type FormData = yup.InferType<typeof uncontrolledSchema>;

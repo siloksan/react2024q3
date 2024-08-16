@@ -1,6 +1,4 @@
-const IMAGE_SIZE = 4 * 1024 * 1024;
-
-const IMAGE_EXTENSIONS = ['jpeg', 'png'];
+import { IMAGE_EXTENSIONS, IMAGE_SIZE } from './file-validate-condition';
 
 export function isValidFile(file: unknown): file is FileList {
   return file instanceof FileList && file.length !== 0;

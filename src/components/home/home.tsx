@@ -10,9 +10,9 @@ export default function Home() {
 
   const users = () => {
     return usersData.map((user, idx) => {
-      const isLastItem = idx === usersData.length - 1;
+      const isNewUser = idx === 0;
       return (
-        <li className={`${styles.item} ${isLastItem ? styles.last : ''}`} key={user.id}>
+        <li className={`${styles.item} ${isNewUser ? styles.last : ''}`} key={user.id}>
           <Card {...user} />
         </li>
       );

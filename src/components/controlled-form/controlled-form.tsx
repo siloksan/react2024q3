@@ -121,7 +121,7 @@ export default function ControlledForm() {
         {errors.image && <span className={styles.error}>{errors.image.message}</span>}
       </div>
       <div className={`${styles.field} ${styles.condition}`}>
-        <input id="condition" {...register('condition')} placeholder="condition" type="checkbox" />
+        <input id="condition" {...register('condition')} type="checkbox" />
         <label htmlFor="condition">I accept the terms and conditions</label>
       </div>
       {errors.condition && <span className={styles.error}>{errors.condition.message}</span>}
