@@ -15,6 +15,7 @@ export default function ControlledForm() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isValid },
     reset,
   } = useForm({
@@ -62,6 +63,18 @@ export default function ControlledForm() {
     setShowSecondPassword(!showSecondPassword);
   };
 
+  const password = watch('password');
+  const getStrength = () => {
+    if (errors.password) return 0;
+    if (password) {
+      const { length } = password;
+      if (length === 4) return 1;
+      if (length > 4 && length < 10) return 2;
+      if (length >= 10) return 3;
+    }
+    return 0;
+  };
+
   return (
     <form className={styles.container} onSubmit={handleSubmit(onSubmitHandler)}>
       <h2 className={styles.title}>Controlled Form</h2>
@@ -81,7 +94,10 @@ export default function ControlledForm() {
         {errors.email && <span className={styles.error}>{errors.email.message}</span>}
       </div>
       <div className={styles.field}>
-        <label htmlFor="password">Password</label>
+        <div className={styles.strength}>
+          <label htmlFor="password">Password</label>
+          <meter id="password_strength" min={0} value={getStrength()} max={3} />
+        </div>
         <div className={styles.password}>
           <input
             id="password"
