@@ -1,4 +1,4 @@
-import { createRef, useRef, useState } from 'react';
+import { createRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,11 +23,8 @@ const initialErrors = {
 
 export default function UncontrolledForm() {
   const navigate = useNavigate();
-  const [county, setCountry] = useState('');
   const dispatch = useDispatch();
   const ref = createRef<HTMLFormElement>();
-  const countryRef = useRef<HTMLInputElement>(null);
-
   const [errors, setErrors] = useState(initialErrors);
 
   const countries = useSelector((state: RootState) => state.countries.value);
@@ -66,27 +63,14 @@ export default function UncontrolledForm() {
     }
   };
 
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setCountry(event.target.value);
-    if (countryRef.current) countryRef.current.value = county;
-  };
-
-  const handleClick = (item: string) => {
-    setCountry(item);
-    if (countryRef.current) {
-      countryRef.current.value = item;
-    }
-  };
-  const dropdown = () => {
-    return countries
-      .filter((item: string) => item.includes(county) && item !== county && county !== '')
-      .map((item: string) => {
-        return (
-          <li key={item} onClick={() => handleClick(item)} aria-hidden="true">
-            {item}
-          </li>
-        );
-      });
+  const option = () => {
+    return countries.map((item: string) => {
+      return (
+        <option key={item} value={item}>
+          {item}
+        </option>
+      );
+    });
   };
 
   return (
@@ -129,15 +113,12 @@ export default function UncontrolledForm() {
           id="country"
           name="country"
           type="text"
-          ref={countryRef}
+          list="country_list"
           placeholder="country"
-          onChange={onChange}
           autoComplete="country"
         />
         {errors.country && <span className={styles.error}>{errors.country}</span>}
-        <div className={styles.dropdownContainer}>
-          <ul className={styles.dropdown}>{dropdown()}</ul>
-        </div>
+        <datalist id="country_list">{option()}</datalist>
       </div>
       <fieldset className={styles.field}>
         <legend>Your Gender:</legend>

@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,7 +21,6 @@ export default function ControlledForm() {
   });
 
   const navigate = useNavigate();
-  const [county, setCountry] = useState('');
   const dispatch = useDispatch();
   const countries = useSelector((state: RootState) => state.countries.value);
   const onSubmitHandler: SubmitHandler<FormData> = (data) => {
@@ -40,20 +38,14 @@ export default function ControlledForm() {
     reset();
   };
 
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setCountry(event.target.value);
-  };
-
-  const dropdown = () => {
-    return countries
-      .filter((item: string) => item.includes(county) && item !== county && county !== '')
-      .map((item: string) => {
-        return (
-          <li key={item} onClick={() => setCountry(item)} aria-hidden="true">
-            {item}
-          </li>
-        );
-      });
+  const option = () => {
+    return countries.map((item: string) => {
+      return (
+        <option key={item} value={item}>
+          {item}
+        </option>
+      );
+    });
   };
 
   return (
@@ -98,19 +90,9 @@ export default function ControlledForm() {
       </div>
       <div className={styles.field}>
         <label htmlFor="country">Country</label>
-        <input
-          id="country"
-          {...register('country')}
-          type="text"
-          placeholder="country"
-          value={county}
-          onChange={onChange}
-          autoComplete="country"
-        />
+        <input id="country" type="text" list="country_list" {...register('country')} autoComplete="country" />
+        <datalist id="country_list">{option()}</datalist>
         {errors.country && <span className={styles.error}>{errors.country.message}</span>}
-        <div className={styles.dropdownContainer}>
-          <ul className={styles.dropdown}>{dropdown()}</ul>
-        </div>
       </div>
       <fieldset className={styles.field}>
         <legend>Your Gender:</legend>
