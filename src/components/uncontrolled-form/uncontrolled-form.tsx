@@ -70,12 +70,18 @@ export default function UncontrolledForm() {
     if (countryRef.current) countryRef.current.value = county;
   };
 
+  const handleClick = (item: string) => {
+    setCountry(item);
+    if (countryRef.current) {
+      countryRef.current.value = item;
+    }
+  };
   const dropdown = () => {
     return countries
       .filter((item: string) => item.includes(county) && item !== county && county !== '')
       .map((item: string) => {
         return (
-          <li key={item} onClick={() => setCountry(item)} aria-hidden="true">
+          <li key={item} onClick={() => handleClick(item)} aria-hidden="true">
             {item}
           </li>
         );
