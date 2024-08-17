@@ -43,6 +43,19 @@
       background-color: var(--color--input--focus);
     }
   }
+
+  meter {
+    width: 100%;
+  }
+  meter[value='1']::-webkit-meter-optimum-value {
+    background: red;
+  }
+  meter[value='2']::-webkit-meter-optimum-value {
+    background: yellow;
+  }
+  meter[value='3']::-webkit-meter-optimum-value {
+    background: green;
+  }
 }
 
 .radio {
@@ -76,6 +89,13 @@
   opacity: 0.5;
 }
 
+.password {
+  position: relative;
+  input {
+    margin: 0;
+  }
+}
+
 .btn {
   width: 100%;
   padding: 10px;
@@ -88,13 +108,6 @@
   transition: background-color 0.3s ease;
   &:hover {
     background-color: var(--color--button--hover);
-  }
-}
-
-.password {
-  position: relative;
-  input {
-    margin: 0;
   }
 }
 

@@ -1,4 +1,4 @@
-import { IMAGE_EXTENSIONS, IMAGE_SIZE } from './file-validate-condition';
+import { IMAGE_EXTENSIONS, IMAGE_SIZE } from './validate-file-info';
 
 export function isValidFile(file: unknown): file is FileList {
   return file instanceof FileList && file.length !== 0;

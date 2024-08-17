@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { ValidationError } from 'yup';
 import { RootState } from '@/app/store';
 import { SerializeUserData, submitForm } from '@/app/features/submit-form';
-
-import styles from './uncontrolled-form.module.scss';
-import { uncontrolledSchema } from '@/utils/validate-schema-uncontrolled';
 import ShowPasswordButton from '../show-password-btn/show-password-btn';
+import { unControlledFormSchema } from '@/utils/validate-schema';
+
+import styles from '@/styles/form.module.scss';
 
 const initialErrors = {
   name: '',
@@ -32,9 +32,9 @@ export default function UncontrolledForm() {
   const getStrength = (password: string) => {
     if (errors.password.length > 0) return 0;
     const { length } = password;
-    if (length === 4) return 1;
-    if (length > 4 && length < 10) return 2;
+    if (length > 6 && length < 10) return 2;
     if (length >= 10) return 3;
+    if (length >= 4) return 1;
     return 0;
   };
 
@@ -51,7 +51,7 @@ export default function UncontrolledForm() {
       formDataObj[key] = value;
     });
     try {
-      await uncontrolledSchema.validate(formDataObj, { abortEarly: false });
+      await unControlledFormSchema.validate(formDataObj, { abortEarly: false });
       if ('image' in formDataObj && formDataObj.image instanceof File && formDataObj.image) {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -117,7 +117,6 @@ export default function UncontrolledForm() {
       <div className={styles.field}>
         <div className={styles.strength}>
           <label htmlFor="password">Password</label>
-          <meter id="password_strength" min={0} value={strength} max={3} />
         </div>
         <div className={styles.password}>
           <input
@@ -132,10 +131,11 @@ export default function UncontrolledForm() {
             togglePasswordVisibility={toggleFirstPasswordVisibility}
           />
         </div>
+        <meter id="password_strength" min={0} value={strength} max={3} low={1} high={3} optimum={2} />
         {errors.password && <span className={styles.error}>{errors.password}</span>}
       </div>
       <div className={styles.field}>
-        <label htmlFor="match_password">Password</label>
+        <label htmlFor="match_password">Confirm password</label>
         <div className={styles.password}>
           <input
             id="match_password"

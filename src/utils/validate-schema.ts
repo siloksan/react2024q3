@@ -1,7 +1,9 @@
 import * as yup from 'yup';
-import { isImage, isValidExtension, isValidFile, isValidSize } from '@/utils/validate';
+import { isImage, isValidExtension, isValidFile, isValidSize } from '@/utils/validate-helpers';
+import { COUNTRIES } from '@/app/features/country';
+import { IMAGE_EXTENSIONS, IMAGE_SIZE } from './validate-file-info';
 
-export const schema = yup.object().shape({
+const formFields = {
   name: yup
     .string()
     .matches(/^[A-Z]/, 'Name must be started with a capital letter')
@@ -38,11 +40,45 @@ export const schema = yup.object().shape({
     .test('fileSize', 'The file is too large', (value) => {
       return isValidSize(value);
     }),
-  country: yup.string().required('Country is a required field'),
+  country: yup
+    .string()
+    .test('country', 'Pick a country from the list', (value) => {
+      if (value) {
+        return COUNTRIES.includes(value);
+      }
+      return false;
+    })
+    .required('Country is a required field'),
   condition: yup
     .mixed()
     .oneOf([true, 'on'], 'You must accept the conditions')
     .required('You must accept the conditions'),
-});
+};
 
-export type FormData = yup.InferType<typeof schema>;
+const uncontrolledFormFields = {
+  ...formFields,
+  image: yup
+    .mixed()
+    .test('required', 'A file is required', (value) => {
+      return value && value instanceof File;
+    })
+    .test('fileType', 'File must be an image', (value) => {
+      return value && value instanceof File && value.type.startsWith('image/');
+    })
+    .test('fileExtension', 'File must have an jpeg or png extension', (value) => {
+      if (value && value instanceof File) {
+        const extension = value.name.split('.').pop();
+        return extension ? IMAGE_EXTENSIONS.includes(extension) : false;
+      }
+      return false;
+    })
+    .test('fileSize', 'The file is too large', (value) => {
+      return value && value instanceof File && value.size <= IMAGE_SIZE;
+    }),
+};
+
+export const controlledFormSchema = yup.object().shape(formFields);
+
+export const unControlledFormSchema = yup.object().shape(uncontrolledFormFields);
+
+export type FormData = yup.InferType<typeof controlledFormSchema>;

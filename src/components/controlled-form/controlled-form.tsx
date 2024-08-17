@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom';
 
 import { useState } from 'react';
 import { RootState } from '@/app/store';
-import { schema, type FormData } from '@/utils/validate-schema';
+import { controlledFormSchema, type FormData } from '@/utils/validate-schema';
 import { submitForm } from '@/app/features/submit-form';
-
-import styles from './controlled-form.module.scss';
 import ShowPasswordButton from '../show-password-btn/show-password-btn';
+
+import styles from '@/styles/form.module.scss';
 
 export default function ControlledForm() {
   const {
@@ -19,7 +19,7 @@ export default function ControlledForm() {
     formState: { errors, isValid },
     reset,
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(controlledFormSchema),
     mode: 'onChange',
   });
 
@@ -68,9 +68,9 @@ export default function ControlledForm() {
     if (errors.password) return 0;
     if (password) {
       const { length } = password;
-      if (length === 4) return 1;
-      if (length > 4 && length < 10) return 2;
+      if (length > 6 && length < 10) return 2;
       if (length >= 10) return 3;
+      if (length >= 4) return 1;
     }
     return 0;
   };
@@ -96,7 +96,6 @@ export default function ControlledForm() {
       <div className={styles.field}>
         <div className={styles.strength}>
           <label htmlFor="password">Password</label>
-          <meter id="password_strength" min={0} value={getStrength()} max={3} />
         </div>
         <div className={styles.password}>
           <input
@@ -111,10 +110,11 @@ export default function ControlledForm() {
             togglePasswordVisibility={toggleFirstPasswordVisibility}
           />
         </div>
+        <meter id="password_strength" min={0} value={getStrength()} max={3} />
         {errors.password && <span className={styles.error}>{errors.password.message}</span>}
       </div>
       <div className={styles.field}>
-        <label htmlFor="match_password">Password</label>
+        <label htmlFor="match_password">Confirm password</label>
         <div className={styles.password}>
           <input
             id="match_password"
