@@ -10,7 +10,7 @@ export const usersData = createSlice({
   initialState,
   reducers: {
     submitForm: (state, action: PayloadAction<SerializeUserData>) => {
-      state.push(action.payload);
+      state.unshift(action.payload);
     },
   },
 });

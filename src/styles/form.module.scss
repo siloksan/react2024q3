@@ -24,7 +24,6 @@
   }
 
   label {
-    margin-bottom: 6px;
     font-weight: 700;
     color: var(--color--dark);
   }
@@ -46,15 +45,15 @@
 
   meter {
     width: 100%;
-  }
-  meter[value='1']::-webkit-meter-optimum-value {
-    background: red;
-  }
-  meter[value='2']::-webkit-meter-optimum-value {
-    background: yellow;
-  }
-  meter[value='3']::-webkit-meter-optimum-value {
-    background: green;
+    &[value='1']::-webkit-meter-optimum-value {
+      background: red;
+    }
+    &[value='2']::-webkit-meter-optimum-value {
+      background: yellow;
+    }
+    &[value='3']::-webkit-meter-optimum-value {
+      background: green;
+    }
   }
 }
 
@@ -99,6 +98,7 @@
 .btn {
   width: 100%;
   padding: 10px;
+  margin-top: 10px;
   background-color: var(--color--button);
   border: none;
   border-radius: 5px;
@@ -114,4 +114,8 @@
 .strength {
   display: flex;
   justify-content: space-between;
+}
+
+.error_container {
+  height: 30px;
 }

@@ -81,17 +81,23 @@ export default function ControlledForm() {
       <div className={styles.field}>
         <label htmlFor="name">Name</label>
         <input id="name" {...register('name')} placeholder="name" type="text" autoComplete="given-name" />
-        {errors.name && <span className={styles.error}>{errors.name.message}</span>}
+        <div className={styles.error_container}>
+          {errors.name && <span className={styles.error}>{errors.name.message}</span>}
+        </div>
       </div>
       <div className={styles.field}>
         <label htmlFor="age">Age</label>
         <input id="age" {...register('age')} type="number" min={0} />
-        {errors.age && <span className={styles.error}>{errors.age.message}</span>}
+        <div className={styles.error_container}>
+          {errors.age && <span className={styles.error}>{errors.age.message}</span>}
+        </div>
       </div>
       <div className={styles.field}>
         <label htmlFor="email">Email</label>
         <input id="email" {...register('email')} placeholder="email" type="email" autoComplete="email" />
-        {errors.email && <span className={styles.error}>{errors.email.message}</span>}
+        <div className={styles.error_container}>
+          {errors.email && <span className={styles.error}>{errors.email.message}</span>}
+        </div>
       </div>
       <div className={styles.field}>
         <div className={styles.strength}>
@@ -111,7 +117,9 @@ export default function ControlledForm() {
           />
         </div>
         <meter id="password_strength" min={0} value={getStrength()} max={3} />
-        {errors.password && <span className={styles.error}>{errors.password.message}</span>}
+        <div className={styles.error_container}>
+          {errors.password && <span className={styles.error}>{errors.password.message}</span>}
+        </div>
       </div>
       <div className={styles.field}>
         <label htmlFor="match_password">Confirm password</label>
@@ -128,13 +136,17 @@ export default function ControlledForm() {
             togglePasswordVisibility={toggleSecondPasswordVisibility}
           />
         </div>
-        {errors.match_password && <span className={styles.error}>{errors.match_password.message}</span>}
+        <div className={styles.error_container}>
+          {errors.match_password && <span className={styles.error}>{errors.match_password.message}</span>}
+        </div>
       </div>
       <div className={styles.field}>
         <label htmlFor="country">Country</label>
         <input id="country" type="text" list="country_list" {...register('country')} autoComplete="country" />
         <datalist id="country_list">{option()}</datalist>
-        {errors.country && <span className={styles.error}>{errors.country.message}</span>}
+        <div className={styles.error_container}>
+          {errors.country && <span className={styles.error}>{errors.country.message}</span>}
+        </div>
       </div>
       <fieldset className={styles.field}>
         <legend>Your Gender:</legend>
@@ -148,8 +160,10 @@ export default function ControlledForm() {
             <label htmlFor="gender_female">Female</label>
           </div>
         </div>
-        {errors.gender && <span className={styles.error}>{errors.gender.message}</span>}
       </fieldset>
+      <div className={styles.error_container}>
+        {errors.gender && <span className={styles.error}>{errors.gender.message}</span>}
+      </div>
       <div className={styles.field}>
         <label htmlFor="image">Upload your avatar</label>
         <input id="image" {...register('image')} type="file" accept="image/png, image/jpeg" />
@@ -159,7 +173,9 @@ export default function ControlledForm() {
         <input id="condition" {...register('condition')} type="checkbox" />
         <label htmlFor="condition">I accept the terms and conditions</label>
       </div>
-      {errors.condition && <span className={styles.error}>{errors.condition.message}</span>}
+      <div className={styles.error_container}>
+        {errors.condition && <span className={styles.error}>{errors.condition.message}</span>}
+      </div>
       <button className={`${styles.btn} ${!isValid ? styles.disabled : ''}`} type="submit" disabled={!isValid}>
         Submit
       </button>

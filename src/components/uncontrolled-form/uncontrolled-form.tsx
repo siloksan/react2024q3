@@ -102,17 +102,21 @@ export default function UncontrolledForm() {
       <div className={styles.field}>
         <label htmlFor="name">Name</label>
         <input id="name" name="name" placeholder="name" type="text" autoComplete="given-name" />
-        {errors.name && <span className={styles.error}>{errors.name}</span>}
+        <div className={styles.error_container}>
+          {errors.name && <span className={styles.error}>{errors.name}</span>}
+        </div>
       </div>
       <div className={styles.field}>
         <label htmlFor="age">Age</label>
         <input id="age" name="age" type="number" min={0} />
-        {errors.age && <span className={styles.error}>{errors.age}</span>}
+        <div className={styles.error_container}>{errors.age && <span className={styles.error}>{errors.age}</span>}</div>
       </div>
       <div className={styles.field}>
         <label htmlFor="email">Email</label>
         <input id="email" name="email" placeholder="email" type="email" autoComplete="email" />
-        {errors.email && <span className={styles.error}>{errors.email}</span>}
+        <div className={styles.error_container}>
+          {errors.email && <span className={styles.error}>{errors.email}</span>}
+        </div>
       </div>
       <div className={styles.field}>
         <div className={styles.strength}>
@@ -132,7 +136,9 @@ export default function UncontrolledForm() {
           />
         </div>
         <meter id="password_strength" min={0} value={strength} max={3} low={1} high={3} optimum={2} />
-        {errors.password && <span className={styles.error}>{errors.password}</span>}
+        <div className={styles.error_container}>
+          {errors.password && <span className={styles.error}>{errors.password}</span>}
+        </div>
       </div>
       <div className={styles.field}>
         <label htmlFor="match_password">Confirm password</label>
@@ -149,7 +155,9 @@ export default function UncontrolledForm() {
             togglePasswordVisibility={toggleSecondPasswordVisibility}
           />
         </div>
-        {errors.match_password && <span className={styles.error}>{errors.match_password}</span>}
+        <div className={styles.error_container}>
+          {errors.match_password && <span className={styles.error}>{errors.match_password}</span>}
+        </div>
       </div>
       <div className={styles.field}>
         <label htmlFor="country">Country</label>
@@ -161,7 +169,9 @@ export default function UncontrolledForm() {
           placeholder="country"
           autoComplete="country"
         />
-        {errors.country && <span className={styles.error}>{errors.country}</span>}
+        <div className={styles.error_container}>
+          {errors.country && <span className={styles.error}>{errors.country}</span>}
+        </div>
         <datalist id="country_list">{option()}</datalist>
       </div>
       <fieldset className={styles.field}>
@@ -176,18 +186,24 @@ export default function UncontrolledForm() {
             <label htmlFor="gender_female">Female</label>
           </div>
         </div>
-        {errors.gender && <span className={styles.error}>{errors.gender}</span>}
       </fieldset>
+      <div className={styles.error_container}>
+        {errors.gender && <span className={styles.error}>{errors.gender}</span>}
+      </div>
       <div className={styles.field}>
         <label htmlFor="image">Upload your avatar</label>
         <input id="image" name="image" type="file" accept="image/png, image/jpeg" />
-        {errors.image && <span className={styles.error}>{errors.image}</span>}
+        <div className={styles.error_container}>
+          {errors.image && <span className={styles.error}>{errors.image}</span>}
+        </div>
       </div>
       <div className={`${styles.field} ${styles.condition}`}>
         <input id="condition" name="condition" type="checkbox" />
         <label htmlFor="condition">I accept the terms and conditions</label>
       </div>
-      {errors.condition && <span className={styles.error}>{errors.condition}</span>}
+      <div className={styles.error_container}>
+        {errors.condition && <span className={styles.error}>{errors.condition}</span>}
+      </div>
       <button className={styles.btn} type="submit">
         Submit
       </button>
